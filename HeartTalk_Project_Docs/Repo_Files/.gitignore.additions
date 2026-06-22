@@ -1,0 +1,15 @@
+# HeartTalk local additions
+.env
+*.keystore
+*.jks
+*.p12
+*.pem
+*.key
+*.sqlite
+*.db
+*.db-shm
+*.db-wal
+/data/private/
+/data/raw/
+/models/private/
+/logs/private/
