@@ -42,7 +42,7 @@ void main() {
       );
 
       expect(result.isValid, isTrue);
-      expect(result.summary?.sourceLabel, contains('synthetic demo data'));
+      expect(result.summary?.sourceLabel, contains('데모 데이터'));
       expect(result.summary?.todayFlow, contains('고마움'));
       expect(result.morningDraft?.startLine, isNotEmpty);
     });

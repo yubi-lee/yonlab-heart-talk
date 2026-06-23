@@ -81,29 +81,21 @@ class _DailyReflectionScreenState extends State<DailyReflectionScreen> {
     final morningDraft = result?.morningDraft;
 
     return Scaffold(
-      appBar: AppBar(title: const Text('HeartTalk - 오늘 돌아보기')),
+      appBar: AppBar(title: const Text('HeartTalk — 오늘 어땠어?')),
       body: SafeArea(
         child: ListView(
           padding: const EdgeInsets.all(16),
           children: [
-            Text(
-              'HeartTalk - 오늘 돌아보기',
-              style: Theme.of(context).textTheme.headlineSmall,
-            ),
-            const SizedBox(height: 12),
             _InfoPanel(
-              title: 'Privacy-first 안내',
+              title: '내 개인정보 보호 안내',
               children: const [
-                '자동으로 통화, SMS, 메신저, 알림, 음성, PPG를 읽지 않아요.',
-                '직접 입력하거나 선택한 synthetic demo data만 사용해요.',
-                'MVP에서는 cloud AI, 네트워크, 저장소, 권한 요청을 사용하지 않아요.',
+                '통화, SMS, 메신저, 알림, 음성, PPG를 자동으로 읽지 않아요.',
+                '직접 적은 문장과 선택한 데모 이야기만 사용해요.',
+                '이 MVP는 cloud AI, 네트워크, 저장소, 권한 요청 없이 화면 안에서만 동작해요.',
               ],
             ),
             const SizedBox(height: 16),
-            Text(
-              'Synthetic demo event',
-              style: Theme.of(context).textTheme.titleMedium,
-            ),
+            Text('데모 이야기 조각', style: Theme.of(context).textTheme.titleMedium),
             const SizedBox(height: 8),
             Wrap(
               spacing: 8,
@@ -124,15 +116,15 @@ class _DailyReflectionScreenState extends State<DailyReflectionScreen> {
               minLines: 3,
               maxLines: 5,
               decoration: const InputDecoration(
-                labelText: '오늘의 reflection note',
-                hintText: '오늘 있었던 일을 짧게 적어 주세요.',
+                labelText: '오늘 남기고 싶은 말',
+                hintText: '오늘 있었던 일을 한두 문장으로 적어 주세요.',
                 border: OutlineInputBorder(),
               ),
             ),
             const SizedBox(height: 12),
             FilledButton(
               onPressed: _generateFromManualText,
-              child: const Text('Reflection preview 만들기'),
+              child: const Text('오늘 정리하기'),
             ),
             if (result?.validationMessage != null) ...[
               const SizedBox(height: 12),
@@ -145,8 +137,8 @@ class _DailyReflectionScreenState extends State<DailyReflectionScreen> {
             if (summary != null && morningDraft != null) ...[
               const SizedBox(height: 16),
               _InfoPanel(
-                title: 'Reflection preview',
-                children: [summary.preview, 'Source: ${summary.sourceLabel}'],
+                title: '오늘의 응답 미리보기',
+                children: [summary.preview, '출처: ${summary.sourceLabel}'],
               ),
               const SizedBox(height: 12),
               _InfoPanel(
@@ -174,21 +166,21 @@ class _DailyReflectionScreenState extends State<DailyReflectionScreen> {
                 children: [
                   FilledButton.tonal(
                     onPressed: _keep,
-                    child: const Text('남기기 확인'),
+                    child: const Text('남기기'),
                   ),
                   OutlinedButton(
                     onPressed: _reset,
-                    child: const Text('비우기/초기화'),
+                    child: const Text('다시 비우기'),
                   ),
                 ],
               ),
               if (_kept) ...[
                 const SizedBox(height: 8),
-                const Text('이번 session 안에서만 남겨두었어요.', key: Key('keptMessage')),
+                const Text('이번 화면 안에서만 남겨두었어요.', key: Key('keptMessage')),
               ],
             ] else ...[
               const SizedBox(height: 16),
-              const Text('아직 생성된 reflection이 없어요.', key: Key('emptyState')),
+              const Text('아직 정리한 내용이 없어요.', key: Key('emptyState')),
             ],
           ],
         ),
