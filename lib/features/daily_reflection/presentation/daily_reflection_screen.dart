@@ -16,9 +16,7 @@ class _DailyReflectionScreenState extends State<DailyReflectionScreen> {
   final _engine = RuleBasedReflectionEngine();
   final _controller = TextEditingController();
 
-  DemoReflectionEvent? _selectedEvent;
-  ReflectionResult? _result;
-  bool _kept = false;
+  ReflectionSessionState _session = const ReflectionSessionState();
 
   List<DemoReflectionEvent> get _events => _repository.listEvents();
 
@@ -30,55 +28,56 @@ class _DailyReflectionScreenState extends State<DailyReflectionScreen> {
 
   void _selectEvent(DemoReflectionEvent event) {
     setState(() {
-      _selectedEvent = event;
       _controller.text = event.text;
-      _result = _engine.generate(
-        ReflectionInput(
-          text: event.text,
-          source: ReflectionInputSource.demo,
-          demoEventId: event.id,
+      _session = ReflectionSessionState(
+        selectedEvent: event,
+        result: _engine.generate(
+          ReflectionInput(
+            text: event.text,
+            source: ReflectionInputSource.demo,
+            demoEventId: event.id,
+          ),
         ),
       );
-      _kept = false;
     });
   }
 
   void _generateFromManualText() {
     setState(() {
-      _selectedEvent = null;
-      _result = _engine.generate(
-        ReflectionInput(
-          text: _controller.text,
-          source: ReflectionInputSource.manual,
+      _session = ReflectionSessionState(
+        result: _engine.generate(
+          ReflectionInput(
+            text: _controller.text,
+            source: ReflectionInputSource.manual,
+          ),
         ),
       );
-      _kept = false;
     });
   }
 
   void _keep() {
-    if (_result?.isValid != true) {
+    if (!_session.hasPreview) {
       return;
     }
     setState(() {
-      _kept = true;
+      _session = _session.copyWith(isKept: true);
     });
   }
 
   void _reset() {
     setState(() {
       _controller.clear();
-      _selectedEvent = null;
-      _result = null;
-      _kept = false;
+      _session = const ReflectionSessionState();
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    final result = _result;
+    final result = _session.result;
     final summary = result?.summary;
     final morningDraft = result?.morningDraft;
+    final showMorningBriefing =
+        _session.shouldShowMorningBriefing && morningDraft != null;
 
     return Scaffold(
       appBar: AppBar(title: const Text('HeartTalk — 오늘 어땠어?')),
@@ -104,7 +103,7 @@ class _DailyReflectionScreenState extends State<DailyReflectionScreen> {
                 for (final event in _events)
                   ChoiceChip(
                     label: Text(event.title),
-                    selected: _selectedEvent?.id == event.id,
+                    selected: _session.selectedEvent?.id == event.id,
                     onSelected: (_) => _selectEvent(event),
                   ),
               ],
@@ -123,6 +122,7 @@ class _DailyReflectionScreenState extends State<DailyReflectionScreen> {
             ),
             const SizedBox(height: 12),
             FilledButton(
+              key: const Key('generateButton'),
               onPressed: _generateFromManualText,
               child: const Text('오늘 정리하기'),
             ),
@@ -151,36 +151,49 @@ class _DailyReflectionScreenState extends State<DailyReflectionScreen> {
                 ],
               ),
               const SizedBox(height: 12),
-              _InfoPanel(
-                title: '내일 아침 브리핑 초안',
-                children: [
-                  '오늘의 시작 문장: ${morningDraft.startLine}',
-                  '먼저 볼 일: ${morningDraft.firstThing}',
-                  '말투 힌트: ${morningDraft.toneHint}',
-                ],
-              ),
+              if (showMorningBriefing)
+                _InfoPanel(
+                  title: '내일 아침 브리핑 초안',
+                  children: [
+                    '오늘의 시작 문장: ${morningDraft.startLine}',
+                    '먼저 볼 일: ${morningDraft.firstThing}',
+                    '말투 힌트: ${morningDraft.toneHint}',
+                  ],
+                )
+              else
+                const Text(
+                  '내일 아침 브리핑 초안은 남기기 후에만 보여드려요.',
+                  key: Key('morningBriefingLockedMessage'),
+                ),
               const SizedBox(height: 12),
               Wrap(
                 spacing: 8,
                 runSpacing: 8,
                 children: [
                   FilledButton.tonal(
+                    key: const Key('keepButton'),
                     onPressed: _keep,
                     child: const Text('남기기'),
                   ),
                   OutlinedButton(
+                    key: const Key('resetButton'),
                     onPressed: _reset,
                     child: const Text('다시 비우기'),
                   ),
                 ],
               ),
-              if (_kept) ...[
+              if (_session.isKept) ...[
                 const SizedBox(height: 8),
                 const Text('이번 화면 안에서만 남겨두었어요.', key: Key('keptMessage')),
               ],
             ] else ...[
               const SizedBox(height: 16),
               const Text('아직 정리한 내용이 없어요.', key: Key('emptyState')),
+              const SizedBox(height: 4),
+              const Text(
+                '아직 남겨둔 정리가 없어요.',
+                key: Key('morningBriefingEmptyMessage'),
+              ),
             ],
           ],
         ),

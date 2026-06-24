@@ -71,3 +71,34 @@ class ReflectionResult {
 
   bool get isValid => summary != null && morningDraft != null;
 }
+
+class ReflectionSessionState {
+  const ReflectionSessionState({
+    this.selectedEvent,
+    this.result,
+    this.isKept = false,
+  });
+
+  final DemoReflectionEvent? selectedEvent;
+  final ReflectionResult? result;
+  final bool isKept;
+
+  bool get hasPreview => result?.isValid == true;
+  bool get shouldShowMorningBriefing => hasPreview && isKept;
+
+  ReflectionSessionState copyWith({
+    DemoReflectionEvent? selectedEvent,
+    ReflectionResult? result,
+    bool? isKept,
+    bool clearSelectedEvent = false,
+    bool clearResult = false,
+  }) {
+    return ReflectionSessionState(
+      selectedEvent: clearSelectedEvent
+          ? null
+          : selectedEvent ?? this.selectedEvent,
+      result: clearResult ? null : result ?? this.result,
+      isKept: isKept ?? this.isKept,
+    );
+  }
+}
