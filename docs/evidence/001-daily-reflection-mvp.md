@@ -1,4 +1,4 @@
-﻿# Evidence Package — Daily Reflection Companion MVP
+# Evidence Package — Daily Reflection Companion MVP
 
 ## 1. Summary
 
@@ -264,4 +264,3 @@ Result: Passed. No tracked sensitive file matches.
 ## 10. Merge Recommendation
 
 Recommended: Merge after PR diff review
-
