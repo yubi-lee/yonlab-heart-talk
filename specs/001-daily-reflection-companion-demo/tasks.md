@@ -1,7 +1,7 @@
 # Tasks: Daily Reflection Companion Demo
 
-**Feature**: `001-daily-reflection-companion-demo`  
-**Spec**: `specs\001-daily-reflection-companion-demo\spec.md`  
+**Feature**: `001-daily-reflection-companion-demo`
+**Spec**: `specs\001-daily-reflection-companion-demo\spec.md`
 **Plan**: `specs\001-daily-reflection-companion-demo\plan.md`
 
 ## Phase 0 — Repository Safety

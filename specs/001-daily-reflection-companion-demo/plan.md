@@ -1,8 +1,8 @@
 # Technical Plan: Daily Reflection Companion Demo
 
-**Feature**: `001-daily-reflection-companion-demo`  
-**Spec**: `specs\001-daily-reflection-companion-demo\spec.md`  
-**Status**: Draft  
+**Feature**: `001-daily-reflection-companion-demo`
+**Spec**: `specs\001-daily-reflection-companion-demo\spec.md`
+**Status**: Draft
 **Target App**: `D:\Views\heart_talk`
 
 ## 1. Objective

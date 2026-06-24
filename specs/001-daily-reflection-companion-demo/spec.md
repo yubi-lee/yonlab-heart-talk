@@ -1,9 +1,9 @@
 # Feature Specification: Daily Reflection Companion Demo
 
-**Feature Branch**: `001-daily-reflection-companion-demo`  
-**Feature Directory**: `specs\001-daily-reflection-companion-demo`  
-**Created**: 2026-06-22  
-**Status**: Draft  
+**Feature Branch**: `001-daily-reflection-companion-demo`
+**Feature Directory**: `specs\001-daily-reflection-companion-demo`
+**Created**: 2026-06-22
+**Status**: Draft
 **Input**: HeartTalk MVP PRD v0.2 — `HeartTalk 001 — 하루 끝 친구 Demo`
 
 ## 1. Feature Summary
@@ -42,8 +42,8 @@ Open app
 
 #### US-001 — Demo event로 하루 마무리 생성
 
-**As a** privacy-conscious user,  
-**I want** 민감정보가 없는 demo conversation event를 선택해 하루 마무리 결과를 확인하고,  
+**As a** privacy-conscious user,
+**I want** 민감정보가 없는 demo conversation event를 선택해 하루 마무리 결과를 확인하고,
 **So that** 실제 개인 데이터를 넣지 않고도 HeartTalk의 핵심 경험을 이해할 수 있다.
 
 **Acceptance Scenarios**
@@ -60,8 +60,8 @@ Scenario: Generate reflection from demo event
 
 #### US-002 — 짧은 직접 입력으로 reflection 생성
 
-**As a** user who wants to end the day lightly,  
-**I want** 오늘 있었던 일을 짧게 직접 입력하고,  
+**As a** user who wants to end the day lightly,
+**I want** 오늘 있었던 일을 짧게 직접 입력하고,
 **So that** 앱이 판단이나 진단 없이 하루 흐름과 내일의 한 문장을 정리해준다.
 
 **Acceptance Scenarios**
@@ -78,8 +78,8 @@ Scenario: Generate reflection from manual text
 
 #### US-003 — Privacy notice 확인
 
-**As a** user concerned about privacy,  
-**I want** 앱이 무엇을 읽지 않고 무엇을 전송하지 않는지 명확히 알 수 있고,  
+**As a** user concerned about privacy,
+**I want** 앱이 무엇을 읽지 않고 무엇을 전송하지 않는지 명확히 알 수 있고,
 **So that** 자동 수집이나 cloud AI 사용에 대한 불안을 줄일 수 있다.
 
 **Acceptance Scenarios**
@@ -96,8 +96,8 @@ Scenario: Show privacy boundary before input
 
 #### US-004 — Morning briefing card 확인
 
-**As a** returning user,  
-**I want** 전날 남기기로 선택한 내용을 아침 카드로 확인하고,  
+**As a** returning user,
+**I want** 전날 남기기로 선택한 내용을 아침 카드로 확인하고,
 **So that** 하루를 한 문장으로 부드럽게 시작할 수 있다.
 
 ```gherkin
@@ -110,8 +110,8 @@ Scenario: Show morning briefing from confirmed reflection
 
 #### US-005 — Delete/reset 통제
 
-**As a** privacy-conscious user,  
-**I want** 생성된 카드와 현재 입력을 지우거나 초기화할 수 있고,  
+**As a** privacy-conscious user,
+**I want** 생성된 카드와 현재 입력을 지우거나 초기화할 수 있고,
 **So that** 내가 남길 내용을 직접 통제할 수 있다.
 
 ```gherkin
@@ -126,8 +126,8 @@ Scenario: Reset current reflection
 
 #### US-006 — 안전한 empty/error 상태
 
-**As a** user,  
-**I want** 빈 입력이나 매칭되지 않는 입력에도 앱이 안전하게 반응하고,  
+**As a** user,
+**I want** 빈 입력이나 매칭되지 않는 입력에도 앱이 안전하게 반응하고,
 **So that** 앱이 진단적이거나 과장된 응답을 만들지 않는다.
 
 ```gherkin
