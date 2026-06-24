@@ -6,9 +6,11 @@
 - Branch: `001-daily-reflection-companion-demo`
 - Base: `origin/main` (`366d24a docs: establish HeartTalk constitution`)
 - Compare: `origin/001-daily-reflection-companion-demo` (`85d38cc polish: refine daily reflection copy`)
-- PR: Pending
+- PR: https://github.com/yubi-lee/yonlab-heart-talk/pull/1
 - Evidence date: 2026-06-23
 - Verdict: Recommended: Merge after PR diff review
+
+Note: The evidence package was added as a docs-only commit after the app implementation and verification commits. The PR URL was linked after PR creation.
 
 ## 2. Scope
 
@@ -262,3 +264,4 @@ Result: Passed. No tracked sensitive file matches.
 ## 10. Merge Recommendation
 
 Recommended: Merge after PR diff review
+
