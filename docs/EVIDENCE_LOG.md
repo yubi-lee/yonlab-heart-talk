@@ -1,10 +1,10 @@
-﻿# HeartTalk Evidence Log
+# HeartTalk Evidence Log
 
 Use this file as a template for task evidence. Add newest entries at the top when a task needs repository-level evidence.
 
 Completion is based on observed command output, not on an AI saying the task is complete.
 
-## 2026-06-28 - HT-WF-001 — HeartTalk Agentic Workflow Alignment
+## 2026-06-28 - HT-DOC-002 - Restore Daily Reflection Spec Readability
 
 Verdict: Pass
 
@@ -17,7 +17,88 @@ main
 Task:
 
 ```text
-HT-WF-001 — HeartTalk Agentic Workflow Alignment
+HT-DOC-002 - Restore Daily Reflection Spec Readability
+```
+
+Initial status:
+
+```powershell
+cd D:\Views\heart_talk
+git status -sb
+```
+
+Output:
+
+```text
+## main...origin/main
+```
+
+Changed files:
+
+```text
+specs/001-daily-reflection-companion-demo/spec.md
+docs/EVIDENCE_LOG.md
+```
+
+Commands and observed results:
+
+| Command | Result | Evidence summary |
+|---|---|---|
+| `powershell -ExecutionPolicy Bypass -File .\scripts\verify.ps1` | PASS | Final pass: format `Formatted 9 files (0 changed)`, analyze `No issues found! (ran in 19.6s)`, test `+12: All tests passed!` |
+| `git diff --check` | PASS | Exit code 0; no whitespace errors. Git printed only LF-to-CRLF working-copy warnings for changed Markdown files. |
+| `git status -sb` | DIRTY EXPECTED | `M docs/EVIDENCE_LOG.md` and `M specs/001-daily-reflection-companion-demo/spec.md`. |
+
+Spec restoration summary:
+
+- Replaced mojibake-damaged Korean/English mixed text with readable Markdown.
+- Preserved the Daily Reflection Companion Demo MVP direction.
+- Kept MVP scope limited to safe demo events and short user-entered non-sensitive text.
+- Clarified that real PPG, real voice, phone/message access, health data, cloud AI, network, analytics, sync, database, and sensitive permissions are out of scope.
+- Added testable user stories, functional requirements, non-functional requirements, UX acceptance criteria, technical acceptance criteria, and test strategy.
+- Kept future PPG, voice, inference, storage, and account work as non-MVP follow-up requiring separate approval.
+
+Security/privacy review:
+
+| Check | Result | Notes |
+|---|---|---|
+| Real PPG/voice data | NONE | The spec references these only as forbidden/out-of-scope data. |
+| Personal data | NONE | No personal data was added. |
+| Health-sensitive logs | NONE | The spec references these only as forbidden/out-of-scope data. |
+| API keys/tokens/signing keys | NONE | The spec references these only as forbidden/out-of-scope artifacts. |
+| Permissions/network/database changes | NONE | Documentation-only change; no app permissions, network, database, analytics, sync, or signing changes. |
+| Medical claims | NONE | The spec forbids diagnosis, treatment advice, disease prediction, risk scoring, and mental-health classification. |
+
+Known risks:
+
+- Existing historical docs outside this task may still mention the older synthetic PPG dashboard wording.
+- `AGENTS.md` contains mojibake in the final-report list, but it was outside the HT-DOC-002 allowed file scope.
+
+Recommended next work:
+
+- Align `docs/privacy/` and `docs/security/` with the current daily reflection MVP wording.
+- Review `specs/001-daily-reflection-companion-demo/plan.md` and `tasks.md` for any remaining readability issues.
+- Add a future non-MVP adapter design note for approved PPG/voice/inference work.
+
+Recommended commit message:
+
+```text
+docs: restore daily reflection spec readability
+```
+
+## 2026-06-28 - HT-WF-001 - HeartTalk Agentic Workflow Alignment
+
+Verdict: Pass
+
+Branch:
+
+```text
+main
+```
+
+Task:
+
+```text
+HT-WF-001 - HeartTalk Agentic Workflow Alignment
 ```
 
 Initial status:
@@ -96,7 +177,7 @@ Security/privacy review:
 
 Known risks:
 
-- `specs/001-daily-reflection-companion-demo/spec.md` still contains text that appears to have encoding damage.
+- `specs/001-daily-reflection-companion-demo/spec.md` still contained text that appeared to have encoding damage at the time of HT-WF-001.
 - `specs/` was intentionally not modified in HT-WF-001.
 
 Recommended next work:
@@ -108,7 +189,8 @@ Recommended commit message:
 
 ```text
 docs: align HeartTalk agentic workflow
-```$([Environment]::NewLine)
+```
+
 ## Entry Template
 
 ### YYYY-MM-DD - [Task ID / Task Name]
@@ -178,5 +260,3 @@ Recommended commit message:
 ```text
 [type(scope): message]
 ```
-
-
