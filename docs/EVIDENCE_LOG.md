@@ -4,6 +4,82 @@ Use this file as a template for task evidence. Add newest entries at the top whe
 
 Completion is based on observed command output, not on an AI saying the task is complete.
 
+## 2026-06-28 - HT-DOC-003A - Clean AGENTS Final Report Mojibake
+
+Verdict: Pass
+
+Branch:
+
+```text
+main
+```
+
+Task:
+
+```text
+HT-DOC-003A - Clean AGENTS Final Report Mojibake
+```
+
+Initial status:
+
+```powershell
+cd D:\Views\heart_talk
+git status -sb
+```
+
+Output:
+
+```text
+## main...origin/main
+```
+
+Changed files:
+
+```text
+AGENTS.md
+docs/EVIDENCE_LOG.md
+```
+
+Commands and observed results:
+
+| Command | Result | Evidence summary |
+|---|---|---|
+| `powershell -ExecutionPolicy Bypass -File .\scripts\verify.ps1` | PASS | format `Formatted 9 files (0 changed)`, analyze `No issues found!`, test `+12: All tests passed!` |
+| `git diff --check` | PASS | Exit code 0; no whitespace errors. Git printed only LF-to-CRLF working-copy warnings for changed Markdown files. |
+| `git status -sb` | DIRTY EXPECTED | `M AGENTS.md` and `M docs/EVIDENCE_LOG.md`. |
+
+Summary:
+
+- Repaired the `AGENTS.md` completion report requirements list.
+- Replaced the unclear final report entries with readable Korean labels.
+- Kept HeartTalk operating rules, privacy-first constraints, synthetic/demo-only MVP scope, and evidence-gated completion intact.
+- Did not change app code, tests, specs, Flutter configuration, scripts, README, secrets, or signing material.
+
+Security/privacy review:
+
+| Check | Result | Notes |
+|---|---|---|
+| Real PPG/voice data | NONE | No real PPG or voice data was added. |
+| Personal data | NONE | No personal data was added. |
+| Health-sensitive logs | NONE | No health-sensitive logs were added. |
+| API keys/tokens/signing keys | NONE | No API keys, tokens, signing keys, keystores, or private keys were added. |
+| Permissions/network/database changes | NONE | Documentation-only change; no permissions, network, database, analytics, sync, or signing changes. |
+
+Known risks:
+
+- None for the AGENTS final-report wording.
+
+Recommended next work:
+
+- Align `docs/privacy/` and `docs/security/` with the current Daily Reflection MVP wording.
+- Review `specs/001-daily-reflection-companion-demo/plan.md` and `tasks.md` readability.
+
+Recommended commit message:
+
+```text
+docs: clean AGENTS final report wording
+```
+
 ## 2026-06-28 - HT-DOC-002 - Restore Daily Reflection Spec Readability
 
 Verdict: Pass

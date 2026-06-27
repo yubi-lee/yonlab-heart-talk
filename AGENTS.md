@@ -135,12 +135,12 @@ flutter build apk --debug
 
 ## Completion Report Requirements
 
-Final reports must be in Korean and include:
+Final reports must be written in Korean and include at least:
 
 1. 작업 전 상태
 2. 변경 파일
-3. 생성 파일
-4. 실행한 명령과 결과
+3. 구현/수정 내용
+4. 실행한 명령
 5. 검증 결과
 6. 보안/개인정보 점검
 7. 남은 리스크
