@@ -1,121 +1,154 @@
-# AGENTS.md — HeartTalk
+# AGENTS.md - HeartTalk
 
 ## Project
 
-HeartTalk is a privacy-first Flutter mobile application for on-device multimodal signal analysis. The first MVP uses synthetic PPG-derived heart-rate data only. Real PPG capture, real voice capture, and on-device inference are future features and must not be implemented unless explicitly requested.
+HeartTalk is a privacy-first Flutter mobile application. The current MVP is the `Daily Reflection Companion Demo`: a small local-only vertical slice that lets a user choose safe demo events or manually enter short text, then generates deterministic friend-style reflection cards and morning briefing cards.
 
-## Environment
+The long-term product direction includes on-device multimodal signal analysis, but the MVP must remain synthetic/demo-data only. Real PPG capture, real voice capture, personal data, health-sensitive logs, cloud AI, analytics, API keys, and signing keys are out of scope unless a future spec and explicit approval authorize them.
 
-- OS: Windows 11
-- Shell: PowerShell Native
-- Tool root: `C:\Utils`
-- Project root: `D:\Views\heart_talk`
-- Flutter SDK: `C:\Utils\flutter`
-- uv: `C:\Utils\uv`
-- Spec Kit CLI: `C:\Utils\uv-data\tool-bin\specify.exe`
+## Standard Environment
 
-## Agent Operating Rules
+| Item | Standard |
+|---|---|
+| OS | Windows 11 |
+| Shell | Windows PowerShell Native |
+| Project root | `D:\Views\heart_talk` |
+| Tool root | `C:\Utils` |
+| Flutter SDK | `C:\Utils\flutter` |
+| Spec Kit CLI | `C:\Utils\uv-data\tool-bin\specify.exe` |
 
-- Work in small, scoped changes.
-- Read the relevant spec and task files before editing.
-- Propose a plan before making broad changes.
-- Do not modify unrelated files.
+Always write command examples for this repository from `D:\Views\heart_talk`.
+
+## Required First Steps
+
+Before editing, an agent must:
+
+1. Read `AGENTS.md`.
+2. Read `README.md`.
+3. Read relevant files under `specs/` and `docs/`.
+4. Inspect `pubspec.yaml`, `lib/`, and `test/` structure without modifying forbidden files.
+5. Run `git status -sb`.
+6. Summarize the current structure, branch/status, and risks before making changes.
+
+## Operating Rules
+
+- Preserve the current Flutter app structure and behavior unless the task explicitly allows app code edits.
+- Work in small vertical slices tied to a spec, plan, task, or documented acceptance criteria.
+- Treat `specs/` as the source of truth when it conflicts with summary docs.
+- Do not delete existing specs, docs, source, tests, or generated evidence unless explicitly approved.
 - Do not add dependencies without explicit approval.
-- Do not delete files without explicit approval.
-- Do not change database migrations without explicit approval.
-- Do not change Android/iOS permissions without explicit approval.
-- Do not change signing, release, or CI secrets without explicit approval.
+- Do not change Android/iOS/native permissions without explicit approval.
+- Do not change signing, release, keystore, CI secret, or `.env` configuration.
+- Do not use network, database, cloud AI, analytics, or sync unless a future approved spec requires it.
+- Completion is evidence-gated: command output proves completion, not an AI statement.
+
+## Allowed Data for Current MVP
+
+- Synthetic/demo conversation events
+- Short user-entered text processed locally in the current app session
+- Generated reflection card data
+- Generated morning briefing card data
+- Deterministic test fixtures that contain no personal or sensitive data
+
+## Forbidden Data and Artifacts
+
+Never add, paste, generate, log, or expose:
+
+- Real PPG data
+- Real voice recordings or transcripts
+- Personally identifiable information
+- Health-sensitive logs or user health records
+- API keys, access tokens, refresh tokens, credentials, or production secrets
+- `.env` contents
+- Signing keys, keystores, `.jks`, `.p12`, `.pem`, or private keys
+- Production database dumps
+
+## Forbidden MVP Permissions
+
+The MVP must not request camera, microphone, contacts, call log, SMS, location, Health Connect, notification access, background sensor, analytics, or sync permissions.
 
 ## Architecture Rules
 
-Use feature-first layered architecture.
-
-Recommended structure:
+Use feature-first layered architecture:
 
 ```text
 lib/
-├─ app/
-├─ core/
-├─ features/
-│  └─ <feature_name>/
-│     ├─ presentation/
-│     ├─ application/
-│     ├─ domain/
-│     ├─ data/
-│     └─ infrastructure/
-└─ shared/
+  app/
+  core/
+  features/
+    <feature_name>/
+      presentation/
+      application/
+      domain/
+      data/
+      infrastructure/
+  shared/
+```
+
+Current implemented feature:
+
+```text
+lib/features/daily_reflection/
+  application/
+  data/
+  domain/
+  presentation/
 ```
 
 Rules:
 
-- Keep UI, domain, data, and infrastructure concerns separate.
+- Keep UI, application orchestration, domain models/rules, data sources, and infrastructure/adapters separate.
 - Domain entities must not depend on Flutter widgets.
-- Repository contracts must allow synthetic data to be replaced by real adapters later.
-- On-device inference must be hidden behind an `InferenceAdapter`.
-- Avoid global mutable state unless explicitly justified.
-
-## Privacy and Security Rules
-
-Never include the following in code, fixtures, tests, logs, or prompts:
-
-- Real PPG data
-- Real voice recordings
-- Personally identifiable information
-- Health-sensitive user logs
-- API keys
-- Access tokens
-- `.env`
-- signing keys
-- keystore files
-- production database dumps
-
-MVP 001 must not request:
-
-- camera permission
-- microphone permission
-- location permission
-- contacts permission
-- health data permission
-- network permission for analytics/sync
+- Repository contracts should allow demo data to be replaced by approved real adapters later.
+- Future PPG, voice, or model work must be hidden behind explicit adapter boundaries such as `PpgCaptureAdapter`, `VoiceCaptureAdapter`, and `InferenceAdapter`.
+- Avoid global mutable state unless the spec explicitly justifies it.
 
 ## Quality Gates
 
-Run before reporting completion:
+Default completion gate:
 
 ```powershell
+cd D:\Views\heart_talk
+powershell -ExecutionPolicy Bypass -File .\scripts\format.ps1
+powershell -ExecutionPolicy Bypass -File .\scripts\lint.ps1
+powershell -ExecutionPolicy Bypass -File .\scripts\test.ps1
+powershell -ExecutionPolicy Bypass -File .\scripts\verify.ps1
+git status -sb
+```
+
+The underlying commands are:
+
+```powershell
+cd D:\Views\heart_talk
 dart format --output=none --set-exit-if-changed .
 flutter analyze
 flutter test
 git status -sb
 ```
 
-If the task affects Android build configuration, also run:
+If a task affects Android build configuration, run this manually and record the output:
 
 ```powershell
+cd D:\Views\heart_talk
 flutter build apk --debug
 ```
 
-## Completion Report Format
+## Completion Report Requirements
 
-Every completion report must include:
+Final reports must be in Korean and include:
 
-```text
-1. Changed files
-2. Summary of implementation
-3. Commands run
-4. Command results
-5. Remaining risks
-6. Follow-up recommendations
-7. git status -sb result
-```
+1. 작업 전 상태
+2. 변경 파일
+3. 생성 파일
+4. 실행한 명령과 결과
+5. 검증 결과
+6. 보안/개인정보 점검
+7. 남은 리스크
+8. 다음 권장 작업
+9. 커밋 권장 여부
 
-## Test Policy
+Every command result must be based on observed command output. If a command was skipped, explain why.
 
-- Add or update tests for changed domain, data, and application logic.
-- Widget changes require widget tests when practical.
-- Do not mark a task complete without test or explicit explanation why a test was not applicable.
-- Prefer deterministic tests with synthetic data.
+## Medical and Emotional Safety
 
-## Medical Claims
-
-Do not add medical diagnosis, treatment, disease prediction, or risk-scoring claims. Use non-diagnostic language only.
+Do not add medical diagnosis, treatment, disease prediction, mental-health classification, risk scoring, or emergency advice. Use non-diagnostic reflection language only.
