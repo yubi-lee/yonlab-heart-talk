@@ -175,3 +175,17 @@ Codex final reports for HeartTalk must be written in Korean and include:
 | DESIGN-006 | Follow-up milestone priority is documented. | Done | `HT-DESIGN-QA-001` is recommended first. |
 | DESIGN-007 | No app implementation files are changed by design alignment. | Pending final status | Confirm with `git status -sb` and diff review. |
 | DESIGN-008 | Verification gate passes after docs/spec updates. | Pending final verification | Run `powershell -ExecutionPolicy Bypass -File .\scripts\verify.ps1`. |
+
+## HT-DESIGN-QA-001 Acceptance Matrix
+
+| ID | Criterion | Status | Evidence |
+|---|---|---|---|
+| DQA-AC-001 | HeartTalk has an Android Design/UX manual QA checklist for `HT-COMPANION-001`. | Documented | `docs/qa/android-design-qa-checklist.md` defines purpose, environment, preparation, prohibited findings, scenario table, evidence criteria, verdict rules, known notes, and blocking criteria. |
+| DQA-AC-002 | The checklist covers role-based local memory companion flows. | Documented | Checklist scenarios cover first launch, local memory consent OFF/ON, profile, role, custom role, daily note, people, todo, restart restore, `내 기억`, full reset, restart after reset, role messages, growth, privacy copy, Korean copy, and Android readability. |
+| DQA-AC-003 | The checklist includes safety criteria for lover, parent, role, and growth copy. | Documented | Prohibited findings and scenarios DQA-018, DQA-020, and DQA-024 define fail criteria for dependency, sexual/obsessive language, control, shame, and diagnostic framing. |
+| DQA-AC-004 | The checklist protects privacy/security evidence handling. | Documented | Evidence criteria require synthetic inputs, screenshot/XML review, no personal data in evidence, and no absolute safety claims. |
+| DQA-AC-005 | The Runbook references the Android Design/UX QA flow. | Documented | `docs/RUNBOOK.md` includes `HT-DESIGN-QA-001 Android Design/UX Manual QA`. |
+| DQA-AC-006 | App code, tests, platform files, specs, dependencies, and local exclude settings are not modified by this task. | Pending final verification | Confirm with `git status -sb` and changed-file review. |
+| DQA-AC-007 | Verification commands pass or failures/skips are recorded. | Pending final verification | Run `powershell -ExecutionPolicy Bypass -File .\scripts\verify.ps1`, `git diff --check`, and `git status -sb`. |
+
+Manual Android execution of this checklist is not required for `HT-DESIGN-QA-001`; the deliverable is the checklist and documentation wiring. Actual device execution should be recorded as a later QA evidence task before or during `HT-INSIGHT-001` readiness review.

@@ -1158,3 +1158,83 @@ Recommended next milestone:
 ```text
 HT-DESIGN-QA-001 - Design.md 湲곗? Android manual QA checklist
 ```
+## 2026-06-28 - HT-DESIGN-QA-001 - Android Design/UX Manual QA Checklist
+
+Verdict: Pass
+
+Branch:
+
+```text
+main
+```
+
+Initial status:
+
+```text
+## main...origin/main
+```
+
+Task:
+
+```text
+HT-DESIGN-QA-001 - HeartTalk Design/UX Android Manual QA Checklist
+```
+
+Changed files:
+
+```text
+docs/qa/android-design-qa-checklist.md
+docs/ACCEPTANCE_CRITERIA.md
+docs/RUNBOOK.md
+docs/EVIDENCE_LOG.md
+```
+
+Checklist summary:
+
+- Created a HeartTalk-specific Android Design/UX manual QA checklist for the `HT-COMPANION-001` role-based local memory companion.
+- The checklist treats `DESIGN.md` as limited design input and applies only calm, trustworthy, technically restrained Korean UX qualities to HeartTalk.
+- The checklist includes 29 scenarios covering first launch, local memory consent OFF/ON, profile, role selection, custom role, daily note, condition-input gap review, conversation memo, person memory, todo memory, interests/worries/goals gap review, restart restore, `내 기억`, full reset, restart after reset, all required role message tones, growth level, privacy/security copy, Korean readability, Android density, evidence privacy, and `HT-INSIGHT-001` preflight.
+- Lover and parent role safety, human-relationship replacement risk, diagnostic/treatment framing, absolute safety claims, and OS/network/cloud access implications are explicit Fail criteria.
+
+Documentation updates:
+
+- `docs/ACCEPTANCE_CRITERIA.md` now includes the `HT-DESIGN-QA-001 Acceptance Matrix`.
+- `docs/RUNBOOK.md` now includes the Android Design/UX manual QA execution flow and minimum review areas.
+
+Verification results:
+
+| Command | Result | Evidence summary |
+|---|---|---|
+| `powershell -ExecutionPolicy Bypass -File .\scripts\verify.ps1` | PASS | `dart format --output=none --set-exit-if-changed .` reported `Formatted 17 files (0 changed)`; `flutter analyze` reported `No issues found!`; `flutter test` reported `+27: All tests passed!`. |
+| `git diff --check` | PASS | Exit code 0. Output contained only LF-to-CRLF working-copy warnings for tracked markdown files. |
+| `git status -sb` | Expected dirty docs-only status | `docs/ACCEPTANCE_CRITERIA.md`, `docs/RUNBOOK.md`, `docs/EVIDENCE_LOG.md`, and `docs/qa/` are changed/untracked for this documentation task. |
+
+Files intentionally not changed:
+
+```text
+lib/**
+test/**
+specs/**
+pubspec.yaml
+pubspec.lock
+android/**
+ios/**
+macos/**
+DESIGN.md
+.agents/**
+.codex/**
+.git/info/exclude
+```
+
+Security/privacy notes:
+
+- No app code, platform files, dependency files, specs, or local exclude settings were changed.
+- No network, Cloud AI, analytics, sync, account, sensitive permission, or storage behavior was added.
+- The QA checklist requires synthetic inputs and evidence review before screenshots/XML/notes are retained.
+- `shared_preferences` remains documented as non-encrypted local storage and unsuitable for high-sensitivity data.
+
+Recommended next step:
+
+```text
+Run the new Android checklist on an emulator or physical Android device before starting HT-INSIGHT-001.
+```

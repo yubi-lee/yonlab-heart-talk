@@ -311,3 +311,34 @@ git diff --check
 ```
 
 Do not edit `lib/**`, `test/**`, `pubspec.yaml`, `pubspec.lock`, platform folders, `.agents/**`, or `.codex/**` during design alignment tasks unless a later task explicitly authorizes it.
+
+## HT-DESIGN-QA-001 Android Design/UX Manual QA
+
+Use `docs/qa/android-design-qa-checklist.md` to manually review the role-based local memory companion on Android before starting `HT-INSIGHT-001`.
+
+Recommended command setup:
+
+```powershell
+cd D:\Views\heart_talk
+git status -sb
+flutter devices
+flutter run -d <android-device-id>
+```
+
+If no Android target is available, record the checklist run as `Pending - no Android emulator/device available`. A successful debug APK build is useful build evidence, but it is not a substitute for Android Design/UX manual QA.
+
+Minimum review areas:
+
+1. First launch privacy understanding.
+2. Local memory consent OFF and ON behavior.
+3. Role selection for 친구, 연인, 가족, 부모, 코치, 선생님, 경청자, 사용자 지정.
+4. Profile, person, todo, daily note, and stored-information visibility.
+5. App restart restore, full reset, and restart after reset.
+6. Role-specific companion messages, especially lover and parent safety.
+7. Growth level wording as deterministic local familiarity, not diagnosis or treatment.
+8. Korean copy readability and Android phone-density usability.
+9. Evidence privacy review before storing screenshots, XML, or notes.
+
+Fail the manual QA run if the app requests sensitive permissions, implies OS data access, introduces network/cloud/analytics/sync/account behavior, hides stored categories, persists memory with consent OFF, fails full reset, displays broken Korean in the Android UI, or uses companion copy that implies medical judgment or replacement of real relationships.
+
+After the run, add a summary to `docs/EVIDENCE_LOG.md` with the Android target, checklist verdict, failed IDs, noted IDs, evidence handling decision, and whether `HT-INSIGHT-001` is blocked.
