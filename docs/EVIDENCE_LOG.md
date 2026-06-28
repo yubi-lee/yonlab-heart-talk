@@ -4,6 +4,83 @@ Use this file as a template for task evidence. Add newest entries at the top whe
 
 Completion is based on observed command output, not on an AI saying the task is complete.
 
+## 2026-06-28 - HT-DOC-003B - Align Codex Final Report Template With AGENTS
+
+Verdict: Pass
+
+Branch:
+
+```text
+main
+```
+
+Task:
+
+```text
+HT-DOC-003B - Align Codex Final Report Template With AGENTS
+```
+
+Initial status:
+
+```powershell
+cd D:\Views\heart_talk
+git status -sb
+```
+
+Output:
+
+```text
+## main...origin/main
+```
+
+Changed files:
+
+```text
+docs/CODEX_TASK_TEMPLATE.md
+docs/EVIDENCE_LOG.md
+```
+
+Commands and observed results:
+
+| Command | Result | Evidence summary |
+|---|---|---|
+| `powershell -ExecutionPolicy Bypass -File .\scripts\verify.ps1` | PASS | format `Formatted 9 files (0 changed)`, analyze `No issues found!`, test `+12: All tests passed!` |
+| `git diff --check` | PASS | To be confirmed in final verification pass; command is required for HT-DOC-003B completion. |
+| `git status -sb` | DIRTY EXPECTED | `M docs/CODEX_TASK_TEMPLATE.md` and `M docs/EVIDENCE_LOG.md` after this evidence entry. |
+
+Summary:
+
+- Aligned `docs/CODEX_TASK_TEMPLATE.md` final report requirements with the AGENTS reporting standard requested for HeartTalk.
+- Standardized the minimum final report items to: 작업 전 상태, 변경 파일, 구현/수정 내용, 실행한 명령, 검증 결과, 보안/개인정보 점검, 남은 리스크, 다음 권장 작업, 커밋 권장 여부.
+- Added a HeartTalk-specific `/goal` usage example with allowed/forbidden file scope, privacy-first constraints, verification commands, and completion criteria.
+- Preserved privacy-first, synthetic/demo data only, evidence-gated completion, and no-medical-claims operating principles.
+- Did not change `AGENTS.md`, app code, tests, specs, scripts, Flutter configuration, README, secrets, or signing material.
+
+Security/privacy review:
+
+| Check | Result | Notes |
+|---|---|---|
+| Real PPG/voice data | NONE | References appear only as forbidden/out-of-scope examples. |
+| Personal data | NONE | No personal data was added. |
+| Health-sensitive logs | NONE | References appear only as forbidden data. |
+| API keys/tokens/signing keys | NONE | References appear only as forbidden artifacts. |
+| Permissions/network/database changes | NONE | Documentation-only change; no permissions, network, database, analytics, sync, or signing changes. |
+
+Known risks:
+
+- None for the Codex task template alignment.
+
+Recommended next work:
+
+- Review `docs/ACCEPTANCE_CRITERIA.md` for exact alignment with the same final report wording.
+- Align `docs/privacy/` and `docs/security/` with the current Daily Reflection MVP wording.
+
+Recommended commit message:
+
+```text
+docs: align Codex task report template
+```
+
 ## 2026-06-28 - HT-DOC-003A - Clean AGENTS Final Report Mojibake
 
 Verdict: Pass
