@@ -4,6 +4,131 @@ Use this file as a template for task evidence. Add newest entries at the top whe
 
 Completion is based on observed command output, not on an AI saying the task is complete.
 
+## 2026-06-28 - HT-QA-003R - Complete Android Manual QA Evidence
+
+Verdict: Pass with notes
+
+Branch:
+
+```text
+main
+```
+
+Task:
+
+```text
+HT-QA-003R - Resume Android Manual QA Evidence Completion
+```
+
+Initial status:
+
+```powershell
+cd D:\Views\heart_talk
+git status -sb
+```
+
+Output:
+
+```text
+## main...origin/main
+```
+
+Changed files:
+
+```text
+docs/ACCEPTANCE_CRITERIA.md
+docs/EVIDENCE_LOG.md
+docs/RUNBOOK.md
+```
+
+Android targets:
+
+```text
+flutter doctor -v:
+Connected device (5 available)
+- SM F956N (mobile) / R3CX70NHJRN / Android 16 (API 36)
+- sdk gphone16k x86 64 (mobile) / emulator-5554 / Android 17 (API 37 emulator)
+- Windows, Chrome, Edge
+
+adb devices:
+R3CX70NHJRN    device
+emulator-5554  device
+```
+
+Commands and observed results:
+
+| Command | Result | Evidence summary |
+|---|---|---|
+| `flutter run -d emulator-5554` | PASS | Built and installed `app-debug.apk`; Flutter run reported VM Service and app launch on `sdk gphone16k x86 64`. |
+| Emulator visual QA via ADB screenshots | PASS | Confirmed first screen, title, privacy notice, demo presets, demo reflection preview/card, keep, morning briefing, next action, kept message, reset/delete empty state, manual input result, `Source: Manual text`, and empty validation. Screenshots were collected outside the repository for visual inspection. |
+| `where.exe adb` | INFO | PATH did not contain `adb`; used `C:\Utils\Android\SDK\platform-tools\adb.exe` directly. |
+| `adb devices` | PASS | Physical device `R3CX70NHJRN` and emulator `emulator-5554` were listed. |
+| `flutter emulators --launch Pixel_10_Pro` | NOTE | Returned `The Android emulator exited with code 1` after `emulator-5554` became ADB-offline. |
+| `flutter run -d R3CX70NHJRN --no-resident` | PASS | Built, installed, and launched the app on physical Android target `SM F956N`. |
+| Physical-device UIAutomator QA | PASS | XML text dumps confirmed title, privacy notice, demo preset, generated preview/card, keep controls, morning briefing, and next action using safe demo text. |
+| `adb -s R3CX70NHJRN shell am force-stop com.example.heart_talk` | PASS | Force-stopped app for session-only relaunch check. |
+| `adb -s R3CX70NHJRN shell monkey -p com.example.heart_talk -c android.intent.category.LAUNCHER 1` | PASS | Relaunched app; monkey reported `Events injected: 1`. |
+| Post-relaunch UIAutomator check | PASS | Post-relaunch XML contained initial title/privacy/demo-preset state and no `Morning briefing`, `Next action`, `Kept in this session only`, `Reflection preview`, `Daily reflection card`, or `Source: Demo data`. |
+| `flutter build apk --debug` | PASS | `Built build\app\outputs\flutter-apk\app-debug.apk` |
+| `powershell -ExecutionPolicy Bypass -File .\scripts\verify.ps1` | PASS | format `Formatted 9 files (0 changed)`, analyze `No issues found!`, test `+13: All tests passed!` |
+| `git diff --check` | PASS | Exit code 0; no whitespace errors. Git printed only LF-to-CRLF working-copy warnings for changed Markdown files. |
+| `git status -sb` | DIRTY EXPECTED | This entry and acceptance/runbook updates leave documentation changes for review. |
+
+Manual QA checklist:
+
+| Check | Result | Evidence |
+|---|---|---|
+| App first screen displayed | Pass | Emulator screenshot and physical XML showed app surface. |
+| Title displayed | Pass | `HeartTalk Daily Reflection Demo` appeared in screenshot/XML. |
+| Privacy notice displayed | Pass | `Privacy-first demo` notice appeared; copy states no calls/SMS/messengers/notifications/voice/PPG/contacts/location/health data and no cloud AI/analytics/sync/database/permission request. |
+| Demo preset selectable | Pass | `Work coordination` selected on emulator and physical target. |
+| Generate flow works | Pass | Demo selection generated preview automatically; manual input plus generate produced manual preview. |
+| Reflection card displayed | Pass | `Daily reflection card` appeared with summary/gentle insight/closing prompt/tomorrow line. |
+| Morning briefing/next action displayed | Pass | `Morning briefing` and `Next action` appeared after keep. |
+| Manual input works | Pass | Safe manual text produced `Source: Manual text` and reflection preview. |
+| Empty validation displayed | Pass | Empty generate showed `Write at least one sentence to create a reflection.` |
+| Keep works | Pass | Keep produced morning briefing and kept state. |
+| Reset/delete works | Pass | Reset/delete returned to empty state on emulator visual QA. |
+| Session-only relaunch behavior | Pass | After force-stop/relaunch on physical target, previous reflection/morning/kept state was absent. |
+| Permission prompt absent | Pass | No permission prompt appeared during emulator/physical QA flow. |
+| Network/cloud AI/API trace absent | Pass | UI copy states local deterministic processing; no network/API prompt or account/cloud surface appeared during QA. |
+| Medical/diagnostic wording absent | Pass | Observed copy stayed non-diagnostic and did not mention diagnosis, treatment, risk score, or mental-health classification. |
+
+Notes:
+
+- Emulator `emulator-5554` completed most visual manual QA but became ADB-offline before the final session-only relaunch check.
+- The final session-only relaunch check was repeated on physical Android device `SM F956N` with safe demo data only.
+- Physical-device screenshot capture was intentionally avoided; UIAutomator XML text dumps were used to reduce personal-device screenshot exposure.
+- No app code, tests, Flutter config, platform files, specs, scripts, secrets, signing material, or dependencies were changed.
+
+Security/privacy review:
+
+| Check | Result | Notes |
+|---|---|---|
+| Real PPG/voice data | NONE | QA used safe demo/manual text only. |
+| Personal data | NONE | No personal data was entered or recorded. |
+| Health-sensitive logs | NONE | No health-sensitive logs were added. |
+| API keys/tokens/signing keys | NONE | No API keys, tokens, signing keys, keystores, private keys, or release credentials were added. |
+| Permissions/network/database changes | NONE | Documentation-only update; no app/platform/dependency changes. |
+| Cloud AI/API calls | NONE | No cloud AI/API path was added or observed in the QA flow. |
+| Medical/diagnostic claims | NONE | Observed copy remained gentle and non-diagnostic. |
+
+Known risks:
+
+- Emulator `emulator-5554` became ADB-offline after most visual QA steps, so the session-only relaunch evidence was completed on the physical Android target instead.
+- Repository does not store screenshots; evidence is recorded as command output and UI text observations.
+
+Recommended next work:
+
+- Add a small QA artifact retention policy for where screenshots/XML dumps should live when they need to be preserved.
+- Clean remaining mojibake in AGENTS/reporting docs in a separate allowed-scope documentation task.
+
+Recommended commit message:
+
+```text
+docs: record Android manual QA evidence
+```
+
 ## 2026-06-28 - HT-QA-002 - Run Android Manual QA or Prepare Device Evidence Path
 
 Verdict: Pass

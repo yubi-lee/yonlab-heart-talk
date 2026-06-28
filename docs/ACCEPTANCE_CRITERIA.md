@@ -86,6 +86,18 @@ Current status for `HT-QA-002 - Run Android Manual QA or Prepare Device Evidence
 
 Do not mark Android manual QA as `Pass` until `flutter run -d <android-device-id>` or an installed APK has been exercised on an Android emulator or physical Android device and the checklist above has been completed.
 
+Current status for `HT-QA-003 - Execute Android Manual QA Evidence`:
+
+| Item | Status | Evidence |
+|---|---|---|
+| Android target available | Pass | `flutter devices` listed physical device `SM F956N` and emulator `emulator-5554`; ADB listed both targets. |
+| Android manual app launch | Pass | `flutter run -d emulator-5554` launched the app on emulator; `flutter run -d R3CX70NHJRN --no-resident` launched the app on physical device. |
+| Manual QA checklist | Pass with notes | Emulator visual QA confirmed title, privacy notice, demo preset, reflection preview/card, keep, morning briefing, next action, reset/delete, manual input, and empty validation. Physical-device UIAutomator text dumps confirmed generated state and session-only relaunch behavior. |
+| Session-only persistence | Pass | After `adb shell am force-stop com.example.heart_talk` and launcher relaunch on `SM F956N`, UIAutomator text returned to initial/privacy/demo-preset state and no reflection/morning/kept state remained. |
+| Screenshot evidence | Pass with notes | Emulator screenshots were captured for visual inspection outside the repository; physical-device verification used UIAutomator XML text dumps to avoid collecting personal-device screenshots. |
+
+Android manual QA is now `Pass with notes`: the full visible MVP flow was exercised on Android, with emulator visual evidence and physical-device text evidence. The only note is that the emulator became ADB-offline before the final session-only relaunch check, so that final check was repeated on the physical Android target.
+
 ## Non-MVP / Out of Scope
 
 The following remain out of scope for the current MVP and require a separate approved spec before implementation:

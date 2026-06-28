@@ -213,6 +213,18 @@ flutter build apk --debug
 
 Manual Android QA is `Pass` only after the app is actually launched on an Android emulator or physical Android device and the checklist is completed. A successful APK build is build evidence, not manual run evidence.
 
+### Session-only restart check
+
+Use this check after keeping a reflection to prove the MVP does not persist the kept result as durable storage:
+
+```powershell
+cd D:\Views\heart_talk
+C:\Utils\Android\SDK\platform-tools\adb.exe -s <android-device-id> shell am force-stop com.example.heart_talk
+C:\Utils\Android\SDK\platform-tools\adb.exe -s <android-device-id> shell monkey -p com.example.heart_talk -c android.intent.category.LAUNCHER 1
+```
+
+After relaunch, the app should return to the initial safe state. The previous reflection preview, daily reflection card, morning briefing, next action, and kept message should not remain visible.
+
 ### Git status is not clean
 
 Do not revert user changes. Inspect:
