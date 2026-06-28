@@ -4,6 +4,113 @@ Use this file as a template for task evidence. Add newest entries at the top whe
 
 Completion is based on observed command output, not on an AI saying the task is complete.
 
+## 2026-06-28 - HT-QA-001 - Validate Daily Reflection Demo MVP Acceptance
+
+Verdict: Pass
+
+Branch:
+
+```text
+main
+```
+
+Task:
+
+```text
+HT-QA-001 - Validate Daily Reflection Demo MVP Acceptance
+```
+
+Baseline commit:
+
+```text
+aedbaece950f984769551eaa0f7f3c1d78573dff
+aedbaec feat: complete daily reflection demo MVP
+```
+
+Initial status:
+
+```powershell
+cd D:\Views\heart_talk
+git status -sb
+```
+
+Output:
+
+```text
+## main...origin/main
+```
+
+Changed files:
+
+```text
+docs/ACCEPTANCE_CRITERIA.md
+docs/DECISION_LOG.md
+docs/RUNBOOK.md
+docs/EVIDENCE_LOG.md
+```
+
+Commands and observed results:
+
+| Command | Result | Evidence summary |
+|---|---|---|
+| `dart format --output=none --set-exit-if-changed .` | PASS | `Formatted 9 files (0 changed) in 0.26 seconds.` |
+| `flutter analyze` | PASS | `No issues found! (ran in 11.5s)` |
+| `flutter test` | PASS | `+13: All tests passed!` |
+| `flutter build apk --debug` | PASS | `Built build\app\outputs\flutter-apk\app-debug.apk` |
+| `powershell -ExecutionPolicy Bypass -File .\scripts\verify.ps1` | PASS | format `Formatted 9 files (0 changed)`, analyze `No issues found!`, test `+13: All tests passed!` |
+| `git diff --check` | PASS | Exit code 0; no whitespace errors. Git printed only LF-to-CRLF working-copy warnings for changed Markdown files. |
+| `flutter devices` | PASS | Devices found: Windows desktop, Chrome web, Edge web. No Android emulator/device was connected. |
+| `flutter emulators` | PASS | `No emulators available.` |
+| `flutter run` | SKIPPED | Android manual run is pending because no Android emulator/device was available. Debug APK build succeeded instead. |
+| `git status -sb` | DIRTY EXPECTED | `M docs/ACCEPTANCE_CRITERIA.md`, `M docs/DECISION_LOG.md`, `M docs/RUNBOOK.md`; this entry adds `M docs/EVIDENCE_LOG.md`. |
+
+Acceptance validation summary:
+
+- Added an HT-MVP-001 acceptance matrix with Pass/Pending/Out of Scope language.
+- Separated automated evidence from manual QA expectations.
+- Documented the session-only keep policy and reset/delete expectation.
+- Added Daily Reflection manual QA steps to the runbook.
+- Recorded DEC-010: Daily Reflection MVP persistence remains session-only and in-memory; durable local storage is a future approved slice.
+- Confirmed that this QA task did not modify app code, tests, specs, scripts, Flutter configuration, platform folders, dependencies, or signing material.
+
+Device/manual QA status:
+
+| Check | Result | Notes |
+|---|---|---|
+| Android emulator/device available | Pending | `flutter devices` listed Windows, Chrome, and Edge only. |
+| Android emulator list | Pending | `flutter emulators` returned `No emulators available.` |
+| Manual `flutter run` on Android | Pending | Not run because no Android emulator/device was available. |
+| Build substitute | Pass | `flutter build apk --debug` built `app-debug.apk`. |
+
+Security/privacy review:
+
+| Check | Result | Notes |
+|---|---|---|
+| Real PPG/voice data | NONE | Documentation-only QA update; no real data added. |
+| Personal data | NONE | No personal data was added. |
+| Health-sensitive logs | NONE | No health-sensitive logs were added. |
+| API keys/tokens/signing keys | NONE | No API keys, tokens, signing keys, keystores, private keys, or release credentials were added. |
+| Permissions/network/database changes | NONE | No app code, platform configuration, dependency, network, database, analytics, sync, or permission changes were made. |
+| Cloud AI/API calls | NONE | No cloud AI or external API path was added. |
+| Medical/diagnostic claims | NONE | Documentation keeps diagnosis, treatment advice, disease prediction, risk scoring, and mental-health classification out of scope. |
+
+Known risks:
+
+- Manual Android device QA remains pending until an Android emulator or physical device is available.
+- `AGENTS.md` still displays mojibake in the final-report list when read in the current terminal, but it was outside the HT-QA-001 allowed file scope.
+
+Recommended next work:
+
+- Run the Daily Reflection manual QA checklist on an Android emulator or physical device and append screenshot or command evidence.
+- Clean the remaining `AGENTS.md` final-report mojibake in a dedicated allowed-scope documentation task if it is still present in the file.
+- Review `docs/privacy/` and `docs/security/` against the current Daily Reflection MVP.
+
+Recommended commit message:
+
+```text
+docs: validate daily reflection MVP acceptance
+```
+
 ## 2026-06-28 - HT-MVP-001 - Complete Usable Daily Reflection Demo App
 
 Verdict: Pass

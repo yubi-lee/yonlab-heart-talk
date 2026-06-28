@@ -13,6 +13,7 @@ This file summarizes workflow-level decisions for the current repository. The hi
 | DEC-007 | 2026-06-22 | Keep synthetic PPG work as a later technical validation slice. | PPG remains long-term direction but is not required for the first product experience. | Accepted |
 | DEC-008 | 2026-06-28 | Use evidence-gated completion as the operating standard. | Command output is auditable; AI completion claims are not sufficient. | Accepted |
 | DEC-009 | 2026-06-28 | Add project-level docs and PowerShell scripts without changing app code. | Aligns the repository with the YOnLab ChatGPT x Codex workflow while preserving the existing Flutter MVP. | Accepted |
+| DEC-010 | 2026-06-28 | Keep Daily Reflection MVP persistence session-only and in-memory. | The MVP validates the reflection flow without durable storage, raw input retention, database schema, account state, or privacy review overhead. Durable local storage must be handled as a future approved slice. | Accepted |
 
 ## New Decision Template
 
