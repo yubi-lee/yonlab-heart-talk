@@ -189,3 +189,14 @@ Codex final reports for HeartTalk must be written in Korean and include:
 | DQA-AC-007 | Verification commands pass or failures/skips are recorded. | Pending final verification | Run `powershell -ExecutionPolicy Bypass -File .\scripts\verify.ps1`, `git diff --check`, and `git status -sb`. |
 
 Manual Android execution of this checklist is not required for `HT-DESIGN-QA-001`; the deliverable is the checklist and documentation wiring. Actual device execution should be recorded as a later QA evidence task before or during `HT-INSIGHT-001` readiness review.
+
+## HT-INSIGHT-001 Acceptance Matrix
+
+| ID | Criterion | Status | Evidence |
+|---|---|---|---|
+| INSIGHT-001 | `LocalInsightService` generates fallback insight for empty or consent-off memory. | Implemented | `local_insight_service_test.dart` covers empty snapshot and `localMemoryEnabled=false`. |
+| INSIGHT-002 | Approved local memory can produce pattern insight, recurring signals, tomorrow hint, curiosity question, tiny mission, and role message. | Implemented | Service tests cover reflection entries, recurring keywords, todos, and person memory. |
+| INSIGHT-003 | Role-specific insight copy differs while staying safe. | Implemented | Service tests cover friend, coach, listener, lover, and parent wording constraints. |
+| INSIGHT-004 | UI exposes `오늘의 인사이트` with fallback and todo-based tiny mission behavior. | Implemented | `daily_reflection_screen_test.dart` covers fallback display and todo memory update. |
+| INSIGHT-005 | No new dependency, platform setting, network, Cloud AI, analytics, sync, account, or sensitive permission is added. | Pending final verification | Confirm with changed-file review and final `git status -sb`. |
+| INSIGHT-006 | Verification gate passes after implementation. | Pending final verification | Run `powershell -ExecutionPolicy Bypass -File .\scripts\verify.ps1`, `git diff --check`, and `git status -sb`. |

@@ -144,3 +144,18 @@ Design alignment does not change the privacy/security posture:
 - No automatic access to voice, phone, SMS, messenger, contacts, calendar, location, or health data.
 - `shared_preferences` remains non-encrypted local key-value storage and must not be used for credentials, secrets, medical records, raw private conversations, or other high-sensitivity data.
 - Growth level remains deterministic local logic and must not be framed as psychological diagnosis, treatment judgment, risk score, or clinical prediction.
+
+## HT-INSIGHT-001 Local Insight Data Flow
+
+Local insight flow:
+
+```text
+Consent-filtered LocalMemorySnapshot
+-> deterministic LocalInsightService
+-> in-memory LocalInsightSummary
+-> `오늘의 인사이트` UI display
+```
+
+The insight summary is derived at render time and is not stored as a new durable record. It uses approved local memory categories only when local memory consent is enabled. If consent is off, the engine returns fallback copy and does not personalize from stored profile, reflection, relationship, todo, or keyword data.
+
+The feature adds no network call, Cloud AI, analytics, sync, account, notification, OS data access, native permission, or new dependency.

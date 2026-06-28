@@ -73,3 +73,9 @@ Current implemented product state after `HT-COMPANION-001`:
 - Deterministic local growth level and role + growth Korean companion message.
 
 Role modes are companion tone/persona only. They must not claim to replace real human relationships. Lover and parent roles must avoid dependency-inducing, obsessive, sexual, controlling, shaming, or blaming language.
+
+## HT-INSIGHT-001 Product Update
+
+HeartTalk now includes a local-only deterministic insight engine. When local memory consent is enabled and approved memory exists, the app can show `오늘의 인사이트` with recurring signals, a tomorrow hint, a curiosity question, a tiny mission, and a role-aware companion line.
+
+The insight is not a diagnosis, prediction guarantee, risk score, therapy judgment, or emergency guide. It is a gentle local reflection based on approved memory and uses possibility/hint language.

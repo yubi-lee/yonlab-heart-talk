@@ -342,3 +342,27 @@ Minimum review areas:
 Fail the manual QA run if the app requests sensitive permissions, implies OS data access, introduces network/cloud/analytics/sync/account behavior, hides stored categories, persists memory with consent OFF, fails full reset, displays broken Korean in the Android UI, or uses companion copy that implies medical judgment or replacement of real relationships.
 
 After the run, add a summary to `docs/EVIDENCE_LOG.md` with the Android target, checklist verdict, failed IDs, noted IDs, evidence handling decision, and whether `HT-INSIGHT-001` is blocked.
+
+## HT-INSIGHT-001 Local Insight Verification
+
+Use this flow when validating the local insight engine:
+
+```powershell
+cd D:\Views\heart_talk
+flutter test test\features\daily_reflection\application\local_insight_service_test.dart
+flutter test test\features\daily_reflection\presentation\daily_reflection_screen_test.dart
+powershell -ExecutionPolicy Bypass -File .\scripts\verify.ps1
+git diff --check
+git status -sb
+```
+
+Manual smoke path:
+
+1. Launch the app on Android or widget-test equivalent.
+2. Confirm `오늘의 인사이트` appears in the local memory area.
+3. With local memory consent OFF or after full reset, confirm fallback copy says the app is still learning the user's pattern.
+4. Turn local memory consent ON.
+5. Add a safe synthetic todo and save memory.
+6. Confirm the tiny mission reflects a small first action, such as a 3-minute start.
+7. Confirm copy uses hints and possibilities, not diagnosis, treatment, risk, or certainty language.
+8. Confirm no permission prompt, account login, network/cloud AI surface, notification behavior, analytics, or sync appears.

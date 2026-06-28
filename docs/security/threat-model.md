@@ -116,3 +116,17 @@ Residual risk: `shared_preferences` is not encrypted secure storage. Do not stor
 Design alignment tasks are documentation/spec tasks only and must not introduce new runtime surfaces. `Design.md` does not authorize network, cloud AI, analytics, sync, account, native permission, sensor, or platform storage changes.
 
 Role-based companion UX has an additional safety constraint: romantic or parental tone must never become dependency-inducing, obsessive, sexual, controlling, shaming, or blaming. The role is a presentation/tone preference, not a real relationship substitute or clinical support role.
+
+## HT-INSIGHT-001 Threat Model Update
+
+New local behavior: `LocalInsightService` derives a transient insight from `LocalMemorySnapshot`, `CompanionPreference`, and `CompanionGrowthState`.
+
+Additional controls:
+
+- Insight generation is deterministic and local-only.
+- Consent OFF returns fallback insight instead of personalized memory-based insight.
+- Relationship memory is reflected at category level and should not expose raw relationship notes in insight questions.
+- No raw personal input is printed, debug-printed, logged, or sent over a network.
+- Insight copy must avoid diagnosis, treatment, risk scoring, certainty claims, shame, blame, dependency, or real relationship replacement.
+
+Residual risk: the insight UI may summarize sensitive information if the user stores sensitive memory. Keep the non-sensitive input guidance and `shared_preferences` non-encrypted storage warning visible in docs and QA.

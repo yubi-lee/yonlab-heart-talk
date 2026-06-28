@@ -1238,3 +1238,76 @@ Recommended next step:
 ```text
 Run the new Android checklist on an emulator or physical Android device before starting HT-INSIGHT-001.
 ```
+
+## 2026-06-29 - HT-INSIGHT-001 - Local Insight & Prediction Engine
+
+Verdict: Pass
+
+Branch:
+
+```text
+main
+```
+
+Initial status:
+
+```text
+## main...origin/main
+```
+
+Task:
+
+```text
+HT-INSIGHT-001 - Local Insight & Prediction Engine
+```
+
+Changed files:
+
+```text
+lib/features/daily_reflection/domain/local_insight_models.dart
+lib/features/daily_reflection/application/local_insight_service.dart
+lib/features/daily_reflection/presentation/daily_reflection_screen.dart
+test/features/daily_reflection/application/local_insight_service_test.dart
+test/features/daily_reflection/presentation/daily_reflection_screen_test.dart
+specs/003-local-insight-prediction-engine/spec.md
+docs/PRODUCT_SPEC.md
+docs/ARCHITECTURE.md
+docs/ACCEPTANCE_CRITERIA.md
+docs/RUNBOOK.md
+docs/privacy/data-flow-and-retention.md
+docs/security/threat-model.md
+docs/EVIDENCE_LOG.md
+```
+
+Implementation summary:
+
+- Added `LocalInsightSummary`, `RecurringSignal`, `TomorrowHint`, `CuriosityQuestion`, `TinyMission`, and `DataDepthLabel` models.
+- Added `LocalInsightService` for deterministic local insight generation from `LocalMemorySnapshot`, `CompanionPreference`, and `CompanionGrowthState`.
+- Added fallback insight for empty snapshots and local memory consent OFF.
+- Added recurring signal derivation from reflection tags, recurring keywords, todo presence, and relationship memory presence.
+- Added role-aware insight messages with safety constraints for lover and parent roles.
+- Added `오늘의 인사이트` display inside the existing local memory area.
+- Added `specs/003-local-insight-prediction-engine/spec.md` and updated product, architecture, acceptance, runbook, privacy, and security docs.
+
+Verification results:
+
+| Command | Result | Evidence summary |
+|---|---|---|
+| `flutter test test\features\daily_reflection\application\local_insight_service_test.dart` | PASS | `+6: All tests passed!` |
+| `flutter test test\features\daily_reflection\presentation\daily_reflection_screen_test.dart` | PASS | `+10: All tests passed!` |
+| `powershell -ExecutionPolicy Bypass -File .\scripts\verify.ps1` | PASS | format `Formatted 20 files (0 changed)`, analyze `No issues found!`, test `+34: All tests passed!`. |
+
+Security/privacy notes:
+
+- No dependency files were changed.
+- No Android/iOS/macOS platform files were changed.
+- No network, Cloud AI, LLM API, analytics, sync, account, notification, or sensitive permission path was added.
+- Insight results are derived in memory from the consent-filtered local memory snapshot and are not persisted as a separate durable record.
+- Consent OFF returns fallback insight instead of personalized memory-based insight.
+- Tests cover unsafe wording avoidance for lover and parent role messages.
+
+Known risks:
+
+- The current single-screen UI is functional but dense; Android manual QA should verify readability of the new insight area.
+- `shared_preferences` remains non-encrypted storage, so high-sensitivity user input remains out of scope.
+- Some existing Korean strings appear mojibake in PowerShell output; Android UI rendering should remain the source of truth for copy QA.

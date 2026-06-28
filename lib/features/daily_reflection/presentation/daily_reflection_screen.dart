@@ -3,11 +3,13 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import '../application/companion_message_service.dart';
 import '../application/growth_calculator.dart';
+import '../application/local_insight_service.dart';
 import '../application/rule_based_reflection_engine.dart';
 import '../data/demo_reflection_repository.dart';
 import '../data/local_memory_repository.dart';
 import '../data/shared_preferences_memory_repository.dart';
 import '../domain/companion_models.dart';
+import '../domain/local_insight_models.dart';
 import '../domain/local_memory_models.dart';
 import '../domain/reflection_models.dart';
 
@@ -23,6 +25,7 @@ class _DailyReflectionScreenState extends State<DailyReflectionScreen> {
   final _engine = RuleBasedReflectionEngine();
   final _growthCalculator = const GrowthCalculator();
   final _messageService = const CompanionMessageService();
+  final _insightService = const LocalInsightService();
   final _controller = TextEditingController();
   final _profileNameController = TextEditingController();
   final _todoMemoryController = TextEditingController();
@@ -238,6 +241,11 @@ class _DailyReflectionScreenState extends State<DailyReflectionScreen> {
             growthState: _growthState,
             reflectionSummary: summary.todayFlow,
           );
+    final localInsight = _insightService.generate(
+      snapshot: _memorySnapshot,
+      preference: _memorySnapshot.companionPreference,
+      growthState: _growthState,
+    );
 
     return Scaffold(
       appBar: AppBar(title: const Text('HeartTalk Daily Reflection Demo')),
@@ -302,6 +310,7 @@ class _DailyReflectionScreenState extends State<DailyReflectionScreen> {
               _LocalMemoryPanel(
                 snapshot: _memorySnapshot,
                 growthState: _growthState,
+                insight: localInsight,
                 profileNameController: _profileNameController,
                 todoMemoryController: _todoMemoryController,
                 personMemoryController: _personMemoryController,
@@ -404,6 +413,7 @@ class _LocalMemoryPanel extends StatelessWidget {
   const _LocalMemoryPanel({
     required this.snapshot,
     required this.growthState,
+    required this.insight,
     required this.profileNameController,
     required this.todoMemoryController,
     required this.personMemoryController,
@@ -415,6 +425,7 @@ class _LocalMemoryPanel extends StatelessWidget {
 
   final LocalMemorySnapshot snapshot;
   final CompanionGrowthState growthState;
+  final LocalInsightSummary insight;
   final TextEditingController profileNameController;
   final TextEditingController todoMemoryController;
   final TextEditingController personMemoryController;
@@ -422,6 +433,13 @@ class _LocalMemoryPanel extends StatelessWidget {
   final ValueChanged<CompanionRole> onRoleSelected;
   final VoidCallback onSaveMemory;
   final VoidCallback onClearAll;
+
+  String _signalLine(List<RecurringSignal> signals) {
+    if (signals.isEmpty) {
+      return '반복 신호: 아직 없음';
+    }
+    return '반복 신호: ${signals.map((signal) => '${signal.label}(${signal.count})').join(', ')}';
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -506,6 +524,14 @@ class _LocalMemoryPanel extends StatelessWidget {
           'People: ${snapshot.people.map((person) => person.note).join(', ')}',
         ),
         Text('Todos: ${snapshot.todos.map((todo) => todo.title).join(', ')}'),
+        const SizedBox(height: 8),
+        Text(insight.patternTitle, key: const Key('localInsightTitle')),
+        Text(insight.patternBody),
+        Text(_signalLine(insight.recurringSignals)),
+        Text('${insight.tomorrowHint.title}: ${insight.tomorrowHint.body}'),
+        Text('질문: ${insight.curiosityQuestion.text}'),
+        Text('${insight.tinyMission.title}: ${insight.tinyMission.body}'),
+        Text(insight.roleMessage),
       ],
     );
   }

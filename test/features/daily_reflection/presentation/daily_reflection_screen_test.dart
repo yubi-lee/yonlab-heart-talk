@@ -266,4 +266,28 @@ void main() {
     expect(find.text('Profile: 나'), findsNothing);
     expect(find.text('Profile: -'), findsOneWidget);
   });
+  testWidgets('shows local insight fallback and todo-based tiny mission', (
+    tester,
+  ) async {
+    await _pumpScreen(tester);
+
+    await _scrollTo(tester, find.text('오늘의 인사이트'));
+    expect(find.text('오늘의 인사이트'), findsOneWidget);
+    expect(find.textContaining('아직 알아가는 중'), findsOneWidget);
+
+    await _scrollTo(tester, find.byKey(const Key('localMemoryConsentSwitch')));
+    await tester.tap(find.byKey(const Key('localMemoryConsentSwitch')));
+    await tester.pumpAndSettle();
+    await tester.enterText(
+      find.byKey(const Key('todoMemoryField')),
+      '내일 쉬운 일 하나 정리',
+    );
+    await _scrollTo(tester, find.byKey(const Key('saveMemoryButton')));
+    await tester.tap(find.byKey(const Key('saveMemoryButton')));
+    await tester.pumpAndSettle();
+
+    await _scrollTo(tester, find.textContaining('내일 첫 3분'));
+    expect(find.textContaining('내일 첫 3분'), findsOneWidget);
+    expect(find.text('오늘의 인사이트'), findsOneWidget);
+  });
 }

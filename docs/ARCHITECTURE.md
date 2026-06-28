@@ -109,3 +109,13 @@ The dependency direction remains presentation -> application/data/domain. Domain
 `Design.md` does not change the current app architecture. HeartTalk remains a Flutter app using feature-first layered architecture under `lib/features/daily_reflection`.
 
 Design-system work, if approved later, should be added without collapsing domain/application/data boundaries into presentation code. Recommended future UI work should introduce small reusable widgets or theme tokens only after a HeartTalk-specific design QA milestone defines the intended visual hierarchy, Korean copy standards, and safety copy constraints.
+
+## HT-INSIGHT-001 Architecture Update
+
+Local insight is implemented inside the existing `daily_reflection` feature without new dependencies:
+
+- `domain/local_insight_models.dart`: insight result models and data-depth enum.
+- `application/local_insight_service.dart`: deterministic insight generation from `LocalMemorySnapshot`, `CompanionPreference`, and `CompanionGrowthState`.
+- `presentation/daily_reflection_screen.dart`: minimal `오늘의 인사이트` display inside the existing local memory area.
+
+The engine does not persist a separate insight record. It derives the current insight from the consent-filtered local memory snapshot at render time.
