@@ -167,11 +167,51 @@ Run:
 
 ```powershell
 cd D:\Views\heart_talk
+flutter doctor -v
 flutter devices
+flutter emulators
 flutter build apk --debug
 ```
 
 If no supported Android device is listed, record manual device QA as pending and keep the debug APK build output as build evidence.
+
+Use one of these paths to make Android manual QA possible:
+
+1. Android Studio emulator path
+   - Open Android Studio.
+   - Open Device Manager.
+   - Create or start an Android Virtual Device.
+   - Re-run:
+
+```powershell
+cd D:\Views\heart_talk
+flutter devices
+flutter run -d <android-device-id>
+```
+
+2. Physical Android device path
+   - Enable Developer Options on the Android device.
+   - Enable USB debugging.
+   - Connect the device by USB and approve the debugging prompt.
+   - Re-run:
+
+```powershell
+cd D:\Views\heart_talk
+flutter devices
+flutter run -d <android-device-id>
+```
+
+3. APK install path
+   - Build the debug APK.
+   - Install `build\app\outputs\flutter-apk\app-debug.apk` on an Android device.
+   - Run the Daily Reflection manual QA checklist on the installed app.
+
+```powershell
+cd D:\Views\heart_talk
+flutter build apk --debug
+```
+
+Manual Android QA is `Pass` only after the app is actually launched on an Android emulator or physical Android device and the checklist is completed. A successful APK build is build evidence, not manual run evidence.
 
 ### Git status is not clean
 

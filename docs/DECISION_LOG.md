@@ -14,6 +14,7 @@ This file summarizes workflow-level decisions for the current repository. The hi
 | DEC-008 | 2026-06-28 | Use evidence-gated completion as the operating standard. | Command output is auditable; AI completion claims are not sufficient. | Accepted |
 | DEC-009 | 2026-06-28 | Add project-level docs and PowerShell scripts without changing app code. | Aligns the repository with the YOnLab ChatGPT x Codex workflow while preserving the existing Flutter MVP. | Accepted |
 | DEC-010 | 2026-06-28 | Keep Daily Reflection MVP persistence session-only and in-memory. | The MVP validates the reflection flow without durable storage, raw input retention, database schema, account state, or privacy review overhead. Durable local storage must be handled as a future approved slice. | Accepted |
+| DEC-011 | 2026-06-28 | Separate Android debug APK build evidence from Android manual QA pass evidence. | A successful APK build proves the Android artifact builds, but manual QA requires launching the app on an Android emulator or physical device and completing the checklist. | Accepted |
 
 ## New Decision Template
 

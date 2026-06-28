@@ -4,6 +4,103 @@ Use this file as a template for task evidence. Add newest entries at the top whe
 
 Completion is based on observed command output, not on an AI saying the task is complete.
 
+## 2026-06-28 - HT-QA-002 - Run Android Manual QA or Prepare Device Evidence Path
+
+Verdict: Pass
+
+Branch:
+
+```text
+main
+```
+
+Task:
+
+```text
+HT-QA-002 - Run Android Manual QA or Prepare Device Evidence Path
+```
+
+Initial status:
+
+```powershell
+cd D:\Views\heart_talk
+git status -sb
+```
+
+Output:
+
+```text
+## main...origin/main
+```
+
+Changed files:
+
+```text
+docs/ACCEPTANCE_CRITERIA.md
+docs/DECISION_LOG.md
+docs/EVIDENCE_LOG.md
+docs/RUNBOOK.md
+```
+
+Commands and observed results:
+
+| Command | Result | Evidence summary |
+|---|---|---|
+| `flutter doctor -v` | PASS | Flutter 3.44.2 and Dart 3.12.2 found; Android toolchain is available with Android SDK 37.0.0, emulator 36.6.11.0, build-tools 37.0.0, Java 21, and accepted Android licenses; no issues found. |
+| `flutter devices` | PASS | Devices found: Windows desktop, Chrome web, Edge web. No Android emulator/device was connected. |
+| `flutter emulators` | PASS | `No emulators available.` |
+| `flutter build apk --debug` | PASS | `Built build\app\outputs\flutter-apk\app-debug.apk` |
+| `powershell -ExecutionPolicy Bypass -File .\scripts\verify.ps1` | PASS | format `Formatted 9 files (0 changed)`, analyze `No issues found!`, test `+13: All tests passed!` |
+| `flutter run -d <android-device-id>` | SKIPPED | Skipped because `flutter devices` did not list an Android emulator/device and `flutter emulators` listed no available emulator. |
+| `git diff --check` | PASS | Exit code 0; no whitespace errors. Git printed only LF-to-CRLF working-copy warnings for changed Markdown files. |
+| `git status -sb` | DIRTY EXPECTED | `M docs/ACCEPTANCE_CRITERIA.md`, `M docs/DECISION_LOG.md`, `M docs/EVIDENCE_LOG.md`, `M docs/RUNBOOK.md`. |
+
+Android device/manual QA status:
+
+| Check | Result | Notes |
+|---|---|---|
+| Android toolchain available | Pass | `flutter doctor -v` reports the Android toolchain is ready. |
+| Android emulator/device connected | Pending | No Android target is listed by `flutter devices`. |
+| Android emulator available | Pending | `flutter emulators` reports no available emulator. |
+| Android manual run | Pending | Not run because no Android emulator or physical Android device is available. |
+| Build evidence | Pass | Debug APK builds successfully. |
+
+Documentation updates:
+
+- Updated `docs/RUNBOOK.md` with Android Studio emulator, physical USB debugging, and APK install paths.
+- Updated `docs/ACCEPTANCE_CRITERIA.md` with Android manual QA evidence status and the rule that APK build evidence is not the same as manual run evidence.
+- Added DEC-011 to `docs/DECISION_LOG.md`: Android debug APK build evidence and Android manual QA pass evidence must remain separate.
+- Did not modify app code, tests, specs, scripts, Flutter configuration, platform folders, dependencies, README, secrets, or signing material.
+
+Security/privacy review:
+
+| Check | Result | Notes |
+|---|---|---|
+| Real PPG/voice data | NONE | Documentation-only QA update; no real data added. |
+| Personal data | NONE | No personal data was added. |
+| Health-sensitive logs | NONE | No health-sensitive logs were added. |
+| API keys/tokens/signing keys | NONE | No API keys, tokens, signing keys, keystores, private keys, or release credentials were added. |
+| Permissions/network/database changes | NONE | No app code, platform configuration, dependency, network, database, analytics, sync, or permission changes were made. |
+| Cloud AI/API calls | NONE | No cloud AI or external API path was added. |
+| Medical/diagnostic claims | NONE | Documentation keeps diagnosis, treatment advice, disease prediction, risk scoring, and mental-health classification out of scope. |
+
+Known risks:
+
+- Android manual QA remains pending until an Android emulator or physical Android device is available.
+- Human screenshot evidence remains pending because no Android app session was available to capture.
+
+Recommended next work:
+
+- Create an Android emulator in Android Studio Device Manager, then run `flutter devices` and `flutter run -d <android-device-id>`.
+- Connect a physical Android device with USB debugging enabled and run the Daily Reflection manual QA checklist.
+- Install `build\app\outputs\flutter-apk\app-debug.apk` on an Android device and record manual QA evidence.
+
+Recommended commit message:
+
+```text
+docs: document Android manual QA evidence path
+```
+
 ## 2026-06-28 - HT-QA-001 - Validate Daily Reflection Demo MVP Acceptance
 
 Verdict: Pass

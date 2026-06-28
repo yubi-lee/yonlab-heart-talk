@@ -72,6 +72,20 @@ Run this checklist on an Android emulator or physical Android device when availa
 
 If no emulator or device is available, mark device/manual run as `Pending` in the evidence log and rely on `flutter build apk --debug` plus automated tests for build and behavior evidence.
 
+## Android Manual QA Evidence Status
+
+Current status for `HT-QA-002 - Run Android Manual QA or Prepare Device Evidence Path`:
+
+| Item | Status | Evidence |
+|---|---|---|
+| Android toolchain | Pass | `flutter doctor -v` reports Android SDK 37.0.0, emulator 36.6.11.0, build-tools 37.0.0, Java 21, and accepted Android licenses. |
+| Connected Android device | Pending | `flutter devices` lists Windows, Chrome, and Edge only. |
+| Available Android emulator | Pending | `flutter emulators` reports `No emulators available.` |
+| Android debug APK build | Pass | `flutter build apk --debug` builds `build\app\outputs\flutter-apk\app-debug.apk`. |
+| Android manual `flutter run` QA | Pending | No Android emulator or physical Android device is currently available. |
+
+Do not mark Android manual QA as `Pass` until `flutter run -d <android-device-id>` or an installed APK has been exercised on an Android emulator or physical Android device and the checklist above has been completed.
+
 ## Non-MVP / Out of Scope
 
 The following remain out of scope for the current MVP and require a separate approved spec before implementation:
