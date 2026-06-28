@@ -5,13 +5,20 @@ void main() {
   group('DemoReflectionRepository', () {
     const repository = DemoReflectionRepository();
 
-    test('returns at least five demo events with text', () {
+    test('returns at least five readable safe demo events', () {
       final events = repository.listEvents();
 
       expect(events.length, greaterThanOrEqualTo(5));
+      expect(events.map((event) => event.id), contains('work_coordination'));
+      expect(events.map((event) => event.id), contains('gratitude_note'));
+      expect(events.map((event) => event.id), contains('tomorrow_task'));
+
       for (final event in events) {
         expect(event.text.trim(), isNotEmpty);
         expect(event.title.trim(), isNotEmpty);
+        expect(event.title, isNot(contains('?')));
+        expect(event.text, isNot(contains('?')));
+        expect(event.tags, contains('demo'));
       }
     });
 

@@ -80,21 +80,29 @@ class _DailyReflectionScreenState extends State<DailyReflectionScreen> {
         _session.shouldShowMorningBriefing && morningDraft != null;
 
     return Scaffold(
-      appBar: AppBar(title: const Text('HeartTalk — 오늘 어땠어?')),
+      appBar: AppBar(title: const Text('HeartTalk Daily Reflection Demo')),
       body: SafeArea(
         child: ListView(
           padding: const EdgeInsets.all(16),
           children: [
+            Text(
+              'A local-only daily reflection demo for ending the day gently.',
+              style: Theme.of(context).textTheme.bodyLarge,
+            ),
+            const SizedBox(height: 16),
             _InfoPanel(
-              title: '내 개인정보 보호 안내',
+              title: 'Privacy-first demo',
               children: const [
-                '통화, SMS, 메신저, 알림, 음성, PPG를 자동으로 읽지 않아요.',
-                '직접 적은 문장과 선택한 데모 이야기만 사용해요.',
-                '이 MVP는 cloud AI, 네트워크, 저장소, 권한 요청 없이 화면 안에서만 동작해요.',
+                'This MVP does not read calls, SMS, messengers, notifications, voice, PPG, contacts, location, or health data.',
+                'Use only safe demo events or short non-sensitive text that you type yourself.',
+                'Processing is local and deterministic. No cloud AI, analytics, sync, database, or permission request is used.',
               ],
             ),
             const SizedBox(height: 16),
-            Text('데모 이야기 조각', style: Theme.of(context).textTheme.titleMedium),
+            Text(
+              'Safe demo events',
+              style: Theme.of(context).textTheme.titleMedium,
+            ),
             const SizedBox(height: 8),
             Wrap(
               spacing: 8,
@@ -115,8 +123,11 @@ class _DailyReflectionScreenState extends State<DailyReflectionScreen> {
               minLines: 3,
               maxLines: 5,
               decoration: const InputDecoration(
-                labelText: '오늘 남기고 싶은 말',
-                hintText: '오늘 있었던 일을 한두 문장으로 적어 주세요.',
+                labelText: 'Manual reflection note',
+                hintText:
+                    'Write one or two non-sensitive sentences about today.',
+                helperText:
+                    'Do not enter private messages, health data, phone numbers, or real voice/PPG details.',
                 border: OutlineInputBorder(),
               ),
             ),
@@ -124,7 +135,7 @@ class _DailyReflectionScreenState extends State<DailyReflectionScreen> {
             FilledButton(
               key: const Key('generateButton'),
               onPressed: _generateFromManualText,
-              child: const Text('오늘 정리하기'),
+              child: const Text('Generate reflection'),
             ),
             if (result?.validationMessage != null) ...[
               const SizedBox(height: 12),
@@ -137,32 +148,32 @@ class _DailyReflectionScreenState extends State<DailyReflectionScreen> {
             if (summary != null && morningDraft != null) ...[
               const SizedBox(height: 16),
               _InfoPanel(
-                title: '오늘의 응답 미리보기',
-                children: [summary.preview, '출처: ${summary.sourceLabel}'],
+                title: 'Reflection preview',
+                children: [summary.preview, 'Source: ${summary.sourceLabel}'],
               ),
               const SizedBox(height: 12),
               _InfoPanel(
-                title: '오늘의 정리 카드',
+                title: 'Daily reflection card',
                 children: [
-                  '오늘의 흐름: ${summary.todayFlow}',
-                  '마음 단서: ${summary.observedCue}',
-                  '남겨둘 일: ${summary.leftForTomorrow}',
-                  '내일의 한 문장: ${summary.tomorrowLine}',
+                  'Summary: ${summary.todayFlow}',
+                  'Gentle insight: ${summary.observedCue}',
+                  'Closing prompt: ${summary.leftForTomorrow}',
+                  'Tomorrow line: ${summary.tomorrowLine}',
                 ],
               ),
               const SizedBox(height: 12),
               if (showMorningBriefing)
                 _InfoPanel(
-                  title: '내일 아침 브리핑 초안',
+                  title: 'Morning briefing',
                   children: [
-                    '오늘의 시작 문장: ${morningDraft.startLine}',
-                    '먼저 볼 일: ${morningDraft.firstThing}',
-                    '말투 힌트: ${morningDraft.toneHint}',
+                    'Start line: ${morningDraft.startLine}',
+                    'Next action: ${morningDraft.firstThing}',
+                    'Tone hint: ${morningDraft.toneHint}',
                   ],
                 )
               else
                 const Text(
-                  '내일 아침 브리핑 초안은 남기기 후에만 보여드려요.',
+                  'Morning briefing appears after you keep this reflection.',
                   key: Key('morningBriefingLockedMessage'),
                 ),
               const SizedBox(height: 12),
@@ -173,25 +184,31 @@ class _DailyReflectionScreenState extends State<DailyReflectionScreen> {
                   FilledButton.tonal(
                     key: const Key('keepButton'),
                     onPressed: _keep,
-                    child: const Text('남기기'),
+                    child: const Text('Keep for morning'),
                   ),
                   OutlinedButton(
                     key: const Key('resetButton'),
                     onPressed: _reset,
-                    child: const Text('다시 비우기'),
+                    child: const Text('Reset / Delete'),
                   ),
                 ],
               ),
               if (_session.isKept) ...[
                 const SizedBox(height: 8),
-                const Text('이번 화면 안에서만 남겨두었어요.', key: Key('keptMessage')),
+                const Text(
+                  'Kept in this session only.',
+                  key: Key('keptMessage'),
+                ),
               ],
             ] else ...[
               const SizedBox(height: 16),
-              const Text('아직 정리한 내용이 없어요.', key: Key('emptyState')),
+              const Text(
+                'No reflection generated yet.',
+                key: Key('emptyState'),
+              ),
               const SizedBox(height: 4),
               const Text(
-                '아직 남겨둔 정리가 없어요.',
+                'No morning briefing yet.',
                 key: Key('morningBriefingEmptyMessage'),
               ),
             ],

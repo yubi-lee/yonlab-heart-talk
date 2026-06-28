@@ -1,124 +1,165 @@
 import '../domain/reflection_models.dart';
 
 class RuleBasedReflectionEngine {
-  static final forbiddenCopy = <String>[
-    ['우울', '증'].join(),
-    ['불안', '장애'].join(),
-    ['치료가 ', '필요'].join(),
-    ['위험', '합니다'].join(),
-    ['진단', '합니다'].join(),
-    ['의학적으로 ', '판단'].join(),
+  static const forbiddenCopy = <String>[
+    'depressed',
+    'anxious',
+    'at risk',
+    'need treatment',
+    'mental-health problem',
+    'health condition is poor',
+    'stress level is high',
+    'medical problem',
+    'predicts your illness',
+    'safety risk',
   ];
 
   ReflectionResult generate(ReflectionInput input) {
     final normalized = input.text.trim().replaceAll(RegExp(r'\s+'), ' ');
     if (normalized.isEmpty) {
       return const ReflectionResult(
-        validationMessage: '오늘 남기고 싶은 말을 한 줄 이상 적어 주세요.',
+        validationMessage:
+            'Write at least one sentence to create a reflection.',
       );
     }
 
-    final tone = _detectTone(normalized);
-    final carry = _detectCarryOver(normalized);
+    final profile = _profileFor(normalized);
     final sourceLabel = input.source == ReflectionInputSource.demo
-        ? '데모 데이터'
-        : '직접 입력';
+        ? 'Demo data'
+        : 'Manual text';
+
     final summary = ReflectionSummary(
-      preview: '오늘은 $tone 하루처럼 보여요. $carry 여기까지만 정리해도 충분해요.',
-      todayFlow: _todayFlowFor(normalized),
-      observedCue: _observedCueFor(normalized),
-      leftForTomorrow: carry,
-      tomorrowLine: _tomorrowLineFor(normalized),
+      preview:
+          'Today ${profile.previewFocus}. You can close the day with one gentle note and leave the next step small.',
+      todayFlow: profile.todayFlow,
+      observedCue: profile.observedCue,
+      leftForTomorrow: profile.leftForTomorrow,
+      tomorrowLine: profile.tomorrowLine,
       sourceLabel: sourceLabel,
     );
     final morningDraft = MorningBriefingDraft(
-      startLine: summary.tomorrowLine,
-      firstThing: _firstThingFor(normalized),
-      toneHint: '짧고 부드러운 말투로 시작해도 좋아요.',
+      startLine: profile.tomorrowLine,
+      firstThing: profile.firstThing,
+      toneHint: profile.toneHint,
     );
 
     return ReflectionResult(summary: summary, morningDraft: morningDraft);
   }
 
-  String _detectTone(String text) {
-    if (_containsAny(text, const ['고마', '감사', '도움', '덕분'])) {
-      return '고마운 마음을 확인한';
-    }
-    if (_containsAny(text, const ['회의', '조율', '정리', '일정', '업무'])) {
-      return '설명하고 맞추는 일이 많았던';
-    }
-    if (_containsAny(text, const ['가족', '집', '저녁', '부모', '아이'])) {
-      return '가까운 사람들과 이야기를 나눈';
-    }
-    if (_containsAny(text, const ['내일', '해야', '할 일', '다시', '확인'])) {
-      return '내일 볼 일을 남겨 둔';
-    }
-    if (_containsAny(text, const ['아직', '애매', '오해', '미뤄', '남아'])) {
-      return '아직 정리 중인 장면을 알아차린';
-    }
-    return '작은 장면을 차분히 돌아본';
-  }
+  _ReflectionProfile _profileFor(String text) {
+    final lower = text.toLowerCase();
 
-  String _detectCarryOver(String text) {
-    if (_containsAny(text, const ['내일', '해야', '할 일', '다시', '확인'])) {
-      return '내일 다시 볼 일이 하나 남아 있어요.';
+    if (_containsAny(lower, const [
+      'thank',
+      'grateful',
+      'gratitude',
+      'helped',
+      'appreciate',
+    ])) {
+      return const _ReflectionProfile(
+        previewFocus: 'held a clear moment of gratitude',
+        todayFlow: 'A helpful moment gave the day a warmer ending.',
+        observedCue: 'There is a note of appreciation in this reflection.',
+        leftForTomorrow:
+            'Carry forward the part that felt supportive, not the whole day.',
+        tomorrowLine: 'Start tomorrow by naming one thing that helped today.',
+        firstThing: 'Keep one useful note from today',
+        toneHint: 'Begin with a calm and appreciative tone.',
+      );
     }
-    if (_containsAny(text, const ['아직', '애매', '오해', '미뤄', '남아'])) {
-      return '덜 풀린 대화는 천천히 다시 확인해도 좋아요.';
-    }
-    if (_containsAny(text, const ['회의', '조율', '정리', '일정', '업무'])) {
-      return '정리할 내용은 작은 목록 하나로 남겨두면 좋아요.';
-    }
-    return '오늘 기억하고 싶은 장면 하나만 남겨도 충분해요.';
-  }
 
-  String _todayFlowFor(String text) {
-    if (_containsAny(text, const ['회의', '조율', '일정', '업무'])) {
-      return '설명하고 맞추는 일이 중심이 된 하루처럼 보여요.';
+    if (_containsAny(lower, const [
+      'meeting',
+      'schedule',
+      'coordinate',
+      'coordination',
+      'project',
+      'work',
+      'review',
+    ])) {
+      return const _ReflectionProfile(
+        previewFocus: 'had a lot of coordination and follow-up energy',
+        todayFlow: 'Coordination and decisions shaped the flow of the day.',
+        observedCue:
+            'The note suggests organization mattered more than urgency.',
+        leftForTomorrow:
+            'One follow-up can be enough to restart the thread tomorrow.',
+        tomorrowLine: 'Start tomorrow with the smallest useful check-in.',
+        firstThing: 'Review one follow-up item',
+        toneHint: 'Keep the first step practical and light.',
+      );
     }
-    if (_containsAny(text, const ['고마', '감사', '덕분'])) {
-      return '고마움을 주고받은 장면이 남아 있는 하루예요.';
-    }
-    if (_containsAny(text, const ['가족', '집', '저녁'])) {
-      return '가까운 사람과 나눈 일상 대화가 하루의 중심에 있었어요.';
-    }
-    return '짧은 기록 안에 돌아볼 만한 장면이 담겨 있어요.';
-  }
 
-  String _observedCueFor(String text) {
-    if (_containsAny(text, const ['피곤', '지침', '늦게', '바빴'])) {
-      return '조금 지친 표현이 보여요.';
+    if (_containsAny(lower, const [
+      'family',
+      'conversation',
+      'talk',
+      'gentle',
+      'evening',
+    ])) {
+      return const _ReflectionProfile(
+        previewFocus: 'included a relationship moment worth noticing',
+        todayFlow: 'A conversation gave the day a more personal shape.',
+        observedCue: 'There is a gentle connection cue in what you wrote.',
+        leftForTomorrow:
+            'Leave room to return to the conversation only if it still matters.',
+        tomorrowLine: 'Start tomorrow by keeping the tone simple and kind.',
+        firstThing: 'Choose one kind phrase or small check-in',
+        toneHint: 'Use a simple and warm tone.',
+      );
     }
-    if (_containsAny(text, const ['고마', '감사', '덕분'])) {
-      return '고마움을 알아차린 표현이 보여요.';
-    }
-    if (_containsAny(text, const ['아직', '애매', '오해'])) {
-      return '아직 정리 중인 마음이 남아 있는 것처럼 보여요.';
-    }
-    return '차분히 돌아보려는 표현이 보여요.';
-  }
 
-  String _tomorrowLineFor(String text) {
-    if (_containsAny(text, const ['내일', '해야', '확인', '일정'])) {
-      return '내일은 가장 작은 확인 하나부터 시작해 보세요.';
+    if (_containsAny(lower, const [
+      'tomorrow',
+      'task',
+      'unfinished',
+      'need',
+      'follow-up',
+      'next',
+    ])) {
+      return const _ReflectionProfile(
+        previewFocus: 'left one clear next step for tomorrow',
+        todayFlow: 'The day ended with something still open but manageable.',
+        observedCue: 'The note points to organization rather than pressure.',
+        leftForTomorrow: 'One small next action is enough to hold the thread.',
+        tomorrowLine: 'Start tomorrow with one small visible task.',
+        firstThing: 'Pick the smallest next action',
+        toneHint: 'Keep the morning plan narrow and doable.',
+      );
     }
-    if (_containsAny(text, const ['고마', '감사', '덕분'])) {
-      return '내일은 고마웠던 마음 하나를 짧게 전해도 좋아요.';
-    }
-    return '내일은 부담 없는 한 가지부터 시작해 보세요.';
-  }
 
-  String _firstThingFor(String text) {
-    if (_containsAny(text, const ['내일', '해야', '확인', '일정'])) {
-      return '남겨 둔 확인 사항 하나 보기';
-    }
-    if (_containsAny(text, const ['고마', '감사', '덕분'])) {
-      return '고마웠던 장면 한 줄 남기기';
-    }
-    return '오늘 시작 전에 작은 할 일 하나 고르기';
+    return const _ReflectionProfile(
+      previewFocus: 'has one moment worth gently organizing',
+      todayFlow: 'A small part of the day is ready to be named and closed.',
+      observedCue: 'The note shows a wish to pause without judging the day.',
+      leftForTomorrow: 'Only carry forward what still feels useful tomorrow.',
+      tomorrowLine: 'Start tomorrow with one clear and kind step.',
+      firstThing: 'Name one small starting point',
+      toneHint: 'Begin gently and keep the scope small.',
+    );
   }
 
   bool _containsAny(String text, List<String> keywords) {
     return keywords.any(text.contains);
   }
+}
+
+class _ReflectionProfile {
+  const _ReflectionProfile({
+    required this.previewFocus,
+    required this.todayFlow,
+    required this.observedCue,
+    required this.leftForTomorrow,
+    required this.tomorrowLine,
+    required this.firstThing,
+    required this.toneHint,
+  });
+
+  final String previewFocus;
+  final String todayFlow;
+  final String observedCue;
+  final String leftForTomorrow;
+  final String tomorrowLine;
+  final String firstThing;
+  final String toneHint;
 }

@@ -15,12 +15,13 @@ void main() {
       );
 
       expect(result.isValid, isFalse);
-      expect(result.validationMessage, contains('한 줄 이상'));
+      expect(result.validationMessage, contains('Write at least one sentence'));
     });
 
-    test('returns deterministic output for the same input', () {
+    test('returns deterministic output for the same manual input', () {
       const input = ReflectionInput(
-        text: '오늘 회의에서 일정을 조율했고 내일 확인할 일이 남았다.',
+        text:
+            'Today I coordinated a project meeting and wrote down one task for tomorrow.',
         source: ReflectionInputSource.manual,
       );
 
@@ -30,27 +31,36 @@ void main() {
       expect(first.summary?.preview, second.summary?.preview);
       expect(first.summary?.todayFlow, second.summary?.todayFlow);
       expect(first.morningDraft?.firstThing, second.morningDraft?.firstThing);
+      expect(first.summary?.sourceLabel, 'Manual text');
     });
 
     test('creates summary and morning briefing for demo input', () {
       final result = engine.generate(
         const ReflectionInput(
-          text: '동료가 자료 정리를 도와줬다. 덕분에 오늘 일을 마무리했다.',
+          text:
+              'A teammate helped organize the notes, and the day ended with a grateful feeling.',
           source: ReflectionInputSource.demo,
           demoEventId: 'gratitude_note',
         ),
       );
 
       expect(result.isValid, isTrue);
-      expect(result.summary?.sourceLabel, contains('데모 데이터'));
-      expect(result.summary?.todayFlow, contains('고마움'));
+      expect(result.summary?.sourceLabel, 'Demo data');
+      expect(result.summary?.preview, contains('Today'));
+      expect(result.summary?.todayFlow, isNotEmpty);
+      expect(result.summary?.observedCue, isNotEmpty);
+      expect(result.summary?.leftForTomorrow, isNotEmpty);
+      expect(result.summary?.tomorrowLine, isNotEmpty);
       expect(result.morningDraft?.startLine, isNotEmpty);
+      expect(result.morningDraft?.firstThing, isNotEmpty);
+      expect(result.morningDraft?.toneHint, isNotEmpty);
     });
 
     test('does not include forbidden diagnostic copy', () {
       final result = engine.generate(
         const ReflectionInput(
-          text: '오늘은 바빴고 내일 확인할 일이 있다.',
+          text:
+              'Today felt busy and I still need to check one small thing tomorrow.',
           source: ReflectionInputSource.manual,
         ),
       );
@@ -66,7 +76,7 @@ void main() {
       ].whereType<String>().join('\n');
 
       for (final phrase in RuleBasedReflectionEngine.forbiddenCopy) {
-        expect(combined.contains(phrase), isFalse, reason: phrase);
+        expect(combined.toLowerCase(), isNot(contains(phrase.toLowerCase())));
       }
     });
   });
