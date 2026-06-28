@@ -200,3 +200,17 @@ Manual Android execution of this checklist is not required for `HT-DESIGN-QA-001
 | INSIGHT-004 | UI exposes `오늘의 인사이트` with fallback and todo-based tiny mission behavior. | Implemented | `daily_reflection_screen_test.dart` covers fallback display and todo memory update. |
 | INSIGHT-005 | No new dependency, platform setting, network, Cloud AI, analytics, sync, account, or sensitive permission is added. | Pending final verification | Confirm with changed-file review and final `git status -sb`. |
 | INSIGHT-006 | Verification gate passes after implementation. | Pending final verification | Run `powershell -ExecutionPolicy Bypass -File .\scripts\verify.ps1`, `git diff --check`, and `git status -sb`. |
+
+## HT-ANDROID-QA-004 Android Manual QA Status
+
+Current status for `HT-ANDROID-QA-004 - Execute Android Manual QA for Companion + Insight MVP`:
+
+| Item | Status | Evidence |
+|---|---|---|
+| Android target available | Pass | `flutter devices` listed physical device `SM F956N` / `R3CX70NHJRN`; SDK ADB listed it as `device`. |
+| Latest Android APK build/install | Blocked | `flutter build apk --debug` and `flutter build apk --debug --no-pub` failed at `:shared_preferences_android:compileDebugKotlin` with Kotlin cache/root mismatch under `build\shared_preferences_android`. |
+| Existing APK launch | Partial | Existing `build\app\outputs\flutter-apk\app-debug.apk` installed and launched, but did not expose current local memory/role/insight UI. |
+| Companion + insight manual checklist | Blocked | Cannot mark Pass until the current source APK is built/installed and local memory consent, roles, saved memory restore/reset, and insight/tiny mission UI are exercised on Android. |
+| Korean Design/UX QA | Blocked with risk | Android-visible QA is still required. Source inspection shows mojibake risk in the local memory/insight UI strings, so this must be checked after the build blocker is removed. |
+
+Do not treat the partial launch of the older APK as acceptance for `HT-COMPANION-001` + `HT-INSIGHT-001`. The next acceptance gate is a successful latest APK build/install followed by the Android manual checklist.

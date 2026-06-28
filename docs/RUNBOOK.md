@@ -366,3 +366,45 @@ Manual smoke path:
 6. Confirm the tiny mission reflects a small first action, such as a 3-minute start.
 7. Confirm copy uses hints and possibilities, not diagnosis, treatment, risk, or certainty language.
 8. Confirm no permission prompt, account login, network/cloud AI surface, notification behavior, analytics, or sync appears.
+
+## HT-ANDROID-QA-004 Companion + Insight Android Manual QA
+
+Use this flow when running Android manual QA for the current Companion + Insight MVP:
+
+```powershell
+cd D:\Views\heart_talk
+git status -sb
+flutter devices
+C:\Utils\Android\SDK\platform-tools\adb.exe devices
+flutter build apk --debug
+flutter run -d <android-device-id>
+```
+
+If bare `adb` is not available on PATH, use the SDK path explicitly:
+
+```powershell
+C:\Utils\Android\SDK\platform-tools\adb.exe -s <android-device-id> shell monkey -p com.example.heart_talk -c android.intent.category.LAUNCHER 1
+```
+
+If `flutter build apk --debug` fails at `:shared_preferences_android:compileDebugKotlin` with `Could not close incremental caches` or `this and base files have different roots`, record Android QA as blocked. Safe first retries are:
+
+```powershell
+cd D:\Views\heart_talk\android
+$env:JAVA_HOME='C:\Utils\Android\Android Studio\jbr'
+.\gradlew.bat --stop
+cd D:\Views\heart_talk
+flutter build apk --debug --no-pub
+```
+
+Do not delete build/cache directories, run `flutter clean`, change platform files, or change dependencies during QA-only work unless a separate task explicitly authorizes that cleanup. An older installed APK may be used only for smoke evidence; it is not acceptance evidence for local memory, role selection, restore/reset, or local insight UI unless the latest source APK is confirmed installed.
+
+Required Android-visible pass areas for this milestone:
+
+1. Local memory consent OFF and ON.
+2. Role selection for friend, lover, family, parent, coach, teacher, listener, and custom.
+3. Profile, person, todo, and reflection input.
+4. Save, app restart restore, full reset, and restart after reset.
+5. `내 기억` or equivalent stored-information area.
+6. Today insight, tomorrow hint, curiosity question, and tiny mission.
+7. Role-specific safety copy for lover and parent roles.
+8. Korean text rendering and Android screen density/readability.

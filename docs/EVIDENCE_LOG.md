@@ -1311,3 +1311,84 @@ Known risks:
 - The current single-screen UI is functional but dense; Android manual QA should verify readability of the new insight area.
 - `shared_preferences` remains non-encrypted storage, so high-sensitivity user input remains out of scope.
 - Some existing Korean strings appear mojibake in PowerShell output; Android UI rendering should remain the source of truth for copy QA.
+
+## 2026-06-29 - HT-ANDROID-QA-004 - Android Manual QA for Companion + Insight MVP
+
+Verdict: Blocked after partial Android smoke QA
+
+Branch:
+
+```text
+main
+```
+
+Initial status:
+
+```text
+## main...origin/main
+```
+
+Android target:
+
+```text
+flutter devices:
+- SM F956N (R3CX70NHJRN), android-arm64, Android 16 API 36
+- Windows, Chrome, Edge
+- emulator-5554 was listed as offline
+
+ADB:
+- `adb` was not available on PATH
+- `C:\Utils\Android\SDK\platform-tools\adb.exe devices` listed R3CX70NHJRN as `device` and emulator-5554 as `offline`
+```
+
+Execution summary:
+
+- Confirmed physical Android launch target `SM F956N`.
+- `flutter run -d R3CX70NHJRN --no-resident` reached `Running Gradle task 'assembleDebug'...` and did not complete before manual termination.
+- Installed and launched the existing `build\app\outputs\flutter-apk\app-debug.apk` with `adb install -r` and `adb shell monkey -p com.example.heart_talk -c android.intent.category.LAUNCHER 1`.
+- UIAutomator confirmed the older installed app launched and showed the daily reflection demo, privacy notice, safe demo events, manual reflection note, generated reflection preview/card, `Keep for morning`, and morning briefing behavior.
+- The installed APK did not expose the current source's `Local memory consent`, role chips, `내 기억`, or local insight area, so HT-COMPANION-001/HT-INSIGHT-001 Android manual QA could not be completed on this target.
+
+Blocked evidence:
+
+```text
+flutter build apk --debug
+flutter build apk --debug --no-pub
+```
+
+Both latest APK build attempts failed at `:shared_preferences_android:compileDebugKotlin` with Kotlin daemon/cache errors. The key failure was:
+
+```text
+Execution failed for task ':shared_preferences_android:compileDebugKotlin'.
+Could not close incremental caches in D:\Views\heart_talk\build\shared_preferences_android\kotlin\compileDebugKotlin\cacheable\caches-jvm\jvm\kotlin
+this and base files have different roots: C:\Users\joyke\AppData\Local\Pub\Cache\hosted\pub.dev\shared_preferences_android-2.4.26\android\src\main\kotlin\io\flutter\plugins\sharedpreferences\Messages.g.kt and D:\Views\heart_talk\android
+```
+
+Mitigation attempted:
+
+- `ORG_GRADLE_PROJECT_kotlin_incremental=false` build retry: same task failed.
+- `gradlew.bat --stop` with `JAVA_HOME=C:\Utils\Android\Android Studio\jbr`: one daemon stopped, but the next build still failed with the same cache/root mismatch.
+- No `flutter clean`, cache deletion, app code edits, platform edits, or dependency edits were performed in this task.
+
+QA result by requested flow:
+
+| Area | Result | Evidence |
+|---|---|---|
+| Android target availability | Pass | Physical device `SM F956N` was online; emulator was offline. |
+| App launch | Partial | Existing APK launched via ADB monkey. Latest source build/install was blocked. |
+| First launch privacy copy | Pass on existing APK | UIAutomator showed privacy-first copy, no OS data access claim, no cloud AI/analytics/sync/database/permission request. |
+| Local memory consent OFF/ON | Blocked | Latest app containing the panel could not be built/installed. |
+| Role selection | Blocked | Latest app containing role chips could not be built/installed. |
+| Profile/person/todo memory input | Blocked | Latest app containing local memory fields could not be built/installed. |
+| Save/restore/reset | Blocked | Latest local persistent memory app could not be built/installed. |
+| 내 기억 area | Blocked | Latest app containing the area could not be built/installed. |
+| Today insight/tiny mission/fallback | Blocked | Latest insight UI could not be built/installed. |
+| Role-specific safety copy | Blocked on Android | Source/tests remain the latest evidence; Android manual view was not completed. |
+| Korean readability | Fail risk | Current source inspection shows mojibake strings in `daily_reflection_screen.dart` around `내 기억`, recurring signal, question, and some role labels in docs output. Needs Android-visible QA after build blocker is removed. |
+| Screen density/readability | Partial | Existing daily reflection demo is dense but scrollable enough for the basic reflection flow. Companion/insight density not verified. |
+
+Conclusion:
+
+- HT-ANDROID-QA-004 is not a pass. It is blocked by inability to build/install the latest Android APK for the current source.
+- The existing installed APK only supports partial smoke evidence for the older Daily Reflection MVP.
+- Next work should unblock Android build cache/root mismatch first, then rerun the full `docs/qa/android-design-qa-checklist.md` flow.
