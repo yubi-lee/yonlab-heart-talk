@@ -118,6 +118,23 @@ For each completed task, record:
 
 Use `docs/EVIDENCE_LOG.md` as the template. Completion is based on command output evidence, not an AI summary.
 
+### Privacy and security evidence handling
+
+Before saving QA screenshots, UIAutomator XML dumps, or manual QA notes, inspect
+the artifact for personal or sensitive content.
+
+Allowed evidence:
+
+- command output from format, analyze, test, build, and git commands
+- emulator screenshots/XML that show only safe demo data
+- physical-device text evidence that avoids personal-device screenshots
+- summarized UI observations that do not include private manual input
+
+Do not commit or paste evidence that contains personal notifications, contacts,
+real messages, location, health data, credentials, API keys, signing material,
+or identifying manual text. If an artifact is needed for long-term retention,
+create a separate evidence-retention decision before adding it to the repository.
+
 ## Common Failure Handling
 
 ### `dart format` fails
@@ -247,3 +264,50 @@ Stop and ask for human approval before:
 - Adding real PPG or real voice data
 - Adding personal, health-sensitive, or production data
 - Touching signing keys, keystores, `.env`, tokens, or release credentials
+
+## Role-Based Local Memory Companion QA
+
+Use this checklist for `HT-COMPANION-001`:
+
+1. Launch the app.
+2. Confirm `Local memory consent` is visible.
+3. Confirm local memory defaults off.
+4. Turn local memory on.
+5. Select a role such as `코치`.
+6. Enter a profile name, one person memory, and one todo memory.
+7. Tap `Save memory`.
+8. Confirm `내 기억` shows role, profile, growth level, people, and todos.
+9. Force-stop/relaunch or restart the app.
+10. Confirm approved local memory is restored.
+11. Tap `Clear all local memory`.
+12. Confirm stored profile/todo/person memory is cleared.
+13. Confirm no permission prompt, account login, network/cloud AI surface, or diagnostic/treatment copy appears.
+
+Automated verification:
+
+```powershell
+cd D:\Views\heart_talk
+flutter test
+powershell -ExecutionPolicy Bypass -File .\scripts\verify.ps1
+```
+
+## HT-DESIGN-ALIGN-001 Runbook
+
+Use this procedure when reviewing `Design.md` against HeartTalk:
+
+1. Read `Design.md` and `docs/DESIGN_ALIGNMENT.md`.
+2. Confirm whether the design direction is HeartTalk-specific or still contains B2B dashboard framing.
+3. Verify role copy remains companion tone/persona only.
+4. Verify lover/parent role copy avoids dependency, obsession, sexual expression, control, blame, and shame.
+5. Verify local memory copy says storage is consent-based, local, inspectable, and resettable.
+6. Verify `shared_preferences` is not described as encrypted or secure storage.
+7. Verify no server transfer, cloud AI, analytics, sync, account, or sensitive platform permission is introduced.
+8. Run:
+
+```powershell
+cd D:\Views\heart_talk
+powershell -ExecutionPolicy Bypass -File .\scripts\verify.ps1
+git diff --check
+```
+
+Do not edit `lib/**`, `test/**`, `pubspec.yaml`, `pubspec.lock`, platform folders, `.agents/**`, or `.codex/**` during design alignment tasks unless a later task explicitly authorizes it.

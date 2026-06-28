@@ -53,3 +53,23 @@ MVP success means the existing vertical slice is understandable, testable, and d
 - Task list: `specs/001-daily-reflection-companion-demo/tasks.md`
 - Privacy notes: `docs/privacy/data-flow-and-retention.md`
 - Security notes: `docs/security/threat-model.md`
+
+## HT-COMPANION-001 Product Update
+
+The Daily Reflection Companion can now act as a role-based local memory companion. The user explicitly chooses whether approved information may be stored locally. When consent is on, the app can restore companion role, profile name, relationship memory, todo memory, reflection entries, recurring keywords, and deterministic growth state after restart.
+
+The experience remains a companion-style reflection product, not a medical, therapy, mental-health classification, risk, or emergency guidance product.
+
+## HT-DESIGN-ALIGN-001 Product Alignment
+
+`Design.md` is recognized as a design-input document, not a replacement for HeartTalk's product direction. Its transferable qualities are calm, trustworthy, technically restrained, Korean-language product polish. Its B2B AI operations dashboard framing conflicts with the current HeartTalk companion product and should be treated as out of scope unless separately approved.
+
+Current implemented product state after `HT-COMPANION-001`:
+
+- Local memory consent ON/OFF.
+- Role selection for 친구, 연인, 가족, 부모, 코치, 선생님, 경청자, 사용자 지정.
+- Local storage/restore through `shared_preferences` when consent permits it.
+- `내 기억` area and full local memory reset.
+- Deterministic local growth level and role + growth Korean companion message.
+
+Role modes are companion tone/persona only. They must not claim to replace real human relationships. Lover and parent roles must avoid dependency-inducing, obsessive, sexual, controlling, shaming, or blaming language.

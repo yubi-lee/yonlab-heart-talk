@@ -4,6 +4,97 @@ Use this file as a template for task evidence. Add newest entries at the top whe
 
 Completion is based on observed command output, not on an AI saying the task is complete.
 
+## 2026-06-28 - HT-PRIV-001 - Align Privacy and Security Docs With Daily Reflection MVP
+
+Verdict: Pass
+
+Branch:
+
+```text
+main
+```
+
+Task:
+
+```text
+HT-PRIV-001 - Align Privacy and Security Docs With Daily Reflection MVP
+```
+
+Initial status:
+
+```powershell
+cd D:\Views\heart_talk
+git status -sb
+```
+
+Output:
+
+```text
+## main...origin/main
+```
+
+Changed files:
+
+```text
+docs/ACCEPTANCE_CRITERIA.md
+docs/DECISION_LOG.md
+docs/EVIDENCE_LOG.md
+docs/RUNBOOK.md
+docs/privacy/data-flow-and-retention.md
+docs/security/threat-model.md
+```
+
+Commands and observed results:
+
+| Command | Result | Evidence summary |
+|---|---|---|
+| `dart format --output=none --set-exit-if-changed .` | PASS | `Formatted 9 files (0 changed) in 0.36 seconds.` |
+| `flutter analyze` | PASS | `No issues found! (ran in 63.0s)` |
+| `flutter test` | PASS | `+13: All tests passed!` |
+| `flutter build apk --debug` | PASS | `Built build\app\outputs\flutter-apk\app-debug.apk` |
+| `powershell -ExecutionPolicy Bypass -File .\scripts\verify.ps1` | PASS | Final pass after this evidence entry: format `Formatted 9 files (0 changed)`, analyze `No issues found!`, test `+13: All tests passed!` |
+| `git diff --check` | PASS | Exit code 0; no whitespace errors. Git printed only LF-to-CRLF working-copy warnings for changed Markdown files. |
+| `git status -sb` | DIRTY EXPECTED | `M docs/ACCEPTANCE_CRITERIA.md`, `M docs/DECISION_LOG.md`, `M docs/EVIDENCE_LOG.md`, `M docs/RUNBOOK.md`, `M docs/privacy/data-flow-and-retention.md`, and `M docs/security/threat-model.md`. |
+
+Documentation alignment summary:
+
+- Replaced the outdated synthetic PPG-centered privacy flow with the current Daily Reflection MVP data flow: demo/manual input, visible privacy boundary, local deterministic reflection generation, user confirmation, session-only in-memory kept state, morning briefing, and reset/delete.
+- Updated the security threat model to match the current MVP: no real PPG, real voice, health data, sensitive permissions, network APIs, cloud AI, analytics, crash reporting, local database, account system, or release signing changes.
+- Added QA screenshot/XML evidence handling rules that require review before storing artifacts and prohibit personal or sensitive QA evidence.
+- Added DEC-012 to record that future PPG, voice, inference, durable storage, permissions, network/cloud, analytics, crash reporting, signing, or release-secret work requires separate privacy/security review.
+- Added a privacy/security documentation gate to acceptance criteria and a matching runbook evidence-handling procedure.
+- Did not change app code, tests, specs, scripts, Flutter configuration, platform folders, dependencies, README, secrets, or signing material.
+
+Security/privacy review:
+
+| Check | Result | Notes |
+|---|---|---|
+| Real PPG/voice data | NONE | References appear only as forbidden/out-of-scope data. |
+| Personal data | NONE | No personal data was added. |
+| Health-sensitive logs | NONE | No health-sensitive logs were added. |
+| API keys/tokens/signing keys | NONE | No API keys, tokens, signing keys, keystores, private keys, or release credentials were added. |
+| Permissions/network/database changes | NONE | Documentation-only change; no app/platform/dependency changes. |
+| Cloud AI/API calls | NONE | No cloud AI/API path was added. |
+| Medical/diagnostic claims | NONE | Documentation keeps diagnosis, treatment advice, disease prediction, risk scoring, and mental-health classification out of scope. |
+| QA evidence sensitive data | NONE | No screenshots, XML dumps, personal-device data, or private manual text were added. |
+
+Known risks:
+
+- `AGENTS.md` and `docs/ACCEPTANCE_CRITERIA.md` still show mojibake in some final-report list labels when read in the current terminal. They were outside the direct privacy/security cleanup scope except for the acceptance privacy/security gate added here.
+- Long-term artifact retention for QA screenshots/XML should still be formalized if the project starts storing evidence artifacts in the repository.
+
+Recommended next work:
+
+- Clean remaining final-report mojibake in AGENTS/acceptance reporting docs in a narrow documentation task.
+- Add a small QA artifact retention policy for screenshots/XML dumps if evidence artifacts will be preserved.
+- Draft a future adapter review note for approved PPG/voice/inference/storage work.
+
+Recommended commit message:
+
+```text
+docs: align privacy and security docs with MVP
+```
+
 ## 2026-06-28 - HT-QA-003R - Complete Android Manual QA Evidence
 
 Verdict: Pass with notes
@@ -475,7 +566,7 @@ Commands and observed results:
 Summary:
 
 - Aligned `docs/CODEX_TASK_TEMPLATE.md` final report requirements with the AGENTS reporting standard requested for HeartTalk.
-- Standardized the minimum final report items to: 작업 전 상태, 변경 파일, 구현/수정 내용, 실행한 명령, 검증 결과, 보안/개인정보 점검, 남은 리스크, 다음 권장 작업, 커밋 권장 여부.
+- Standardized the minimum final report items to: ?묒뾽 ???곹깭, 蹂寃??뚯씪, 援ы쁽/?섏젙 ?댁슜, ?ㅽ뻾??紐낅졊, 寃利?寃곌낵, 蹂댁븞/媛쒖씤?뺣낫 ?먭?, ?⑥? 由ъ뒪?? ?ㅼ쓬 沅뚯옣 ?묒뾽, 而ㅻ컠 沅뚯옣 ?щ?.
 - Added a HeartTalk-specific `/goal` usage example with allowed/forbidden file scope, privacy-first constraints, verification commands, and completion criteria.
 - Preserved privacy-first, synthetic/demo data only, evidence-gated completion, and no-medical-claims operating principles.
 - Did not change `AGENTS.md`, app code, tests, specs, scripts, Flutter configuration, README, secrets, or signing material.
@@ -836,4 +927,234 @@ Recommended commit message:
 
 ```text
 [type(scope): message]
+```
+
+## 2026-06-28 - HT-COMPANION-001 - Role-Based Local Memory Companion
+
+Verdict: Pass
+
+Branch:
+
+```text
+main
+```
+
+Task:
+
+```text
+HT-COMPANION-001 - Role-Based Local Memory Companion
+```
+
+Initial status observed before implementation:
+
+```text
+## main...origin/main
+ M docs/ACCEPTANCE_CRITERIA.md
+ M docs/DECISION_LOG.md
+ M docs/EVIDENCE_LOG.md
+ M docs/RUNBOOK.md
+ M docs/privacy/data-flow-and-retention.md
+ M docs/security/threat-model.md
+```
+
+Implementation summary:
+
+- Added explicit local memory consent and category-based consent sanitizing.
+- Added companion roles: 移쒓뎄, ?곗씤, 媛議? 遺紐? 肄붿튂, ?좎깮?? 寃쎌껌?? ?ъ슜??吏??
+- Added companion preference, local profile, reflection entry, memory item, person memory, todo memory, local memory snapshot, and deterministic growth state models.
+- Added in-memory and `shared_preferences` local repository implementations.
+- Added deterministic growth level 0-5 calculation.
+- Added Korean role + growth companion message generation.
+- Added UI for local memory consent, role selection, profile/person/todo input, `??湲곗뼲`, and full local memory reset.
+- Added `specs/002-role-based-local-memory-companion` as the approved follow-up spec to preserve MVP 001 session-only source-of-truth history.
+
+Changed files in this task include:
+
+```text
+lib/features/daily_reflection/application/companion_message_service.dart
+lib/features/daily_reflection/application/growth_calculator.dart
+lib/features/daily_reflection/data/local_memory_repository.dart
+lib/features/daily_reflection/data/shared_preferences_memory_repository.dart
+lib/features/daily_reflection/domain/companion_models.dart
+lib/features/daily_reflection/domain/local_memory_models.dart
+lib/features/daily_reflection/presentation/daily_reflection_screen.dart
+test/features/daily_reflection/data/local_memory_repository_test.dart
+test/features/daily_reflection/domain/companion_models_test.dart
+test/features/daily_reflection/presentation/daily_reflection_screen_test.dart
+specs/002-role-based-local-memory-companion/spec.md
+specs/002-role-based-local-memory-companion/plan.md
+specs/002-role-based-local-memory-companion/tasks.md
+pubspec.yaml
+pubspec.lock
+macos/Flutter/GeneratedPluginRegistrant.swift
+docs/GOAL.md
+docs/PRODUCT_SPEC.md
+docs/ARCHITECTURE.md
+docs/ACCEPTANCE_CRITERIA.md
+docs/RUNBOOK.md
+docs/DECISION_LOG.md
+docs/privacy/data-flow-and-retention.md
+docs/security/threat-model.md
+docs/EVIDENCE_LOG.md
+```
+
+Commands and observed results:
+
+| Command | Result | Evidence summary |
+|---|---|---|
+| `flutter pub add shared_preferences` | PASS | Added `shared_preferences 2.5.5` and related platform packages; changed 17 dependencies. |
+| `flutter test test\features\daily_reflection\domain\companion_models_test.dart` | RED expected | Failed before implementation because new model/service files did not exist. |
+| `flutter test test\features\daily_reflection\data\local_memory_repository_test.dart` | RED expected | Failed before implementation because repository/model files did not exist. |
+| `flutter test test\features\daily_reflection\domain\companion_models_test.dart test\features\daily_reflection\data\local_memory_repository_test.dart` | PASS | `+11: All tests passed!` after domain/application/data implementation. |
+| `flutter test test\features\daily_reflection\presentation\daily_reflection_screen_test.dart` | RED then PASS | New UI tests first failed because local memory UI was absent; final focused run passed with `+9: All tests passed!`. |
+| `dart format .` | PASS | Formatted 17 files, 10 changed. |
+| `flutter analyze` | PASS | `No issues found! (ran in 158.3s)`. |
+| `flutter test` | PASS | `+27: All tests passed!`. |
+| `powershell -ExecutionPolicy Bypass -File .\scripts\verify.ps1` | PASS | format `Formatted 17 files (0 changed)`, analyze `No issues found!`, test `+27: All tests passed!`. |
+| `rg "debugPrint|print\(" lib test` | PASS | No matches. |
+| `rg "http|https|dart:io|Socket|Client|permission|Permission|camera|microphone|location|contacts|sms|notification" lib pubspec.yaml android\app\src\main ios\Runner` | REVIEWED | Matches were existing comments/XML namespace/documentation URLs and UI privacy copy; no new network client or sensitive permission path found. |
+
+Security/privacy review:
+
+| Check | Result | Notes |
+|---|---|---|
+| Real PPG/voice data | NONE | No real biometric or voice data added. |
+| Personal data fixtures | NONE | Tests use synthetic Korean sample strings only. |
+| Health-sensitive logs | NONE | No health logs or medical records added. |
+| API keys/tokens/signing keys | NONE | No secrets or signing material added. |
+| Network/cloud AI/analytics/sync | NONE | No network client, cloud AI, analytics, sync, account, or remote DB path added. |
+| Android/iOS sensitive permissions | NONE | No Android/iOS permission files changed. |
+| Local storage | APPROVED | `shared_preferences` stores a consent-sanitized JSON snapshot only when local memory consent is enabled. |
+| Raw personal logging | NONE | `debugPrint`/`print` search returned no matches in `lib` or `test`. |
+| Diagnostic/medical copy | NONE | Companion copy remains reflective and non-diagnostic. |
+
+Known risks:
+
+- `shared_preferences` is not encrypted secure storage; docs now state not to store credentials, secrets, medical records, raw private conversations, or high-sensitivity data in this feature.
+- `flutter pub add shared_preferences` generated `macos/Flutter/GeneratedPluginRegistrant.swift`; no Android/iOS permission file was changed.
+- `verify.ps1` status showed untracked `.agents/skills/...` and `.codex/` directories that were not part of this task and were not modified intentionally.
+- Several docs already had uncommitted changes before this task and were extended rather than reverted.
+
+Recommended commit message:
+
+```text
+feat: add role-based local memory companion
+```
+
+## 2026-06-28 - HT-DESIGN-ALIGN-001 - Design.md Alignment
+
+Verdict: Pass
+
+Branch:
+
+```text
+main
+```
+
+Task:
+
+```text
+HT-DESIGN-ALIGN-001 - Design.md 湲곕컲 援ы쁽쨌臾몄꽌쨌?ㅽ럺 ?뺣젹
+```
+
+Initial status:
+
+```text
+## main...origin/main
+ M docs/ACCEPTANCE_CRITERIA.md
+ M docs/ARCHITECTURE.md
+ M docs/DECISION_LOG.md
+ M docs/EVIDENCE_LOG.md
+ M docs/GOAL.md
+ M docs/PRODUCT_SPEC.md
+ M docs/RUNBOOK.md
+ M docs/privacy/data-flow-and-retention.md
+ M docs/security/threat-model.md
+ M lib/features/daily_reflection/presentation/daily_reflection_screen.dart
+ M macos/Flutter/GeneratedPluginRegistrant.swift
+ M pubspec.lock
+ M pubspec.yaml
+ M test/features/daily_reflection/presentation/daily_reflection_screen_test.dart
+?? .agents/skills/...
+?? .codex/
+?? DESIGN.md
+?? lib/features/daily_reflection/application/companion_message_service.dart
+?? lib/features/daily_reflection/application/growth_calculator.dart
+?? lib/features/daily_reflection/data/local_memory_repository.dart
+?? lib/features/daily_reflection/data/shared_preferences_memory_repository.dart
+?? lib/features/daily_reflection/domain/companion_models.dart
+?? lib/features/daily_reflection/domain/local_memory_models.dart
+?? specs/002-role-based-local-memory-companion/
+?? test/features/daily_reflection/data/local_memory_repository_test.dart
+?? test/features/daily_reflection/domain/
+```
+
+Design.md summary:
+
+- Current `Design.md` asks for a Goorm-style Korean B2B AI operations dashboard design system.
+- It says not to copy Toss exactly and to adapt the reference direction to YOnLab as trustworthy, technical, calm, and enterprise-ready.
+- It asks future Codex sessions to read `DESIGN.md` and says not to implement UI yet.
+- It does not define HeartTalk companion roles, local memory, growth, privacy/security, or daily reflection flow.
+
+Alignment outcome:
+
+- `Design.md` is now documented as a limited design-input document for HeartTalk, not as a product-pivot authority.
+- The transferable qualities are calmness, trustworthiness, technical restraint, Korean product polish, and clear privacy/security communication.
+- The B2B dashboard framing is documented as a conflict with HeartTalk's current privacy-first daily reflection companion direction.
+- `HT-DESIGN-QA-001` is recommended as the next milestone.
+
+Changed documentation/spec files for this task:
+
+```text
+docs/DESIGN_ALIGNMENT.md
+docs/GOAL.md
+docs/PRODUCT_SPEC.md
+docs/ARCHITECTURE.md
+docs/ACCEPTANCE_CRITERIA.md
+docs/RUNBOOK.md
+docs/DECISION_LOG.md
+docs/privacy/data-flow-and-retention.md
+docs/security/threat-model.md
+docs/EVIDENCE_LOG.md
+specs/002-role-based-local-memory-companion/spec.md
+```
+
+Files intentionally not changed:
+
+```text
+lib/**
+test/**
+pubspec.yaml
+pubspec.lock
+android/**
+ios/**
+macos/**
+.agents/**
+.codex/**
+```
+
+Verification results:
+
+| Command | Result | Evidence summary |
+|---|---|---|
+| `powershell -ExecutionPolicy Bypass -File .\scripts\verify.ps1` | PASS | format `Formatted 17 files (0 changed)`, analyze `No issues found!`, test `+27: All tests passed!`. |
+| `git diff --check` | PASS | Exit code 0; output contained only LF-to-CRLF working-copy warnings. |
+
+Security/privacy notes:
+
+- No app feature code was changed by this design alignment task.
+- No dependency, network, cloud AI, analytics, sync, account, permission, platform, or storage behavior change was made.
+- `shared_preferences` remains documented as non-encrypted storage that must not hold high-sensitivity data.
+- Role modes remain companion tone/persona only and must not replace human relationships or clinical support.
+
+Known risks:
+
+- Current `Design.md` is not HeartTalk-specific and should be rewritten or supplemented before a UI redesign.
+- Some Korean text displayed through the current PowerShell output appears mojibake; this task records the risk but does not edit code.
+- `.agents/skills/...` and `.codex/` remain untracked and out of scope.
+
+Recommended next milestone:
+
+```text
+HT-DESIGN-QA-001 - Design.md 湲곗? Android manual QA checklist
 ```

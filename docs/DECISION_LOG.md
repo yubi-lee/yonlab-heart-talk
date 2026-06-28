@@ -15,9 +15,14 @@ This file summarizes workflow-level decisions for the current repository. The hi
 | DEC-009 | 2026-06-28 | Add project-level docs and PowerShell scripts without changing app code. | Aligns the repository with the YOnLab ChatGPT x Codex workflow while preserving the existing Flutter MVP. | Accepted |
 | DEC-010 | 2026-06-28 | Keep Daily Reflection MVP persistence session-only and in-memory. | The MVP validates the reflection flow without durable storage, raw input retention, database schema, account state, or privacy review overhead. Durable local storage must be handled as a future approved slice. | Accepted |
 | DEC-011 | 2026-06-28 | Separate Android debug APK build evidence from Android manual QA pass evidence. | A successful APK build proves the Android artifact builds, but manual QA requires launching the app on an Android emulator or physical device and completing the checklist. | Accepted |
+| DEC-012 | 2026-06-28 | Treat Daily Reflection MVP privacy/security as local-only, demo/manual-input, and session-only. | The implemented MVP has no real PPG, real voice, sensitive permissions, network/cloud AI, analytics, sync, durable DB, or secrets path. Any future expansion into those areas requires separate privacy/security review. | Accepted |
 
 ## New Decision Template
 
 | ID | Date | Decision | Alternatives | Rationale | Impact | Status |
 |---|---|---|---|---|---|---|
 | DEC-XXX | YYYY-MM-DD |  |  |  |  | Proposed |
+
+| DEC-013 | 2026-06-28 | Add `shared_preferences` for HT-COMPANION-001 local memory. | Alternatives: session-only state, custom file storage, local database. | `shared_preferences` is the smallest approved dependency for local key-value persistence, avoids database/account/network scope, and supports testable restart restore through one JSON snapshot key. | Adds generated plugin registration and pubspec/lock changes; no Android/iOS permission changes. | Accepted |
+
+| DEC-014 | 2026-06-28 | Treat `Design.md` as a limited design-input document for HeartTalk until it is rewritten as a HeartTalk-specific design brief. | Alternatives: make Design.md fully authoritative, ignore Design.md, or rewrite it immediately. | Current Design.md names a Korean B2B AI operations dashboard, which conflicts with HeartTalk's privacy-first daily reflection companion direction. Its transferable qualities are calmness, trustworthiness, technical restraint, and Korean product polish. | Future UI work should first run `HT-DESIGN-QA-001`; Design.md does not authorize a product pivot or code changes by itself. | Accepted |

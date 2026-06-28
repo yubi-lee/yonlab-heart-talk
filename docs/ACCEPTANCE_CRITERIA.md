@@ -98,6 +98,19 @@ Current status for `HT-QA-003 - Execute Android Manual QA Evidence`:
 
 Android manual QA is now `Pass with notes`: the full visible MVP flow was exercised on Android, with emulator visual evidence and physical-device text evidence. The only note is that the emulator became ADB-offline before the final session-only relaunch check, so that final check was repeated on the physical Android target.
 
+## Privacy and Security Documentation Gate
+
+Current status for `HT-PRIV-001 - Align Privacy and Security Docs With Daily Reflection MVP`:
+
+| Item | Status | Evidence |
+|---|---|---|
+| Current MVP data boundary | Pass | `docs/privacy/data-flow-and-retention.md` documents demo/manual input only, local deterministic processing, and session-only in-memory state. |
+| Forbidden data and permissions | Pass | `docs/privacy/data-flow-and-retention.md` and `docs/security/threat-model.md` forbid real PPG, real voice, personal data, health-sensitive logs, sensitive permissions, network/cloud AI, analytics, sync, DBs, API keys, and signing keys. |
+| QA evidence handling | Pass | `docs/privacy/data-flow-and-retention.md`, `docs/security/threat-model.md`, and `docs/RUNBOOK.md` require screenshot/XML review and prohibit storing personal or sensitive QA artifacts. |
+| Future review triggers | Pass | Privacy/security docs require separate review before PPG, voice, inference, durable storage, encryption, permissions, network/cloud, analytics, crash reporting, signing, or release-secret work. |
+
+Privacy/security acceptance is documentation evidence for the current MVP boundary. It is not approval to implement real PPG, voice, health data, storage, network, cloud AI, analytics, permissions, or signing changes.
+
 ## Non-MVP / Out of Scope
 
 The following remain out of scope for the current MVP and require a separate approved spec before implementation:
@@ -134,3 +147,31 @@ Codex final reports for HeartTalk must be written in Korean and include:
 7. 남은 리스크
 8. 다음 권장 작업
 9. 커밋 권장 여부
+
+## HT-COMPANION-001 Acceptance Matrix
+
+| ID | Criterion | Status | Evidence |
+|---|---|---|---|
+| COMP-001 | User can turn local memory consent on/off. | Implemented | Widget test covers `localMemoryConsentSwitch`. |
+| COMP-002 | Required roles are visible: 친구, 연인, 가족, 부모, 코치, 선생님, 경청자, 사용자 지정. | Implemented | Domain and widget tests cover role labels. |
+| COMP-003 | User can enter approved profile, relationship, and todo memory. | Implemented | Widget test enters profile/person/todo memory. |
+| COMP-004 | Consent OFF prevents local memory persistence. | Implemented | Repository test sanitizes snapshot when disabled. |
+| COMP-005 | Consent ON persists and restores approved local memory after restart. | Implemented | SharedPreferences repository and widget restart tests. |
+| COMP-006 | User can view stored information in `내 기억`. | Implemented | Widget tests assert role, profile, todo, and growth text. |
+| COMP-007 | Full local memory reset clears stored data. | Implemented | Repository and widget reset tests. |
+| COMP-008 | Growth level is deterministic from approved local memory. | Implemented | `GrowthCalculator` tests cover level 0 and accumulated memory. |
+| COMP-009 | Role + growth produces Korean companion messages. | Implemented | `CompanionMessageService` tests cover role differences. |
+| COMP-010 | No server, cloud AI, analytics, sync, account, sensitive permission, or diagnostic copy added. | Pending final verification | To be confirmed in final evidence entry. |
+
+## HT-DESIGN-ALIGN-001 Acceptance Matrix
+
+| ID | Criterion | Status | Evidence |
+|---|---|---|---|
+| DESIGN-001 | `Design.md` is reviewed and summarized. | Done | `docs/DESIGN_ALIGNMENT.md` section 1. |
+| DESIGN-002 | Current HT-COMPANION-001 implementation is compared against `Design.md`. | Done | `docs/DESIGN_ALIGNMENT.md` gap matrix. |
+| DESIGN-003 | Conflicts between Design.md and HeartTalk product direction are documented. | Done | B2B operations dashboard framing is marked as conflict. |
+| DESIGN-004 | Role safety constraints are documented. | Done | Product spec and companion spec state role modes are tone/persona only. |
+| DESIGN-005 | Privacy/security constraints remain unchanged. | Done | No server/cloud AI/analytics/sync/account/sensitive permission policy remains in docs/spec. |
+| DESIGN-006 | Follow-up milestone priority is documented. | Done | `HT-DESIGN-QA-001` is recommended first. |
+| DESIGN-007 | No app implementation files are changed by design alignment. | Pending final status | Confirm with `git status -sb` and diff review. |
+| DESIGN-008 | Verification gate passes after docs/spec updates. | Pending final verification | Run `powershell -ExecutionPolicy Bypass -File .\scripts\verify.ps1`. |
