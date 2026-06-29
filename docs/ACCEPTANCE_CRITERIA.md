@@ -244,6 +244,6 @@ Updated status after the physical Android restore QA run:
 | Restart restore after saved memory | Pass | `force-stop` plus relaunch restored role, profile, growth, people/todos, and personalized insight on physical Android without ANR. |
 | Full reset + relaunch fallback | Pass | `Clear all local memory` plus relaunch returned the app to `Role: 친구`, `Profile: -`, `Growth level: 0`, empty people/todos, and fallback insight. |
 | Emulator ANR isolation | Note | The previous restart ANR remained on the emulator path only and did not reproduce on the physical target. |
-| Korean product polish | Note | Core role labels and Korean insight copy rendered, but several visible controls remain in English and should be localized in a follow-up task. |
+| Korean product polish | Implemented in source/tests | Korean-first labels now cover `기기 안에 기억하기`, `기억 저장하기`, `저장된 기억 모두 지우기`, `함께 알아가는 단계`, `오늘의 인사이트`, `내일의 실마리`, and `작은 미션`. Android-visible recheck should still confirm final readability on device. |
 
 `HT-ANDROID-QA-004` acceptance is now `Pass with notes` for the current Companion + Insight MVP because the physical-device restart restore gate passed. The remaining emulator restart issue is no longer the blocking product gate for this milestone.

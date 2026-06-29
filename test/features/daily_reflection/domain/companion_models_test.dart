@@ -23,7 +23,7 @@ void main() {
         responseLength: CompanionResponseLength.long,
         affectionLevel: 4,
         directnessLevel: 3,
-        avoidPhrases: ['힘내', '괜찮아'],
+        avoidPhrases: ['몰아붙이기', '단정'],
         customRoleName: '차분한 동료',
         customToneHint: '짧고 구체적으로 말하기',
       );
@@ -61,7 +61,7 @@ void main() {
         dailyEntries: [
           DailyReflectionEntry(
             id: 'entry-1',
-            summary: '오늘은 회의가 많았고 내일 확인할 일이 남았다.',
+            summary: '오늘은 회의가 많았고 내일 확인할 일이 남아 있다.',
             tags: const ['work'],
             createdAt: DateTime.utc(2026, 6, 28),
           ),
@@ -80,12 +80,12 @@ void main() {
         profile: const LocalUserProfile(
           displayName: '사용자',
           interests: ['산책', '기록'],
-          importantContext: '저녁에 차분한 문장을 좋아함',
+          importantContext: '조용하고 차분한 문장을 좋아함',
         ),
         dailyEntries: [
           DailyReflectionEntry(
             id: 'entry-1',
-            summary: '오늘은 회의가 많았고 내일 확인할 일이 남았다.',
+            summary: '오늘은 회의가 많았고 내일 확인할 일이 남아 있다.',
             tags: const ['work', 'todo'],
             createdAt: DateTime.utc(2026, 6, 24),
           ),
@@ -106,7 +106,7 @@ void main() {
           PersonMemory(
             id: 'person-1',
             label: '가족',
-            note: '짧은 안부를 좋아함',
+            note: '짧은 안부가 좋았다',
             createdAt: DateTime.utc(2026, 6, 25),
           ),
         ],
@@ -158,7 +158,7 @@ void main() {
       );
 
       expect(friendMessage, contains('친구처럼'));
-      expect(coachMessage, contains('한 걸음'));
+      expect(coachMessage, contains('첫 걸음'));
       expect(friendMessage, isNot(coachMessage));
       expect(friendMessage, isNot(contains('진단')));
       expect(coachMessage, isNot(contains('치료')));

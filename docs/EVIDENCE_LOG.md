@@ -1,3 +1,83 @@
+## 2026-06-29 - HT-KO-UX-001 - Korean UX Copy Polish for Companion + Insight MVP
+
+Verdict: Pass
+
+Branch:
+
+```text
+main
+```
+
+Task:
+
+```text
+HT-KO-UX-001 - Korean UX Copy Polish for Companion + Insight MVP
+```
+
+Changed files:
+
+```text
+docs/ACCEPTANCE_CRITERIA.md
+docs/EVIDENCE_LOG.md
+docs/RUNBOOK.md
+docs/qa/android-design-qa-checklist.md
+lib/features/daily_reflection/application/companion_message_service.dart
+lib/features/daily_reflection/application/local_insight_service.dart
+lib/features/daily_reflection/application/rule_based_reflection_engine.dart
+lib/features/daily_reflection/data/demo_reflection_repository.dart
+lib/features/daily_reflection/domain/companion_models.dart
+lib/features/daily_reflection/presentation/daily_reflection_screen.dart
+test/features/daily_reflection/application/local_insight_service_test.dart
+test/features/daily_reflection/application/rule_based_reflection_engine_test.dart
+test/features/daily_reflection/domain/companion_models_test.dart
+test/features/daily_reflection/presentation/daily_reflection_screen_test.dart
+test/widget_test.dart
+```
+
+Commands and observed results:
+
+| Command | Result | Evidence summary |
+|---|---|---|
+| `flutter test test\features\daily_reflection\domain\companion_models_test.dart` | PASS | Korean role labels and role-aware companion message expectations passed. |
+| `flutter test test\features\daily_reflection\application\rule_based_reflection_engine_test.dart` | PASS | Korean reflection preview and tomorrow-note copy passed without diagnostic wording. |
+| `flutter test test\features\daily_reflection\application\local_insight_service_test.dart` | PASS | Fallback insight, recurring signals, tomorrow hint, curiosity question, and 작은 미션 copy passed. |
+| `flutter test test\features\daily_reflection\presentation\daily_reflection_screen_test.dart` | PASS | Korean-first UI labels, local memory panel, reset, restore, and insight text all passed. |
+| `powershell -ExecutionPolicy Bypass -File .\scripts\verify.ps1` | PASS | `dart format --output=none --set-exit-if-changed .` reported `Formatted 20 files (0 changed)`; `flutter analyze` reported `No issues found!`; `flutter test` reported `+34: All tests passed!`. |
+| `git diff --check` | PASS | No whitespace errors. Git printed LF-to-CRLF warnings for some updated test files only. |
+
+Implementation summary:
+
+- Replaced remaining major English UI labels with Korean-first copy across the daily reflection screen, companion message service, local insight service, rule-based reflection engine, and demo repository.
+- Standardized visible labels around local storage and insight flow to phrases such as `기기 안에 기억하기`, `기억 저장하기`, `저장된 기억 모두 지우기`, `함께 알아가는 단계`, `오늘의 인사이트`, `내일의 실마리`, and `작은 미션`.
+- Kept local storage keys, consent logic, restore/reset behavior, and deterministic insight logic unchanged.
+- Updated widget/service tests to assert Korean copy directly and updated `test/widget_test.dart` to match the current app title and privacy panel.
+- Updated the Android QA checklist and runbook so manual QA can verify the new Korean labels directly.
+
+Security/privacy review:
+
+| Check | Result | Notes |
+|---|---|---|
+| Storage schema changes | NONE | No `shared_preferences` key or snapshot schema change was made. |
+| Network/cloud/analytics/sync | NONE | Copy-only task-scoped changes. No new external behavior was added. |
+| Sensitive permission changes | NONE | No platform or permission file was modified. |
+| Diagnostic or coercive wording | IMPROVED | Korean copy keeps a hint/proposal tone and preserves lover/parent safety constraints. |
+
+Known notes:
+
+- This task did not rerun Android physical-device QA; the next Android-visible pass should confirm final density/readability with the new Korean labels.
+- PowerShell output may still display mojibake for some UTF-8 Korean text, but Dart source/tests and app rendering remain the source of truth.
+
+Recommended next work:
+
+- Proceed to `HT-MORNING-001` if the next milestone is feature expansion.
+- If Android-visible copy QA is desired before new feature work, run a short follow-up manual check focused on density/readability and control-label fit.
+
+Recommended commit message:
+
+```text
+feat: polish Korean UX copy for companion and insight flows
+```
+
 # HeartTalk Evidence Log
 
 Use this file as a template for task evidence. Add newest entries at the top when a task needs repository-level evidence.

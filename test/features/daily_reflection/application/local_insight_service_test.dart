@@ -23,8 +23,11 @@ void main() {
     expect(insight.isFallback, isTrue);
     expect(insight.dataDepthLabel, DataDepthLabel.gettingStarted);
     expect(insight.recurringSignals, isEmpty);
-    expect(insight.patternBody, contains('아직 알아가는 중'));
+    expect(insight.patternTitle, '오늘의 인사이트');
+    expect(insight.patternBody, contains('아직 알아가는 중이에요'));
+    expect(insight.tomorrowHint.title, '내일의 실마리');
     expect(insight.tomorrowHint.body, contains('작은 기록'));
+    expect(insight.tinyMission.title, '작은 미션');
     expect(insight.tinyMission.estimatedMinutes, 3);
   });
 
@@ -35,7 +38,7 @@ void main() {
         dailyEntries: [
           DailyReflectionEntry(
             id: 'entry-1',
-            summary: '피곤함과 미룸이 같이 남은 날',
+            summary: '피곤함과 미룸이 같이 남은 하루였다.',
             tags: const ['fatigue', 'delay'],
             createdAt: DateTime.utc(2026, 6, 28),
           ),
@@ -55,7 +58,7 @@ void main() {
       expect(insight.isFallback, isTrue);
       expect(insight.basisEntryCount, 0);
       expect(insight.recurringSignals, isEmpty);
-      expect(insight.patternBody, isNot(contains('fatigue')));
+      expect(insight.patternBody, isNot(contains('피곤함')));
     },
   );
 
@@ -67,13 +70,13 @@ void main() {
         dailyEntries: [
           DailyReflectionEntry(
             id: 'entry-1',
-            summary: '회의가 길고 피곤했던 날',
+            summary: '회의가 길고 피곤함이 남았다.',
             tags: const ['work', 'fatigue'],
             createdAt: DateTime.utc(2026, 6, 27),
           ),
           DailyReflectionEntry(
             id: 'entry-2',
-            summary: '할 일을 미루고 피곤함이 남은 날',
+            summary: '해야 할 일을 미루고 피곤함이 이어졌다.',
             tags: const ['fatigue', 'delay'],
             createdAt: DateTime.utc(2026, 6, 28),
           ),
@@ -86,9 +89,9 @@ void main() {
       expect(insight.isFallback, isFalse);
       expect(insight.basisEntryCount, 2);
       expect(insight.dataDepthLabel, DataDepthLabel.learningPattern);
-      expect(insight.recurringSignals.first.label, 'fatigue');
+      expect(insight.recurringSignals.first.label, '피곤함');
       expect(insight.recurringSignals.first.count, 4);
-      expect(insight.patternBody, contains('fatigue'));
+      expect(insight.patternBody, contains('피곤함'));
       expect(insight.tomorrowHint.body, contains('가능성'));
     },
   );
@@ -109,7 +112,7 @@ void main() {
           PersonMemory(
             id: 'person-1',
             label: '동료',
-            note: '긴 대화를 나눈 사람',
+            note: '길게 남은 여운',
             createdAt: DateTime.utc(2026, 6, 28),
           ),
         ],
@@ -126,7 +129,7 @@ void main() {
         contains('관계'),
       );
       expect(insight.curiosityQuestion.text, contains('관계'));
-      expect(insight.curiosityQuestion.text, isNot(contains('긴 대화')));
+      expect(insight.curiosityQuestion.text, isNot(contains('길게 남은 여운')));
       expect(insight.tinyMission.body, contains('3분'));
     },
   );
@@ -137,7 +140,7 @@ void main() {
       dailyEntries: [
         DailyReflectionEntry(
           id: 'entry-1',
-          summary: '작은 성취가 있던 날',
+          summary: '작은 진전이 있던 하루였다.',
           tags: const ['progress'],
           createdAt: DateTime.utc(2026, 6, 28),
         ),
@@ -165,8 +168,8 @@ void main() {
 
     expect(friend.roleMessage, isNot(coach.roleMessage));
     expect(coach.roleMessage, isNot(listener.roleMessage));
-    expect(friend.roleMessage, contains('곁'));
-    expect(coach.roleMessage, contains('실행'));
+    expect(friend.roleMessage, contains('친구처럼'));
+    expect(coach.roleMessage, contains('실행 가능한'));
     expect(listener.roleMessage, contains('질문'));
   });
 
@@ -178,7 +181,7 @@ void main() {
         dailyEntries: [
           DailyReflectionEntry(
             id: 'entry-1',
-            summary: '오늘은 시작이 조금 무거웠던 날',
+            summary: '오늘은 시작이 조금 무거웠다.',
             tags: const ['slow-start'],
             createdAt: DateTime.utc(2026, 6, 28),
           ),
@@ -195,7 +198,7 @@ void main() {
           PersonMemory(
             id: 'person-1',
             label: '가족',
-            note: '안부를 나눈 사람',
+            note: '여운이 남은 대화',
             createdAt: DateTime.utc(2026, 6, 28),
           ),
         ],

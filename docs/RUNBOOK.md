@@ -270,16 +270,16 @@ Stop and ask for human approval before:
 Use this checklist for `HT-COMPANION-001`:
 
 1. Launch the app.
-2. Confirm `Local memory consent` is visible.
+2. Confirm `기기 안에 기억하기` is visible.
 3. Confirm local memory defaults off.
 4. Turn local memory on.
 5. Select a role such as `코치`.
 6. Enter a profile name, one person memory, and one todo memory.
-7. Tap `Save memory`.
-8. Confirm `내 기억` shows role, profile, growth level, people, and todos.
+7. Tap `기억 저장하기`.
+8. Confirm `내 기억` shows role, profile, `함께 알아가는 단계`, `기억할 사람`, and `내일 할 일`.
 9. Force-stop/relaunch or restart the app.
 10. Confirm approved local memory is restored.
-11. Tap `Clear all local memory`.
+11. Tap `저장된 기억 모두 지우기`.
 12. Confirm stored profile/todo/person memory is cleared.
 13. Confirm no permission prompt, account login, network/cloud AI surface, or diagnostic/treatment copy appears.
 
@@ -331,7 +331,7 @@ Minimum review areas:
 
 1. First launch privacy understanding.
 2. Local memory consent OFF and ON behavior.
-3. Role selection for 친구, 연인, 가족, 부모, 코치, 선생님, 경청자, 사용자 지정.
+3. Role selection for `친구`, `연인`, `가족`, `부모`, `코치`, `선생님`, `경청자`, and `사용자 지정`.
 4. Profile, person, todo, daily note, and stored-information visibility.
 5. App restart restore, full reset, and restart after reset.
 6. Role-specific companion messages, especially lover and parent safety.

@@ -15,13 +15,12 @@ void main() {
       );
 
       expect(result.isValid, isFalse);
-      expect(result.validationMessage, contains('Write at least one sentence'));
+      expect(result.validationMessage, contains('한 문장 이상 적어주세요'));
     });
 
     test('returns deterministic output for the same manual input', () {
       const input = ReflectionInput(
-        text:
-            'Today I coordinated a project meeting and wrote down one task for tomorrow.',
+        text: '오늘은 프로젝트 회의를 정리하고 내일 확인할 작은 일을 적어두었다.',
         source: ReflectionInputSource.manual,
       );
 
@@ -31,22 +30,21 @@ void main() {
       expect(first.summary?.preview, second.summary?.preview);
       expect(first.summary?.todayFlow, second.summary?.todayFlow);
       expect(first.morningDraft?.firstThing, second.morningDraft?.firstThing);
-      expect(first.summary?.sourceLabel, 'Manual text');
+      expect(first.summary?.sourceLabel, '직접 입력');
     });
 
-    test('creates summary and morning briefing for demo input', () {
+    test('creates summary and tomorrow note for demo input', () {
       final result = engine.generate(
         const ReflectionInput(
-          text:
-              'A teammate helped organize the notes, and the day ended with a grateful feeling.',
+          text: '동료가 메모를 정리해줘서 하루 끝이 조금 더 가벼워졌다.',
           source: ReflectionInputSource.demo,
           demoEventId: 'gratitude_note',
         ),
       );
 
       expect(result.isValid, isTrue);
-      expect(result.summary?.sourceLabel, 'Demo data');
-      expect(result.summary?.preview, contains('Today'));
+      expect(result.summary?.sourceLabel, '데모 예시');
+      expect(result.summary?.preview, contains('오늘'));
       expect(result.summary?.todayFlow, isNotEmpty);
       expect(result.summary?.observedCue, isNotEmpty);
       expect(result.summary?.leftForTomorrow, isNotEmpty);
@@ -59,8 +57,7 @@ void main() {
     test('does not include forbidden diagnostic copy', () {
       final result = engine.generate(
         const ReflectionInput(
-          text:
-              'Today felt busy and I still need to check one small thing tomorrow.',
+          text: '오늘은 바빴고 내일 작은 할 일을 하나만 다시 확인하면 된다.',
           source: ReflectionInputSource.manual,
         ),
       );

@@ -117,13 +117,15 @@ class _DailyReflectionScreenState extends State<DailyReflectionScreen> {
     final people = [..._memorySnapshot.people];
     if (personNote.isNotEmpty) {
       final parts = personNote.split(':');
+      final label = parts.first.trim().isEmpty ? '관계' : parts.first.trim();
+      final note = parts.length > 1
+          ? parts.sublist(1).join(':').trim()
+          : personNote;
       people.add(
         PersonMemory(
           id: 'person-${now.microsecondsSinceEpoch}',
-          label: parts.first.trim().isEmpty ? '관계' : parts.first.trim(),
-          note: parts.length > 1
-              ? parts.sublist(1).join(':').trim()
-              : personNote,
+          label: label,
+          note: note,
           createdAt: now,
         ),
       );
@@ -248,7 +250,7 @@ class _DailyReflectionScreenState extends State<DailyReflectionScreen> {
     );
 
     return Scaffold(
-      appBar: AppBar(title: const Text('HeartTalk Daily Reflection Demo')),
+      appBar: AppBar(title: const Text('HeartTalk 하루 회고')),
       body: SafeArea(
         child: SingleChildScrollView(
           padding: const EdgeInsets.all(16),
@@ -256,22 +258,19 @@ class _DailyReflectionScreenState extends State<DailyReflectionScreen> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                'A local-only daily reflection demo for ending the day gently.',
+                '기기 안에서만 남기는 하루 회고예요. 오늘을 다정하게 정리하고, 내일의 작은 시작을 남겨볼 수 있어요.',
                 style: Theme.of(context).textTheme.bodyLarge,
               ),
               _InfoPanel(
-                title: 'Privacy-first demo',
+                title: '사생활을 지키는 회고',
                 children: const [
-                  'This MVP does not read calls, SMS, messengers, notifications, voice, PPG, contacts, location, or health data.',
-                  'Use only safe demo events or short non-sensitive text that you type yourself.',
-                  'Processing is local and deterministic. No cloud AI, analytics, sync, database, or permission request is used.',
+                  '이 MVP는 통화, 문자, 메신저, 알림, 음성, PPG, 연락처, 위치, 건강 정보를 읽지 않아요.',
+                  '직접 적는 짧은 문장이나 안전한 데모 예시만 사용해 주세요.',
+                  '처리는 기기 안에서만 이루어지고, Cloud AI, 분석, 동기화, 데이터베이스, 추가 권한 요청은 없어요.',
                 ],
               ),
               const SizedBox(height: 16),
-              Text(
-                'Safe demo events',
-                style: Theme.of(context).textTheme.titleMedium,
-              ),
+              Text('안전한 데모 예시', style: Theme.of(context).textTheme.titleMedium),
               const SizedBox(height: 8),
               Wrap(
                 spacing: 8,
@@ -292,11 +291,9 @@ class _DailyReflectionScreenState extends State<DailyReflectionScreen> {
                 minLines: 3,
                 maxLines: 5,
                 decoration: const InputDecoration(
-                  labelText: 'Manual reflection note',
-                  hintText:
-                      'Write one or two non-sensitive sentences about today.',
-                  helperText:
-                      'Do not enter private messages, health data, phone numbers, or real voice/PPG details.',
+                  labelText: '오늘 남기고 싶은 한 줄',
+                  hintText: '오늘 있었던 일을 짧고 편하게 적어보세요.',
+                  helperText: '실제 개인정보, 건강 정보, 전화번호, 사적인 대화 원문은 적지 마세요.',
                   border: OutlineInputBorder(),
                 ),
               ),
@@ -304,7 +301,7 @@ class _DailyReflectionScreenState extends State<DailyReflectionScreen> {
               FilledButton(
                 key: const Key('generateButton'),
                 onPressed: _generateFromManualText,
-                child: const Text('Generate reflection'),
+                child: const Text('회고 만들기'),
               ),
               const SizedBox(height: 16),
               _LocalMemoryPanel(
@@ -330,39 +327,36 @@ class _DailyReflectionScreenState extends State<DailyReflectionScreen> {
               if (summary != null && morningDraft != null) ...[
                 const SizedBox(height: 16),
                 _InfoPanel(
-                  title: 'Reflection preview',
-                  children: [summary.preview, 'Source: ${summary.sourceLabel}'],
+                  title: '회고 미리보기',
+                  children: [summary.preview, '입력 방식: ${summary.sourceLabel}'],
                 ),
                 if (companionMessage != null) ...[
                   const SizedBox(height: 12),
-                  _InfoPanel(
-                    title: 'Companion message',
-                    children: [companionMessage],
-                  ),
+                  _InfoPanel(title: '오늘의 한마디', children: [companionMessage]),
                 ],
                 const SizedBox(height: 12),
                 _InfoPanel(
-                  title: 'Daily reflection card',
+                  title: '오늘의 회고 카드',
                   children: [
-                    'Summary: ${summary.todayFlow}',
-                    'Gentle insight: ${summary.observedCue}',
-                    'Closing prompt: ${summary.leftForTomorrow}',
-                    'Tomorrow line: ${summary.tomorrowLine}',
+                    '오늘의 흐름: ${summary.todayFlow}',
+                    '눈에 띈 신호: ${summary.observedCue}',
+                    '내일로 남길 한마디: ${summary.leftForTomorrow}',
+                    '내일의 시작: ${summary.tomorrowLine}',
                   ],
                 ),
                 const SizedBox(height: 12),
                 if (showMorningBriefing)
                   _InfoPanel(
-                    title: 'Morning briefing',
+                    title: '내일 시작 메모',
                     children: [
-                      'Start line: ${morningDraft.startLine}',
-                      'Next action: ${morningDraft.firstThing}',
-                      'Tone hint: ${morningDraft.toneHint}',
+                      '시작 한마디: ${morningDraft.startLine}',
+                      '가장 먼저 할 일: ${morningDraft.firstThing}',
+                      '톤 가이드: ${morningDraft.toneHint}',
                     ],
                   )
                 else
                   const Text(
-                    'Morning briefing appears after you keep this reflection.',
+                    '이 회고를 남기면 내일 시작 메모가 함께 보여요.',
                     key: Key('morningBriefingLockedMessage'),
                   ),
                 const SizedBox(height: 12),
@@ -373,31 +367,28 @@ class _DailyReflectionScreenState extends State<DailyReflectionScreen> {
                     FilledButton.tonal(
                       key: const Key('keepButton'),
                       onPressed: _keep,
-                      child: const Text('Keep for morning'),
+                      child: const Text('내일로 남기기'),
                     ),
                     OutlinedButton(
                       key: const Key('resetButton'),
                       onPressed: _reset,
-                      child: const Text('Reset / Delete'),
+                      child: const Text('지우고 다시 쓰기'),
                     ),
                   ],
                 ),
                 if (_session.isKept) ...[
                   const SizedBox(height: 8),
                   const Text(
-                    'Kept in this session only unless local memory consent is on.',
+                    '기기 안에 기억하기를 켜지 않으면 이번 실행 동안만 남아요.',
                     key: Key('keptMessage'),
                   ),
                 ],
               ] else ...[
                 const SizedBox(height: 16),
-                const Text(
-                  'No reflection generated yet.',
-                  key: Key('emptyState'),
-                ),
+                const Text('아직 회고를 만들지 않았어요.', key: Key('emptyState')),
                 const SizedBox(height: 4),
                 const Text(
-                  'No morning briefing yet.',
+                  '아직 내일 시작 메모가 없어요.',
                   key: Key('morningBriefingEmptyMessage'),
                 ),
               ],
@@ -436,22 +427,38 @@ class _LocalMemoryPanel extends StatelessWidget {
 
   String _signalLine(List<RecurringSignal> signals) {
     if (signals.isEmpty) {
-      return '반복 신호: 아직 없음';
+      return '반복 신호: 아직 없어요';
     }
     return '반복 신호: ${signals.map((signal) => '${signal.label}(${signal.count})').join(', ')}';
+  }
+
+  String _peopleText() {
+    if (snapshot.people.isEmpty) {
+      return '-';
+    }
+    return snapshot.people
+        .map((person) => '${person.label}: ${person.note}')
+        .join(', ');
+  }
+
+  String _todoText() {
+    if (snapshot.todos.isEmpty) {
+      return '-';
+    }
+    return snapshot.todos.map((todo) => todo.title).join(', ');
   }
 
   @override
   Widget build(BuildContext context) {
     return _InfoPanel(
-      title: 'Local memory consent',
+      title: '기기 안에 기억하기',
       childrenWidgets: [
         SwitchListTile(
           key: const Key('localMemoryConsentSwitch'),
           contentPadding: EdgeInsets.zero,
-          title: const Text('Store approved information on this device'),
+          title: const Text('동의한 정보만 이 기기 안에 저장해요'),
           subtitle: const Text(
-            'Profile, reflections, people, todos, and recurring keywords are stored only when consent is on.',
+            '내 소개, 하루 기록, 기억할 사람, 내일 할 일, 반복 키워드를 동의한 경우에만 저장해요.',
           ),
           value: snapshot.consentSettings.localMemoryEnabled,
           onChanged: onConsentChanged,
@@ -473,7 +480,7 @@ class _LocalMemoryPanel extends StatelessWidget {
           key: const Key('profileNameField'),
           controller: profileNameController,
           decoration: const InputDecoration(
-            labelText: 'Profile name',
+            labelText: '내 소개',
             border: OutlineInputBorder(),
           ),
         ),
@@ -482,7 +489,7 @@ class _LocalMemoryPanel extends StatelessWidget {
           key: const Key('todoMemoryField'),
           controller: todoMemoryController,
           decoration: const InputDecoration(
-            labelText: 'Todo memory',
+            labelText: '내일 할 일',
             border: OutlineInputBorder(),
           ),
         ),
@@ -491,7 +498,7 @@ class _LocalMemoryPanel extends StatelessWidget {
           key: const Key('personMemoryField'),
           controller: personMemoryController,
           decoration: const InputDecoration(
-            labelText: 'Person memory',
+            labelText: '기억할 사람',
             border: OutlineInputBorder(),
           ),
         ),
@@ -503,27 +510,25 @@ class _LocalMemoryPanel extends StatelessWidget {
             FilledButton.tonal(
               key: const Key('saveMemoryButton'),
               onPressed: onSaveMemory,
-              child: const Text('Save memory'),
+              child: const Text('기억 저장하기'),
             ),
             OutlinedButton(
               key: const Key('clearAllMemoryButton'),
               onPressed: onClearAll,
-              child: const Text('Clear all local memory'),
+              child: const Text('저장된 기억 모두 지우기'),
             ),
           ],
         ),
         const SizedBox(height: 8),
         const Text('내 기억'),
-        Text('Role: ${snapshot.companionPreference.defaultRole.koreanLabel}'),
+        Text('대화 역할: ${snapshot.companionPreference.defaultRole.koreanLabel}'),
         Text(
-          'Profile: ${snapshot.profile.displayName.trim().isEmpty ? '-' : snapshot.profile.displayName.trim()}',
+          '내 소개: ${snapshot.profile.displayName.trim().isEmpty ? '-' : snapshot.profile.displayName.trim()}',
         ),
-        Text('Growth level: ${growthState.level}'),
-        Text('Entries: ${snapshot.dailyEntries.length}'),
-        Text(
-          'People: ${snapshot.people.map((person) => person.note).join(', ')}',
-        ),
-        Text('Todos: ${snapshot.todos.map((todo) => todo.title).join(', ')}'),
+        Text('함께 알아가는 단계: ${growthState.level}'),
+        Text('하루 기록: ${snapshot.dailyEntries.length}'),
+        Text('기억할 사람: ${_peopleText()}'),
+        Text('내일 할 일: ${_todoText()}'),
         const SizedBox(height: 8),
         Text(insight.patternTitle, key: const Key('localInsightTitle')),
         Text(insight.patternBody),
