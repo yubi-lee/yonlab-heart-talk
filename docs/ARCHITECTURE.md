@@ -129,3 +129,14 @@ Morning brief is implemented inside the existing `daily_reflection` feature with
 - `presentation/daily_reflection_screen.dart`: minimal `오늘 시작하기` card in the existing single-screen flow.
 
 The morning brief is derived at render time from consent-filtered local memory and the current local insight. It does not introduce a new stored snapshot, background scheduler, notification flow, or network/API dependency. Existing session-only `Keep for morning -> 내일 시작 메모` behavior remains separate from the persistent local-memory-based morning brief.
+
+## HT-MEMORY-MANAGE-001 Architecture Update
+
+Local memory management is implemented inside the existing daily_reflection feature without changing the stored snapshot schema:
+
+- pplication/local_memory_management_service.dart: snapshot edit/delete operations for profile, person memory, todo memory, and reflection entries.
+- presentation/daily_reflection_screen.dart: 내 기억 관리 category UI, per-item edit/delete actions, and consent-OFF fallback management message.
+- 	est/features/daily_reflection/application/local_memory_management_service_test.dart: deterministic service coverage for update/delete behavior and derived-state refresh.
+- 	est/features/daily_reflection/presentation/daily_reflection_screen_test.dart: widget coverage for category counts, consent-off hiding, edit, delete, and unchanged reset/restore flow.
+
+The implementation keeps persistence behind the existing repository path and reuses LocalMemorySnapshot plus sanitizeSnapshotForConsent. No new dependency, platform adapter, or network-facing boundary is introduced. Growth, insight, and morning-brief state continue to be derived at render time from the latest consent-filtered snapshot.

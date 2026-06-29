@@ -4,6 +4,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../application/companion_message_service.dart';
 import '../application/growth_calculator.dart';
 import '../application/local_insight_service.dart';
+import '../application/local_memory_management_service.dart';
 import '../application/morning_brief_service.dart';
 import '../application/rule_based_reflection_engine.dart';
 import '../data/demo_reflection_repository.dart';
@@ -28,6 +29,7 @@ class _DailyReflectionScreenState extends State<DailyReflectionScreen> {
   final _growthCalculator = const GrowthCalculator();
   final _messageService = const CompanionMessageService();
   final _insightService = const LocalInsightService();
+  final _memoryManagementService = const LocalMemoryManagementService();
   final _morningBriefService = const MorningBriefService();
   final _controller = TextEditingController();
   final _profileNameController = TextEditingController();
@@ -120,7 +122,7 @@ class _DailyReflectionScreenState extends State<DailyReflectionScreen> {
     final people = [..._memorySnapshot.people];
     if (personNote.isNotEmpty) {
       final parts = personNote.split(':');
-      final label = parts.first.trim().isEmpty ? '관계' : parts.first.trim();
+      final label = parts.first.trim().isEmpty ? '관계 메모' : parts.first.trim();
       final note = parts.length > 1
           ? parts.sublist(1).join(':').trim()
           : personNote;
@@ -139,6 +141,58 @@ class _DailyReflectionScreenState extends State<DailyReflectionScreen> {
       profile: LocalUserProfile(displayName: profileName),
       todos: todos,
       people: people,
+    );
+    await _persistMemory(nextSnapshot);
+  }
+
+  Future<void> _updateProfileDisplayName(String displayName) async {
+    final nextSnapshot = _memoryManagementService.updateProfileDisplayName(
+      _memorySnapshot,
+      displayName,
+    );
+    _profileNameController.text = nextSnapshot.profile.displayName;
+    await _persistMemory(nextSnapshot);
+  }
+
+  Future<void> _updateTodoTitle(String todoId, String title) async {
+    final nextSnapshot = _memoryManagementService.updateTodoTitle(
+      _memorySnapshot,
+      todoId: todoId,
+      title: title,
+    );
+    await _persistMemory(nextSnapshot);
+  }
+
+  Future<void> _deleteTodo(String todoId) async {
+    final nextSnapshot = _memoryManagementService.deleteTodo(
+      _memorySnapshot,
+      todoId: todoId,
+    );
+    await _persistMemory(nextSnapshot);
+  }
+
+  Future<void> _updatePerson(String personId, String label, String note) async {
+    final nextSnapshot = _memoryManagementService.updatePerson(
+      _memorySnapshot,
+      personId: personId,
+      label: label,
+      note: note,
+    );
+    await _persistMemory(nextSnapshot);
+  }
+
+  Future<void> _deletePerson(String personId) async {
+    final nextSnapshot = _memoryManagementService.deletePerson(
+      _memorySnapshot,
+      personId: personId,
+    );
+    await _persistMemory(nextSnapshot);
+  }
+
+  Future<void> _deleteReflectionEntry(String entryId) async {
+    final nextSnapshot = _memoryManagementService.deleteReflectionEntry(
+      _memorySnapshot,
+      entryId: entryId,
     );
     await _persistMemory(nextSnapshot);
   }
@@ -259,7 +313,7 @@ class _DailyReflectionScreenState extends State<DailyReflectionScreen> {
     );
 
     return Scaffold(
-      appBar: AppBar(title: const Text('HeartTalk 하루 회고')),
+      appBar: AppBar(title: const Text('HeartTalk 하루 대화')),
       body: SafeArea(
         child: SingleChildScrollView(
           padding: const EdgeInsets.all(16),
@@ -267,15 +321,15 @@ class _DailyReflectionScreenState extends State<DailyReflectionScreen> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                '기기 안에서만 남기는 하루 회고예요. 오늘을 다정하게 정리하고, 내일의 작은 시작을 남겨볼 수 있어요.',
+                '기기 안에서만 이어지는 하루 대화예요. 오늘을 다정하게 정리하고, 내일의 작은 시작도 함께 꺼내볼 수 있어요.',
                 style: Theme.of(context).textTheme.bodyLarge,
               ),
               _InfoPanel(
-                title: '사생활을 지키는 회고',
+                title: '사생활을 지키는 대화',
                 children: const [
                   '이 MVP는 통화, 문자, 메신저, 알림, 음성, PPG, 연락처, 위치, 건강 정보를 읽지 않아요.',
                   '직접 적는 짧은 문장이나 안전한 데모 예시만 사용해 주세요.',
-                  '처리는 기기 안에서만 이루어지고, Cloud AI, 분석, 동기화, 데이터베이스, 추가 권한 요청은 없어요.',
+                  '처리는 기기 안에서만 이뤄지고 Cloud AI, 분석, 동기화, 외부 데이터베이스, 추가 권한 요청은 없어요.',
                 ],
               ),
               const SizedBox(height: 16),
@@ -300,9 +354,9 @@ class _DailyReflectionScreenState extends State<DailyReflectionScreen> {
                 minLines: 3,
                 maxLines: 5,
                 decoration: const InputDecoration(
-                  labelText: '오늘 남기고 싶은 한 줄',
+                  labelText: '오늘 있었던 일 한 줄',
                   hintText: '오늘 있었던 일을 짧고 편하게 적어보세요.',
-                  helperText: '실제 개인정보, 건강 정보, 전화번호, 사적인 대화 원문은 적지 마세요.',
+                  helperText: '실제 개인정보, 건강 정보, 전화번호, 사적인 대화 전문은 적지 마세요.',
                   border: OutlineInputBorder(),
                 ),
               ),
@@ -310,7 +364,7 @@ class _DailyReflectionScreenState extends State<DailyReflectionScreen> {
               FilledButton(
                 key: const Key('generateButton'),
                 onPressed: _generateFromManualText,
-                child: const Text('회고 만들기'),
+                child: const Text('대화 만들기'),
               ),
               const SizedBox(height: 16),
               _LocalMemoryPanel(
@@ -325,6 +379,12 @@ class _DailyReflectionScreenState extends State<DailyReflectionScreen> {
                 onRoleSelected: _selectRole,
                 onSaveMemory: _saveMemoryInputs,
                 onClearAll: _clearAllMemory,
+                onUpdateProfileName: _updateProfileDisplayName,
+                onUpdateTodo: _updateTodoTitle,
+                onDeleteTodo: _deleteTodo,
+                onUpdatePerson: _updatePerson,
+                onDeletePerson: _deletePerson,
+                onDeleteReflectionEntry: _deleteReflectionEntry,
               ),
               if (result?.validationMessage != null) ...[
                 const SizedBox(height: 12),
@@ -337,7 +397,7 @@ class _DailyReflectionScreenState extends State<DailyReflectionScreen> {
               if (summary != null && morningDraft != null) ...[
                 const SizedBox(height: 16),
                 _InfoPanel(
-                  title: '회고 미리보기',
+                  title: '대화 미리보기',
                   children: [summary.preview, '입력 방식: ${summary.sourceLabel}'],
                 ),
                 if (companionMessage != null) ...[
@@ -346,11 +406,11 @@ class _DailyReflectionScreenState extends State<DailyReflectionScreen> {
                 ],
                 const SizedBox(height: 12),
                 _InfoPanel(
-                  title: '오늘의 회고 카드',
+                  title: '오늘의 대화 카드',
                   children: [
                     '오늘의 흐름: ${summary.todayFlow}',
                     '눈에 띈 신호: ${summary.observedCue}',
-                    '내일로 남길 한마디: ${summary.leftForTomorrow}',
+                    '내일로 남긴 흐름: ${summary.leftForTomorrow}',
                     '내일의 시작: ${summary.tomorrowLine}',
                   ],
                 ),
@@ -366,7 +426,7 @@ class _DailyReflectionScreenState extends State<DailyReflectionScreen> {
                   )
                 else
                   const Text(
-                    '이 회고를 남기면 내일 시작 메모가 함께 보여요.',
+                    '이 대화를 아끼면 내일 시작 메모가 아래 보여요',
                     key: Key('morningBriefingLockedMessage'),
                   ),
                 const SizedBox(height: 12),
@@ -377,7 +437,7 @@ class _DailyReflectionScreenState extends State<DailyReflectionScreen> {
                     FilledButton.tonal(
                       key: const Key('keepButton'),
                       onPressed: _keep,
-                      child: const Text('내일로 남기기'),
+                      child: const Text('내일로 아끼기'),
                     ),
                     OutlinedButton(
                       key: const Key('resetButton'),
@@ -395,7 +455,7 @@ class _DailyReflectionScreenState extends State<DailyReflectionScreen> {
                 ],
               ] else ...[
                 const SizedBox(height: 16),
-                const Text('아직 회고를 만들지 않았어요.', key: Key('emptyState')),
+                const Text('아직 대화를 만들지 않았어요.', key: Key('emptyState')),
                 const SizedBox(height: 4),
                 const Text(
                   '아직 내일 시작 메모가 없어요.',
@@ -423,6 +483,12 @@ class _LocalMemoryPanel extends StatelessWidget {
     required this.onRoleSelected,
     required this.onSaveMemory,
     required this.onClearAll,
+    required this.onUpdateProfileName,
+    required this.onUpdateTodo,
+    required this.onDeleteTodo,
+    required this.onUpdatePerson,
+    required this.onDeletePerson,
+    required this.onDeleteReflectionEntry,
   });
 
   final LocalMemorySnapshot snapshot;
@@ -436,28 +502,259 @@ class _LocalMemoryPanel extends StatelessWidget {
   final ValueChanged<CompanionRole> onRoleSelected;
   final VoidCallback onSaveMemory;
   final VoidCallback onClearAll;
-
+  final ValueChanged<String> onUpdateProfileName;
+  final Future<void> Function(String todoId, String title) onUpdateTodo;
+  final Future<void> Function(String todoId) onDeleteTodo;
+  final Future<void> Function(String personId, String label, String note)
+  onUpdatePerson;
+  final Future<void> Function(String personId) onDeletePerson;
+  final Future<void> Function(String entryId) onDeleteReflectionEntry;
   String _signalLine(List<RecurringSignal> signals) {
     if (signals.isEmpty) {
-      return '반복 신호: 아직 없어요';
+      return '반복 신호: 아직 없어요.';
     }
     return '반복 신호: ${signals.map((signal) => '${signal.label}(${signal.count})').join(', ')}';
   }
 
-  String _peopleText() {
-    if (snapshot.people.isEmpty) {
-      return '-';
+  int get _profileCount => snapshot.profile.displayName.trim().isEmpty ? 0 : 1;
+
+  Future<void> _showEditProfileDialog(BuildContext context) async {
+    final controller = TextEditingController(
+      text: snapshot.profile.displayName.trim(),
+    );
+    final shouldSave = await showDialog<bool>(
+      context: context,
+      builder: (dialogContext) {
+        return AlertDialog(
+          title: const Text('내 소개 수정'),
+          content: TextField(
+            key: const Key('editProfileNameField'),
+            controller: controller,
+            decoration: const InputDecoration(
+              labelText: '닉네임',
+              border: OutlineInputBorder(),
+            ),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(dialogContext).pop(false),
+              child: const Text('취소'),
+            ),
+            FilledButton(
+              key: const Key('confirmEditProfileButton'),
+              onPressed: () => Navigator.of(dialogContext).pop(true),
+              child: const Text('저장'),
+            ),
+          ],
+        );
+      },
+    );
+
+    if (shouldSave == true) {
+      onUpdateProfileName(controller.text);
     }
-    return snapshot.people
-        .map((person) => '${person.label}: ${person.note}')
-        .join(', ');
   }
 
-  String _todoText() {
-    if (snapshot.todos.isEmpty) {
-      return '-';
+  Future<void> _showEditTodoDialog(
+    BuildContext context,
+    TodoMemory todo,
+  ) async {
+    final controller = TextEditingController(text: todo.title);
+    final shouldSave = await showDialog<bool>(
+      context: context,
+      builder: (dialogContext) {
+        return AlertDialog(
+          title: const Text('내일 할 일 수정'),
+          content: TextField(
+            key: const Key('editTodoTitleField'),
+            controller: controller,
+            decoration: const InputDecoration(
+              labelText: '할 일',
+              border: OutlineInputBorder(),
+            ),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(dialogContext).pop(false),
+              child: const Text('취소'),
+            ),
+            FilledButton(
+              key: const Key('confirmEditTodoButton'),
+              onPressed: () => Navigator.of(dialogContext).pop(true),
+              child: const Text('저장'),
+            ),
+          ],
+        );
+      },
+    );
+
+    if (shouldSave == true) {
+      await onUpdateTodo(todo.id, controller.text);
     }
-    return snapshot.todos.map((todo) => todo.title).join(', ');
+  }
+
+  Future<void> _showEditPersonDialog(
+    BuildContext context,
+    PersonMemory person,
+  ) async {
+    final labelController = TextEditingController(text: person.label);
+    final noteController = TextEditingController(text: person.note);
+    final shouldSave = await showDialog<bool>(
+      context: context,
+      builder: (dialogContext) {
+        return AlertDialog(
+          title: const Text('기억할 사람 수정'),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              TextField(
+                key: const Key('editPersonLabelField'),
+                controller: labelController,
+                decoration: const InputDecoration(
+                  labelText: '이름 또는 관계',
+                  border: OutlineInputBorder(),
+                ),
+              ),
+              const SizedBox(height: 8),
+              TextField(
+                key: const Key('editPersonNoteField'),
+                controller: noteController,
+                minLines: 2,
+                maxLines: 3,
+                decoration: const InputDecoration(
+                  labelText: '硫붾え',
+                  border: OutlineInputBorder(),
+                ),
+              ),
+            ],
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(dialogContext).pop(false),
+              child: const Text('취소'),
+            ),
+            FilledButton(
+              key: const Key('confirmEditPersonButton'),
+              onPressed: () => Navigator.of(dialogContext).pop(true),
+              child: const Text('저장'),
+            ),
+          ],
+        );
+      },
+    );
+
+    if (shouldSave == true) {
+      await onUpdatePerson(
+        person.id,
+        labelController.text,
+        noteController.text,
+      );
+    }
+  }
+
+  Widget _buildProfileSection(BuildContext context) {
+    return _MemoryCategorySection(
+      title: '내 소개',
+      count: _profileCount,
+      child: _profileCount == 0
+          ? const Text('아직 저장된 내 소개가 없어요.')
+          : Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Expanded(
+                  child: Text('닉네임: ${snapshot.profile.displayName.trim()}'),
+                ),
+                TextButton(
+                  key: const Key('editProfileButton'),
+                  onPressed: () {
+                    _showEditProfileDialog(context);
+                  },
+                  child: const Text('수정'),
+                ),
+              ],
+            ),
+    );
+  }
+
+  Widget _buildPeopleSection(BuildContext context) {
+    return _MemoryCategorySection(
+      title: '기억할 사람',
+      count: snapshot.people.length,
+      child: snapshot.people.isEmpty
+          ? const Text('아직 저장된 사람이 없어요.')
+          : Column(
+              children: [
+                for (var index = 0; index < snapshot.people.length; index += 1)
+                  _MemoryItemRow(
+                    title: snapshot.people[index].label,
+                    subtitle: snapshot.people[index].note,
+                    editKey: Key('editPersonButton-$index'),
+                    deleteKey: Key('deletePersonButton-$index'),
+                    onEdit: () {
+                      _showEditPersonDialog(context, snapshot.people[index]);
+                    },
+                    onDelete: () async {
+                      await onDeletePerson(snapshot.people[index].id);
+                    },
+                  ),
+              ],
+            ),
+    );
+  }
+
+  Widget _buildTodoSection(BuildContext context) {
+    return _MemoryCategorySection(
+      title: '내일 할 일',
+      count: snapshot.todos.length,
+      child: snapshot.todos.isEmpty
+          ? const Text('아직 저장된 할 일이 없어요.')
+          : Column(
+              children: [
+                for (var index = 0; index < snapshot.todos.length; index += 1)
+                  _MemoryItemRow(
+                    title: snapshot.todos[index].title,
+                    editKey: Key('editTodoButton-$index'),
+                    deleteKey: Key('deleteTodoButton-$index'),
+                    onEdit: () {
+                      _showEditTodoDialog(context, snapshot.todos[index]);
+                    },
+                    onDelete: () async {
+                      await onDeleteTodo(snapshot.todos[index].id);
+                    },
+                  ),
+              ],
+            ),
+    );
+  }
+
+  Widget _buildReflectionSection() {
+    return _MemoryCategorySection(
+      title: '하루 기록',
+      count: snapshot.dailyEntries.length,
+      child: snapshot.dailyEntries.isEmpty
+          ? const Text('아직 저장된 하루 기록이 없어요.')
+          : Column(
+              children: [
+                for (
+                  var index = 0;
+                  index < snapshot.dailyEntries.length;
+                  index += 1
+                )
+                  _MemoryItemRow(
+                    title: snapshot.dailyEntries[index].summary,
+                    subtitle: snapshot.dailyEntries[index].tags.isEmpty
+                        ? null
+                        : '태그: ${snapshot.dailyEntries[index].tags.join(', ')}',
+                    deleteKey: Key('deleteReflectionButton-$index'),
+                    onDelete: () async {
+                      await onDeleteReflectionEntry(
+                        snapshot.dailyEntries[index].id,
+                      );
+                    },
+                  ),
+              ],
+            ),
+    );
   }
 
   @override
@@ -478,7 +775,7 @@ class _LocalMemoryPanel extends StatelessWidget {
         SwitchListTile(
           key: const Key('localMemoryConsentSwitch'),
           contentPadding: EdgeInsets.zero,
-          title: const Text('동의한 정보만 이 기기 안에 저장해요'),
+          title: const Text('동의한 정보만 기기 안에 기억해요'),
           subtitle: const Text(
             '내 소개, 하루 기록, 기억할 사람, 내일 할 일, 반복 키워드를 동의한 경우에만 저장해요.',
           ),
@@ -491,6 +788,7 @@ class _LocalMemoryPanel extends StatelessWidget {
           children: [
             for (final role in CompanionRole.values)
               ChoiceChip(
+                key: Key('roleChip-${role.name}'),
                 label: Text(role.koreanLabel),
                 selected: snapshot.companionPreference.defaultRole == role,
                 onSelected: (_) => onRoleSelected(role),
@@ -549,8 +847,26 @@ class _LocalMemoryPanel extends StatelessWidget {
         ),
         Text('함께 알아가는 단계: ${growthState.level}'),
         Text('하루 기록: ${snapshot.dailyEntries.length}'),
-        Text('기억할 사람: ${_peopleText()}'),
-        Text('내일 할 일: ${_todoText()}'),
+        const SizedBox(height: 12),
+        const Text('내 기억 관리', key: Key('memoryManagementTitle')),
+        if (!snapshot.consentSettings.localMemoryEnabled)
+          const Padding(
+            padding: EdgeInsets.only(top: 8),
+            child: Text(
+              '기기 안에 기억하기를 켜면 저장된 정보를 여기서 관리할 수 있어요.',
+              key: Key('memoryConsentOffMessage'),
+            ),
+          )
+        else ...[
+          const SizedBox(height: 8),
+          _buildProfileSection(context),
+          const SizedBox(height: 8),
+          _buildPeopleSection(context),
+          const SizedBox(height: 8),
+          _buildTodoSection(context),
+          const SizedBox(height: 8),
+          _buildReflectionSection(),
+        ],
         const SizedBox(height: 8),
         Text(insight.patternTitle, key: const Key('localInsightTitle')),
         Text(insight.patternBody),
@@ -560,6 +876,88 @@ class _LocalMemoryPanel extends StatelessWidget {
         Text('${insight.tinyMission.title}: ${insight.tinyMission.body}'),
         Text(insight.roleMessage),
       ],
+    );
+  }
+}
+
+class _MemoryCategorySection extends StatelessWidget {
+  const _MemoryCategorySection({
+    required this.title,
+    required this.count,
+    required this.child,
+  });
+
+  final String title;
+  final int count;
+  final Widget child;
+
+  @override
+  Widget build(BuildContext context) {
+    return DecoratedBox(
+      decoration: BoxDecoration(
+        color: Theme.of(context).colorScheme.surfaceContainerHighest,
+        borderRadius: BorderRadius.circular(8),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.all(12),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [Text('$title ($count)'), const SizedBox(height: 8), child],
+        ),
+      ),
+    );
+  }
+}
+
+class _MemoryItemRow extends StatelessWidget {
+  const _MemoryItemRow({
+    required this.title,
+    this.subtitle,
+    this.editKey,
+    this.deleteKey,
+    this.onEdit,
+    required this.onDelete,
+  });
+
+  final String title;
+  final String? subtitle;
+  final Key? editKey;
+  final Key? deleteKey;
+  final VoidCallback? onEdit;
+  final VoidCallback onDelete;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 8),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(title),
+                if (subtitle != null && subtitle!.trim().isNotEmpty) ...[
+                  const SizedBox(height: 2),
+                  Text(subtitle!),
+                ],
+              ],
+            ),
+          ),
+          if (onEdit != null)
+            TextButton(
+              key: editKey,
+              onPressed: onEdit,
+              child: const Text('수정'),
+            ),
+          TextButton(
+            key: deleteKey,
+            onPressed: onDelete,
+            child: const Text('삭제'),
+          ),
+        ],
+      ),
     );
   }
 }

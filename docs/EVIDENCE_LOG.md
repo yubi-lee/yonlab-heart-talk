@@ -1771,3 +1771,44 @@ Conclusion:
 - The product itself is buildable from the current `main` source, and the latest APK was produced successfully from the original `D:` path.
 - The blocking condition is external-device availability: the requested physical Android target was not connected, so no valid physical install/run/restart/reset evidence could be collected.
 - The next clean step is to reconnect `SM F956N / R3CX70NHJRN` and rerun this QA flow using the already confirmed build path.
+
+## 2026-06-30 - HT-MEMORY-MANAGE-001 - Local Memory View/Edit/Delete Management
+
+Branch:
+
+```text
+main
+```
+
+Implementation summary:
+
+- Added `LocalMemoryManagementService` for snapshot-level local memory updates without changing storage keys or adding dependencies.
+- Extended the existing `내 기억` area into a category-based management surface for `내 소개`, `기억할 사람`, `내일 할 일`, and `하루 기록`.
+- Added localized edit and delete actions for saved profile name, person memories, todo memories, and reflection entries.
+- Kept all changes local-only and reused the existing snapshot save/restore path through `shared_preferences`.
+- Recalculated growth, local insight, and morning brief immediately after memory edits or deletions.
+- Preserved consent-off fallback behavior so personal memory management details are not shown when local memory consent is disabled.
+
+Targeted test evidence:
+
+```text
+flutter test test\features\daily_reflection\application\local_memory_management_service_test.dart
+- 5 tests passed
+
+flutter test test\features\daily_reflection\presentation\daily_reflection_screen_test.dart
+- 8 tests passed
+```
+
+Verification notes:
+
+- `scripts\verify.ps1` initially stopped at the format gate because four files required `dart format`.
+- After formatting, the repository was ready for a clean rerun of the verification flow.
+- No new dependency, platform setting, network call, or Cloud AI integration was added in this task.
+- No raw personal input was added to debug logging during the memory management flow.
+
+Behavior evidence:
+
+- Consent OFF shows a fallback memory-management message instead of category details.
+- Saved people, todos, and reflections appear with Korean labels and per-category counts.
+- Deleting or editing saved memory updates the visible summary immediately.
+- Derived companion state changes with the updated snapshot rather than waiting for a restart.

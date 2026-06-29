@@ -274,3 +274,16 @@ Current status for `HT-MORNING-QA-001 - Android QA for Morning Brief / Today Sta
 | Korean UX/readability check on physical device | Blocked | No physical-device screen evidence could be collected because install/run did not occur. |
 
 Do not mark `HT-MORNING-QA-001` complete from this run. The next acceptance gate is reconnecting `SM F956N / R3CX70NHJRN` and rerunning the physical-device QA flow with the already built latest APK or a rebuilt latest main APK.
+
+## HT-MEMORY-MANAGE-001 Acceptance Matrix
+
+| ID | Criterion | Status | Evidence |
+|---|---|---|---|
+| MEM-001 | User can inspect stored categories for 내 소개, 기억할 사람, 내일 할 일, and 하루 기록. | Implemented | daily_reflection_screen_test.dart asserts category sections and counts after save + keep flow. |
+| MEM-002 | Consent OFF hides stored category details and shows a fallback management message. | Implemented | Widget test covers consent toggle OFF after save and asserts fallback management copy. |
+| MEM-003 | User can edit at least one stored memory item. | Implemented | Widget test edits a todo title; service test covers profile and person/todo update logic. |
+| MEM-004 | User can delete at least two kinds of stored memory items individually. | Implemented | Widget test deletes person and reflection items; service test covers person, todo, and reflection delete behavior. |
+| MEM-005 | Growth, local insight, and morning brief re-derive from the updated snapshot after edit/delete. | Implemented | local_memory_management_service_test.dart verifies derived growth/insight/morning-brief changes after update/delete. |
+| MEM-006 | Full reset behavior remains available. | Implemented | Existing widget test still covers 저장된 기억 모두 지우기 and empty summary state. |
+| MEM-007 | No new dependency, platform setting, network, Cloud AI, analytics, sync, account, or sensitive permission is added. | Pending final verification | Confirm with changed-file review and final verification commands. |
+| MEM-008 | Verification gate passes after implementation. | Pending final verification | Run powershell -ExecutionPolicy Bypass -File .\scripts\verify.ps1, git diff --check, and git status -sb. |

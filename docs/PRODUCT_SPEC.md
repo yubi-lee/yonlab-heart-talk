@@ -93,3 +93,18 @@ The morning brief can include:
 - a role-aware encouragement line
 
 If consent is off, memory is empty, or the user has reset local storage, the app falls back to a non-personalized start guide. The feature remains local-only, deterministic, non-diagnostic, and does not add notifications, background scheduling, network transfer, Cloud AI, or new permissions.
+
+## HT-MEMORY-MANAGE-001 Product Update
+
+HeartTalk now includes a local-only 내 기억 관리 MVP. When local memory consent is enabled, the user can inspect saved categories for 내 소개, 기억할 사람, 내일 할 일, and 하루 기록, then make small corrections without deleting all saved memory.
+
+The current MVP supports:
+
+- category counts inside the existing local memory area
+- profile nickname edit
+- todo title edit
+- person label/note edit
+- individual delete for person memory, todo memory, and reflection entries
+- immediate recalculation of deterministic growth, local insight, and morning brief after each update
+
+If consent is off, the app does not expose stored category details and instead shows a fallback management message. The feature remains local-only and does not add network, Cloud AI, sync, analytics, or new permissions.

@@ -454,3 +454,25 @@ C:\Utils\Android\SDK\platform-tools\adb.exe -s <device-id> logcat -d -b main -b 
 ```
 
 Prefer a physical Android rerun for the final restore acceptance gate when the emulator shows repeated ANR dialogs.
+
+## HT-MEMORY-MANAGE-001 Local Memory Management Verification
+
+Use this flow when validating the local memory management MVP:
+
+1. Run:
+
+`powershell
+cd D:\Views\heart_talk
+flutter test test\features\daily_reflection\application\local_memory_management_service_test.dart
+flutter test test\features\daily_reflection\presentation\daily_reflection_screen_test.dart
+`
+
+2. Turn 기기 안에 기억하기 ON.
+3. Save one profile name, one person memory, and one todo memory.
+4. Keep one reflection so 하루 기록 appears in 내 기억 관리.
+5. Confirm 내 소개, 기억할 사람, 내일 할 일, and 하루 기록 each show a category count.
+6. Edit at least one saved item and confirm the updated text appears immediately.
+7. Delete at least two saved item types and confirm the counts shrink immediately.
+8. Confirm 함께 알아가는 단계, 오늘의 인사이트, and 오늘 시작하기 continue rendering from the updated snapshot.
+9. Turn consent OFF and confirm 내 기억 관리 hides stored category details behind the fallback management message.
+10. Tap 저장된 기억 모두 지우기 and confirm the app returns to the empty local-memory summary state.
