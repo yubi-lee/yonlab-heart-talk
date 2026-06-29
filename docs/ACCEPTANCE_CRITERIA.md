@@ -259,3 +259,18 @@ Updated status after the physical Android restore QA run:
 | MORNING-005 | UI exposes `오늘 시작하기` without breaking the existing `Keep for morning -> 내일 시작 메모` flow. | Implemented | `daily_reflection_screen_test.dart` covers fallback and personalized morning-brief card while older keep/preview tests remain in place. |
 | MORNING-006 | No new dependency, platform setting, background scheduler, notification, network, or Cloud AI path is added. | Pending final verification | Confirm with changed-file review and final `git status -sb`. |
 | MORNING-007 | Verification gate passes after implementation. | Pending final verification | Run `powershell -ExecutionPolicy Bypass -File .\scripts\verify.ps1`, `git diff --check`, and `git status -sb`. |
+
+## HT-MORNING-QA-001 Android Manual QA Status
+
+Current status for `HT-MORNING-QA-001 - Android QA for Morning Brief / Today Start Guide`:
+
+| Item | Status | Evidence |
+|---|---|---|
+| Latest main source status | Pass | Repository was clean on `main` and latest commit matched `5335e56 feat: add morning brief guide`. |
+| Latest debug APK build from `D:\Views\heart_talk` | Pass | `flutter build apk --debug` succeeded and produced `build\app\outputs\flutter-apk\app-debug.apk`. |
+| Requested physical Android target visibility | Blocked | `adb devices -l` showed only `emulator-5554`; `SM F956N / R3CX70NHJRN` was not connected during this run. |
+| APK install and launch on physical device | Blocked | No connected physical target was available for `adb install` or launch commands. |
+| Morning brief Android-visible validation | Blocked | `오늘 시작하기`, `오늘의 질문`, first-step, restore, and fallback-reset behavior were not observable on the requested physical target in this run. |
+| Korean UX/readability check on physical device | Blocked | No physical-device screen evidence could be collected because install/run did not occur. |
+
+Do not mark `HT-MORNING-QA-001` complete from this run. The next acceptance gate is reconnecting `SM F956N / R3CX70NHJRN` and rerunning the physical-device QA flow with the already built latest APK or a rebuilt latest main APK.

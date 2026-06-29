@@ -1696,3 +1696,78 @@ Behavior evidence:
 - Consent ON plus a saved todo produces a personalized first-step suggestion.
 - When no todo exists, the first-step suggestion falls back to the current tiny mission.
 - Coach and listener role tones diverge in the morning brief, while lover and parent copy remains within safety constraints.
+
+## 2026-06-29 - HT-MORNING-QA-001 - Android QA for Morning Brief / Today Start Guide
+
+Verdict: Blocked before install/run because the requested physical Android target was not connected
+
+Branch:
+
+```text
+main
+```
+
+Initial status:
+
+```text
+## main...origin/main
+```
+
+Source baseline:
+
+```text
+5335e56 feat: add morning brief guide
+dae5244 polish: localize companion insight UX copy
+40a66bd docs: record physical Android restore QA evidence
+```
+
+Android target evidence:
+
+```text
+adb devices -l
+List of devices attached
+emulator-5554          device product:sdk_gphone16k_x86_64 model:sdk_gphone16k_x86_64 device:emu64xa16k transport_id:2
+```
+
+Observed device state:
+
+- The requested physical device `SM F956N / R3CX70NHJRN` was not present in ADB output during this run.
+- `flutter devices` was attempted twice, but device discovery stalled after printing `Found 4 connected devices:` and did not return a bounded device list before the underlying Flutter process had to be terminated.
+- Because the physical device was unavailable, the task could not proceed to APK install, app launch, force-stop/relaunch, or reset verification on the requested target.
+
+APK build evidence:
+
+```text
+flutter build apk --debug
+- exit 0
+- Built build\app\outputs\flutter-apk\app-debug.apk
+```
+
+Built APK:
+
+```text
+Path: D:\Views\heart_talk\build\app\outputs\flutter-apk\app-debug.apk
+LastWriteTime: 2026-06-29 23:16:21
+Length: 185078735 bytes
+```
+
+QA result by requested flow:
+
+| Area | Result | Evidence |
+|---|---|---|
+| Latest main source status | Pass | Repository was clean on `main` and latest commit matched `5335e56 feat: add morning brief guide`. |
+| Latest debug APK build | Pass | `flutter build apk --debug` succeeded directly from `D:\Views\heart_talk`. |
+| Physical Android target visibility | Blocked | ADB showed only `emulator-5554`; `SM F956N / R3CX70NHJRN` was not connected. |
+| APK install to physical device | Blocked | No target serial for the requested physical device was available. |
+| App launch on physical device | Blocked | Could not run without the requested target being connected. |
+| Morning brief card display on physical device | Blocked | Physical install/run did not occur. |
+| Restart restore on physical device | Blocked | Force-stop/relaunch on the requested device could not be executed. |
+| Full reset fallback on physical device | Blocked | Reset-after-relaunch could not be executed on the requested device. |
+| Korean UX readability on physical device | Blocked | Android-visible confirmation for the morning-brief card could not be captured on the requested device. |
+
+Conclusion:
+
+- `HT-MORNING-QA-001` is not complete in this run.
+- The product itself is buildable from the current `main` source, and the latest APK was produced successfully from the original `D:` path.
+- The blocking condition is external-device availability: the requested physical Android target was not connected, so no valid physical install/run/restart/reset evidence could be collected.
+- The next clean step is to reconnect `SM F956N / R3CX70NHJRN` and rerun this QA flow using the already confirmed build path.
