@@ -408,3 +408,29 @@ Required Android-visible pass areas for this milestone:
 6. Today insight, tomorrow hint, curiosity question, and tiny mission.
 7. Role-specific safety copy for lover and parent roles.
 8. Korean text rendering and Android screen density/readability.
+
+### Same-Drive Android Build Workaround
+
+If `flutter build apk --debug` fails from `D:\Views\heart_talk` at `:shared_preferences_android:compileDebugKotlin`, and a same-machine probe build on `C:` succeeds, treat the current blocker as a Windows same-drive workaround candidate.
+
+Safe temporary workaround for QA-only runs:
+
+```powershell
+$copyRoot = Join-Path $env:TEMP ('heart_talk_android_probe_' + (Get-Date -Format 'yyyyMMdd_HHmmss'))
+Copy-Item -LiteralPath 'D:\Views\heart_talk' -Destination $copyRoot -Recurse -Force
+Set-Location -LiteralPath (Join-Path $copyRoot 'heart_talk')
+flutter pub get
+flutter build apk --debug
+```
+
+Use the built APK from the temporary `C:` copy only as QA execution evidence for the same source snapshot. Keep the original repository untouched while doing this.
+
+### Emulator Restart Caveat
+
+If the latest APK works in-session but Android relaunch after saved local memory shows `heart_talk isn't responding`, record restart restore as blocked even if `save`, `insight`, `keep`, and `clear all` passed in-session. Collect:
+
+```powershell
+C:\Utils\Android\SDK\platform-tools\adb.exe -s <device-id> logcat -d -b main -b system -b crash
+```
+
+Prefer a physical Android rerun for the final restore acceptance gate when the emulator shows repeated ANR dialogs.

@@ -214,3 +214,20 @@ Current status for `HT-ANDROID-QA-004 - Execute Android Manual QA for Companion 
 | Korean Design/UX QA | Blocked with risk | Android-visible QA is still required. Source inspection shows mojibake risk in the local memory/insight UI strings, so this must be checked after the build blocker is removed. |
 
 Do not treat the partial launch of the older APK as acceptance for `HT-COMPANION-001` + `HT-INSIGHT-001`. The next acceptance gate is a successful latest APK build/install followed by the Android manual checklist.
+
+## HT-ANDROID-QA-004R Resume Status
+
+Updated status after the resumed Android QA run:
+
+| Item | Status | Evidence |
+|---|---|---|
+| Latest APK build path | Partial pass | Direct build from `D:\Views\heart_talk` still failed, but a temporary `C:` copy of the same source built successfully and produced a latest debug APK. |
+| Android launch of latest Companion + Insight APK | Pass | The latest APK built from the `C:` copy installed on `emulator-5554` and launched. |
+| Consent OFF fallback insight | Pass | Android showed fallback insight with Korean copy and no personalized memory use while consent was OFF. |
+| Consent ON local memory save | Pass | Android showed saved profile, role, todo, person memory, and deterministic growth level changes. |
+| Deterministic local insight after memory save | Pass | Android showed recurring-signal, tomorrow-hint, curiosity-question, tiny-mission, and role-aware Korean copy. |
+| Reflection keep flow | Pass | `Work coordination` plus `Keep for morning` produced `Morning briefing` on Android. |
+| Clear all local memory | Pass in-session | Android returned `내 기억` fields to empty defaults after tapping `Clear all local memory`. |
+| Restart restore after saved memory | Fail / Blocker | Emulator relaunch after saved local memory repeatedly surfaced `heart_talk isn't responding`, so restore acceptance is still blocked. |
+
+Do not mark `HT-ANDROID-QA-004` complete until restart restore is validated on Android without ANR. The next clean acceptance path is either a successful physical-device rerun or a focused fix for the relaunch ANR.

@@ -1392,3 +1392,77 @@ Conclusion:
 - HT-ANDROID-QA-004 is not a pass. It is blocked by inability to build/install the latest Android APK for the current source.
 - The existing installed APK only supports partial smoke evidence for the older Daily Reflection MVP.
 - Next work should unblock Android build cache/root mismatch first, then rerun the full `docs/qa/android-design-qa-checklist.md` flow.
+
+## 2026-06-29 - HT-ANDROID-QA-004R - Resume Android QA After Build Blocker Investigation
+
+Verdict: Partial pass with workaround; blocked on restart-restore due emulator ANR
+
+Branch:
+
+```text
+main
+```
+
+Initial status:
+
+```text
+## main...origin/main
+```
+
+Root cause investigation summary:
+
+- `D:\Views\heart_talk` on `D:` consistently failed Android build at `:shared_preferences_android:compileDebugKotlin`.
+- A minimal Flutter probe project on `C:` with the same `shared_preferences 2.5.5` and `shared_preferences_android 2.4.26` built successfully.
+- The failure pattern therefore points to the current Windows/Gradle/Kotlin toolchain on this machine when building Flutter Android artifacts from the `D:` project path, not to HeartTalk Dart logic alone.
+- A same-machine workaround succeeded: copying the current HeartTalk project to a temporary `C:` path and building the debug APK there.
+
+Build evidence:
+
+```text
+Probe success:
+- Temp project on C:\Users\joyke\AppData\Local\Temp built with shared_preferences and produced app-debug.apk.
+
+HeartTalk workaround success:
+- C:\Users\joyke\AppData\Local\Temp\heart_talk_android_probe_20260629_104435\heart_talk\build\app\outputs\flutter-apk\app-debug.apk built successfully.
+```
+
+Android target used:
+
+```text
+AVD: Pixel_10_Pro
+ADB serial: emulator-5554
+```
+
+Android manual QA results from the latest APK:
+
+| Area | Result | Evidence |
+|---|---|---|
+| First launch | Pass | Latest APK launched on emulator and showed HeartTalk title, privacy-first copy, safe demo buttons, manual note field, and local memory consent section. |
+| Consent OFF | Pass | `Local memory consent` defaulted OFF and `오늘의 인사이트` showed fallback copy with `아직 알아가는 중이에요`, `반복 신호: 아직 없음`, and a tiny mission prompt. |
+| Role list visibility | Pass | `친구`, `연인`, `가족`, `부모`, `코치`, `선생님`, `경청자`, `사용자 지정` chips were visible on Android. |
+| Consent ON + save memory | Pass | Saving `Profile=testfriend`, `Todo=easy_doc_start`, `People=coworker_A`, role `코치` updated `내 기억` and raised `Growth level` to `2`. |
+| Insight after memory save | Pass | Insight changed from fallback to deterministic local guidance: `반복 신호: 관계(1), 할 일(1)`, a tomorrow hint, curiosity question, tiny mission, and coach-tone Korean message. |
+| Reflection preview | Pass | `Work coordination` generated `Reflection preview`, `Companion message`, `Daily reflection card`, and `Keep for morning`. |
+| Keep for morning | Pass | After tapping `Keep for morning`, `Morning briefing`, `Start line`, and `Next action` appeared. |
+| Clear all local memory | Pass in-session | After saving fresh test data and tapping `Clear all local memory`, `Profile: -`, `Growth level: 0`, `Entries: 0`, `People:` and `Todos:` returned to empty state. |
+| App restart restore | Fail / Blocker | After saving local memory and force-stopping/relaunching, emulator repeatedly showed `heart_talk isn't responding`. Restore could not be accepted on emulator. |
+
+Observed Android copy and UX notes:
+
+- Korean role labels and core privacy copy rendered correctly on emulator.
+- The insight copy remained non-diagnostic and non-medical in the exercised flow.
+- The coach role message stayed action-oriented without blame or pressure.
+- The current one-screen layout remains dense but workable on emulator after scrolling.
+- `사용자 지정` chip visibility was confirmed, but a separate custom role name/tone input flow was not conclusively exercised in this resumed run.
+
+ANR evidence:
+
+- `adb logcat` showed repeated `Application Not Responding: com.example.heart_talk` after relaunch with saved local memory.
+- The emulator later logged `Displayed com.example.heart_talk/.MainActivity` and `Fully drawn`, but the ANR dialog remained the user-visible blocker.
+- This means restore-on-relaunch is still not acceptable QA evidence yet, even though in-session save and insight behavior passed.
+
+Conclusion:
+
+- The original Android build blocker is partially unblocked by building the same source from a temporary `C:` copy.
+- The latest Companion + Insight APK can now be launched and exercised on Android.
+- The remaining blocker is app restart restore on the emulator after saved local memory, which must be reproduced on a physical Android target or debugged as an emulator/runtime issue before `HT-ANDROID-QA-004` can be marked complete.
