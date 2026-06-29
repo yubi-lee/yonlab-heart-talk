@@ -79,3 +79,17 @@ Role modes are companion tone/persona only. They must not claim to replace real 
 HeartTalk now includes a local-only deterministic insight engine. When local memory consent is enabled and approved memory exists, the app can show `오늘의 인사이트` with recurring signals, a tomorrow hint, a curiosity question, a tiny mission, and a role-aware companion line.
 
 The insight is not a diagnosis, prediction guarantee, risk score, therapy judgment, or emergency guide. It is a gentle local reflection based on approved memory and uses possibility/hint language.
+
+## HT-MORNING-001 Product Update
+
+HeartTalk now includes a local-only deterministic `오늘 시작하기` morning brief. When local memory consent is enabled and approved memory exists, the app can reopen with a short Korean start guide built from saved local memory, growth state, and the current local insight summary.
+
+The morning brief can include:
+
+- a short opening line
+- one carry-over line from recent reflection context
+- a gentle morning question
+- a first small action based on todos or tiny mission
+- a role-aware encouragement line
+
+If consent is off, memory is empty, or the user has reset local storage, the app falls back to a non-personalized start guide. The feature remains local-only, deterministic, non-diagnostic, and does not add notifications, background scheduling, network transfer, Cloud AI, or new permissions.

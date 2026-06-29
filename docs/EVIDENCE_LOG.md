@@ -1659,3 +1659,40 @@ Conclusion:
 - The original Android build blocker is partially unblocked by building the same source from a temporary `C:` copy.
 - The latest Companion + Insight APK can now be launched and exercised on Android.
 - The remaining blocker is app restart restore on the emulator after saved local memory, which must be reproduced on a physical Android target or debugged as an emulator/runtime issue before `HT-ANDROID-QA-004` can be marked complete.
+
+## 2026-06-29 - HT-MORNING-001 - Morning Brief / Today Start Guide
+
+Branch:
+
+```text
+codex/ht-morning-001
+```
+
+Implementation summary:
+
+- Added deterministic morning-brief domain models: `MorningBrief`, `MorningQuestion`, and `FirstStepSuggestion`.
+- Added `MorningBriefService` that derives `오늘 시작하기` from consent-filtered local memory, local insight, role preference, and growth state.
+- Kept the existing session-only `Keep for morning -> 내일 시작 메모` flow intact and separate from the persistent morning brief.
+- Added a visible `오늘 시작하기` card to the existing screen with fallback and personalized states.
+- Updated product/spec/privacy/security/runbook/acceptance docs for the new morning-brief slice.
+
+Targeted test evidence:
+
+```text
+flutter test test\features\daily_reflection\application\morning_brief_service_test.dart
+- 7 tests passed
+
+flutter test test\features\daily_reflection\application\local_insight_service_test.dart
+- 6 tests passed
+
+flutter test test\features\daily_reflection\presentation\daily_reflection_screen_test.dart
+- 11 tests passed
+```
+
+Behavior evidence:
+
+- Empty snapshot shows a fallback `오늘 시작하기` card.
+- Consent OFF returns a generic morning brief and does not reuse saved-looking todo/reflection content.
+- Consent ON plus a saved todo produces a personalized first-step suggestion.
+- When no todo exists, the first-step suggestion falls back to the current tiny mission.
+- Coach and listener role tones diverge in the morning brief, while lover and parent copy remains within safety constraints.

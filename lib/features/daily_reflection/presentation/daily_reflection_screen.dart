@@ -4,6 +4,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../application/companion_message_service.dart';
 import '../application/growth_calculator.dart';
 import '../application/local_insight_service.dart';
+import '../application/morning_brief_service.dart';
 import '../application/rule_based_reflection_engine.dart';
 import '../data/demo_reflection_repository.dart';
 import '../data/local_memory_repository.dart';
@@ -11,6 +12,7 @@ import '../data/shared_preferences_memory_repository.dart';
 import '../domain/companion_models.dart';
 import '../domain/local_insight_models.dart';
 import '../domain/local_memory_models.dart';
+import '../domain/morning_brief_models.dart';
 import '../domain/reflection_models.dart';
 
 class DailyReflectionScreen extends StatefulWidget {
@@ -26,6 +28,7 @@ class _DailyReflectionScreenState extends State<DailyReflectionScreen> {
   final _growthCalculator = const GrowthCalculator();
   final _messageService = const CompanionMessageService();
   final _insightService = const LocalInsightService();
+  final _morningBriefService = const MorningBriefService();
   final _controller = TextEditingController();
   final _profileNameController = TextEditingController();
   final _todoMemoryController = TextEditingController();
@@ -248,6 +251,12 @@ class _DailyReflectionScreenState extends State<DailyReflectionScreen> {
       preference: _memorySnapshot.companionPreference,
       growthState: _growthState,
     );
+    final morningBrief = _morningBriefService.generate(
+      snapshot: _memorySnapshot,
+      insight: localInsight,
+      preference: _memorySnapshot.companionPreference,
+      growthState: _growthState,
+    );
 
     return Scaffold(
       appBar: AppBar(title: const Text('HeartTalk 하루 회고')),
@@ -308,6 +317,7 @@ class _DailyReflectionScreenState extends State<DailyReflectionScreen> {
                 snapshot: _memorySnapshot,
                 growthState: _growthState,
                 insight: localInsight,
+                morningBrief: morningBrief,
                 profileNameController: _profileNameController,
                 todoMemoryController: _todoMemoryController,
                 personMemoryController: _personMemoryController,
@@ -405,6 +415,7 @@ class _LocalMemoryPanel extends StatelessWidget {
     required this.snapshot,
     required this.growthState,
     required this.insight,
+    required this.morningBrief,
     required this.profileNameController,
     required this.todoMemoryController,
     required this.personMemoryController,
@@ -417,6 +428,7 @@ class _LocalMemoryPanel extends StatelessWidget {
   final LocalMemorySnapshot snapshot;
   final CompanionGrowthState growthState;
   final LocalInsightSummary insight;
+  final MorningBrief morningBrief;
   final TextEditingController profileNameController;
   final TextEditingController todoMemoryController;
   final TextEditingController personMemoryController;
@@ -453,6 +465,16 @@ class _LocalMemoryPanel extends StatelessWidget {
     return _InfoPanel(
       title: '기기 안에 기억하기',
       childrenWidgets: [
+        Text(morningBrief.title, key: const Key('morningBriefTitle')),
+        const SizedBox(height: 4),
+        Text(morningBrief.greeting),
+        const SizedBox(height: 4),
+        Text(morningBrief.carryOverLine),
+        const SizedBox(height: 4),
+        Text('오늘의 질문: ${morningBrief.todayQuestion.text}'),
+        Text('${morningBrief.firstStep.title}: ${morningBrief.firstStep.body}'),
+        Text(morningBrief.roleMessage),
+        const SizedBox(height: 12),
         SwitchListTile(
           key: const Key('localMemoryConsentSwitch'),
           contentPadding: EdgeInsets.zero,

@@ -247,3 +247,15 @@ Updated status after the physical Android restore QA run:
 | Korean product polish | Implemented in source/tests | Korean-first labels now cover `기기 안에 기억하기`, `기억 저장하기`, `저장된 기억 모두 지우기`, `함께 알아가는 단계`, `오늘의 인사이트`, `내일의 실마리`, and `작은 미션`. Android-visible recheck should still confirm final readability on device. |
 
 `HT-ANDROID-QA-004` acceptance is now `Pass with notes` for the current Companion + Insight MVP because the physical-device restart restore gate passed. The remaining emulator restart issue is no longer the blocking product gate for this milestone.
+
+## HT-MORNING-001 Acceptance Matrix
+
+| ID | Criterion | Status | Evidence |
+|---|---|---|---|
+| MORNING-001 | Empty or reset state shows a fallback `오늘 시작하기` card. | Implemented | `morning_brief_service_test.dart` covers empty snapshot fallback; widget test covers visible start card. |
+| MORNING-002 | Consent OFF must not create a personalized morning brief from saved memory-like fields. | Implemented | `morning_brief_service_test.dart` covers consent-off fallback and verifies no todo/reflection personalization leaks into output. |
+| MORNING-003 | Consent ON plus saved todo or reflection context can generate a personalized morning brief. | Implemented | Service tests cover todo-based first step, reflection carry-over, and tiny-mission fallback. |
+| MORNING-004 | Role tone changes the morning encouragement safely for coach, listener, lover, and parent. | Implemented | Service tests cover coach/listener divergence and unsafe-wording exclusions for lover/parent copy. |
+| MORNING-005 | UI exposes `오늘 시작하기` without breaking the existing `Keep for morning -> 내일 시작 메모` flow. | Implemented | `daily_reflection_screen_test.dart` covers fallback and personalized morning-brief card while older keep/preview tests remain in place. |
+| MORNING-006 | No new dependency, platform setting, background scheduler, notification, network, or Cloud AI path is added. | Pending final verification | Confirm with changed-file review and final `git status -sb`. |
+| MORNING-007 | Verification gate passes after implementation. | Pending final verification | Run `powershell -ExecutionPolicy Bypass -File .\scripts\verify.ps1`, `git diff --check`, and `git status -sb`. |

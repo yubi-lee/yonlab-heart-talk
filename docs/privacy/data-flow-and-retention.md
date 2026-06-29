@@ -159,3 +159,18 @@ Consent-filtered LocalMemorySnapshot
 The insight summary is derived at render time and is not stored as a new durable record. It uses approved local memory categories only when local memory consent is enabled. If consent is off, the engine returns fallback copy and does not personalize from stored profile, reflection, relationship, todo, or keyword data.
 
 The feature adds no network call, Cloud AI, analytics, sync, account, notification, OS data access, native permission, or new dependency.
+
+## HT-MORNING-001 Morning Brief Data Flow
+
+Morning brief flow:
+
+```text
+Consent-filtered LocalMemorySnapshot
+-> deterministic LocalInsightService
+-> deterministic MorningBriefService
+-> in-memory `오늘 시작하기` UI card
+```
+
+The morning brief is derived at render time and is not stored as a separate durable record. It uses approved local memory only when local memory consent is enabled. If consent is off, storage is empty, or the user clears all local memory, the app returns a fallback morning brief and does not personalize from profile, reflection, people, todo, or recurring-keyword data.
+
+The feature adds no network call, Cloud AI, notification permission, background scheduler, analytics, sync, account, OS data access, native permission, or new dependency.

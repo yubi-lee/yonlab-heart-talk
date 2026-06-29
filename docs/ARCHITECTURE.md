@@ -119,3 +119,13 @@ Local insight is implemented inside the existing `daily_reflection` feature with
 - `presentation/daily_reflection_screen.dart`: minimal `오늘의 인사이트` display inside the existing local memory area.
 
 The engine does not persist a separate insight record. It derives the current insight from the consent-filtered local memory snapshot at render time.
+
+## HT-MORNING-001 Architecture Update
+
+Morning brief is implemented inside the existing `daily_reflection` feature without new dependencies:
+
+- `domain/morning_brief_models.dart`: morning brief, morning question, and first-step suggestion models.
+- `application/morning_brief_service.dart`: deterministic morning-brief generation from `LocalMemorySnapshot`, `LocalInsightSummary`, `CompanionPreference`, and `CompanionGrowthState`.
+- `presentation/daily_reflection_screen.dart`: minimal `오늘 시작하기` card in the existing single-screen flow.
+
+The morning brief is derived at render time from consent-filtered local memory and the current local insight. It does not introduce a new stored snapshot, background scheduler, notification flow, or network/API dependency. Existing session-only `Keep for morning -> 내일 시작 메모` behavior remains separate from the persistent local-memory-based morning brief.

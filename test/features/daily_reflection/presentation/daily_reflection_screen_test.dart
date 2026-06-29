@@ -228,7 +228,7 @@ void main() {
 
     expect(find.text('대화 역할: 코치'), findsOneWidget);
     expect(find.text('내 소개: 나'), findsOneWidget);
-    expect(find.textContaining('문서 먼저 정리'), findsOneWidget);
+    expect(find.textContaining('문서 먼저 정리'), findsWidgets);
     expect(find.textContaining('함께 알아가는 단계:'), findsOneWidget);
   });
 
@@ -276,5 +276,32 @@ void main() {
     expect(find.textContaining('작은 미션:'), findsOneWidget);
     expect(find.textContaining('내일 첫 3분은'), findsOneWidget);
     expect(find.text('오늘의 인사이트'), findsOneWidget);
+  });
+
+  testWidgets('shows morning brief fallback and personalized start card', (
+    tester,
+  ) async {
+    await _pumpScreen(tester);
+
+    await _scrollTo(tester, find.text('오늘 시작하기'));
+    expect(find.text('오늘 시작하기'), findsOneWidget);
+    expect(find.textContaining('좋은 아침'), findsOneWidget);
+
+    await _scrollTo(tester, find.byKey(const Key('localMemoryConsentSwitch')));
+    await tester.tap(find.byKey(const Key('localMemoryConsentSwitch')));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('코치'));
+    await tester.pumpAndSettle();
+    await tester.enterText(
+      find.byKey(const Key('todoMemoryField')),
+      '아침에 가장 쉬운 문서 정리부터 시작하기',
+    );
+    await _scrollTo(tester, find.byKey(const Key('saveMemoryButton')));
+    await tester.tap(find.byKey(const Key('saveMemoryButton')));
+    await tester.pumpAndSettle();
+
+    await _scrollTo(tester, find.text('오늘 시작하기'));
+    expect(find.text('오늘 시작하기'), findsOneWidget);
+    expect(find.textContaining('문서 정리'), findsWidgets);
   });
 }

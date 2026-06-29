@@ -130,3 +130,18 @@ Additional controls:
 - Insight copy must avoid diagnosis, treatment, risk scoring, certainty claims, shame, blame, dependency, or real relationship replacement.
 
 Residual risk: the insight UI may summarize sensitive information if the user stores sensitive memory. Keep the non-sensitive input guidance and `shared_preferences` non-encrypted storage warning visible in docs and QA.
+
+## HT-MORNING-001 Threat Model Update
+
+New local behavior: `MorningBriefService` derives a transient morning brief from `LocalMemorySnapshot`, `LocalInsightSummary`, `CompanionPreference`, and `CompanionGrowthState`.
+
+Additional controls:
+
+- Morning brief generation is deterministic and local-only.
+- Consent OFF returns fallback morning copy instead of personalized memory-based copy.
+- The card must not claim certainty, prediction accuracy, diagnosis, treatment, or emergency support.
+- Role-aware morning copy must keep lover and parent tones free from obsession, dependency pressure, sexual language, control, blame, or shame.
+- No raw personal input is printed, debug-printed, logged, or sent over a network.
+- Existing session-only `Keep for morning -> 내일 시작 메모` flow remains separate from the persistent local-memory-based morning brief.
+
+Residual risk: the morning brief may still summarize sensitive meaning if the user stores sensitive information in local memory. Keep the non-sensitive input guidance and the `shared_preferences` non-encrypted storage warning visible in docs and QA.

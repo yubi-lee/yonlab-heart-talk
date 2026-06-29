@@ -429,6 +429,26 @@ Use the built APK from the temporary `C:` copy only as QA execution evidence for
 
 If the latest APK works in-session but Android relaunch after saved local memory shows `heart_talk isn't responding`, record restart restore as blocked even if `save`, `insight`, `keep`, and `clear all` passed in-session. Collect:
 
+## HT-MORNING-001 Morning Brief Verification
+
+Use this flow when validating the local-only morning brief:
+
+1. Run:
+
+```powershell
+cd D:\Views\heart_talk
+flutter test test\features\daily_reflection\application\morning_brief_service_test.dart
+flutter test test\features\daily_reflection\presentation\daily_reflection_screen_test.dart
+```
+
+2. Confirm `오늘 시작하기` appears even on the fallback state.
+3. Confirm consent OFF keeps the card generic and does not reuse saved-looking profile, todo, or reflection details.
+4. Turn local memory consent ON, save a todo or reflection entry, and confirm the morning brief changes to a personalized local start guide.
+5. Confirm the first step prefers a saved todo when one exists.
+6. Confirm the fallback first step can fall back to the current tiny mission when no todo exists.
+7. Confirm coach/listener/lover/parent wording remains safe and non-diagnostic.
+8. Confirm `Keep for morning -> 내일 시작 메모` still works as a separate session-only flow.
+
 ```powershell
 C:\Utils\Android\SDK\platform-tools\adb.exe -s <device-id> logcat -d -b main -b system -b crash
 ```
