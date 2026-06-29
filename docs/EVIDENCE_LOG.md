@@ -4,6 +4,119 @@ Use this file as a template for task evidence. Add newest entries at the top whe
 
 Completion is based on observed command output, not on an AI saying the task is complete.
 
+## 2026-06-29 - HT-PHYSICAL-RESTORE-QA-001 - Physical Android Restart Restore QA for Companion + Insight MVP
+
+Verdict: Pass with notes
+
+Branch:
+
+```text
+main
+```
+
+Task:
+
+```text
+HT-PHYSICAL-RESTORE-QA-001 - Physical Android restart restore QA for Companion + Insight MVP
+```
+
+Initial status:
+
+```powershell
+cd D:\Views\heart_talk
+git status -sb
+```
+
+Output:
+
+```text
+## main...origin/main
+```
+
+Android target:
+
+```text
+flutter devices:
+- SM F956N (mobile) / R3CX70NHJRN / Android 16 (API 36)
+- sdk gphone16k x86 64 (mobile) / emulator-5554 / Android 17 (API 37 emulator)
+
+adb devices -l:
+- R3CX70NHJRN device product:q6qksx model:SM_F956N device:q6q
+- emulator-5554 device product:sdk_gphone16k_x86_64 model:sdk_gphone16k_x86_64 device:emu64xa16k
+```
+
+Build and install evidence:
+
+```text
+Fresh workaround build:
+- Project root copy: C:\Users\joyke\AppData\Local\Temp\heart_talk_android_probe_20260629_133040
+- APK: C:\Users\joyke\AppData\Local\Temp\heart_talk_android_probe_20260629_133040\build\app\outputs\flutter-apk\app-debug.apk
+- flutter build apk --debug: PASS (Built build\app\outputs\flutter-apk\app-debug.apk)
+
+Install target:
+- C:\Utils\Android\SDK\platform-tools\adb.exe -s R3CX70NHJRN install -r <fresh apk>
+- Result: Success
+```
+
+Changed files:
+
+```text
+docs/ACCEPTANCE_CRITERIA.md
+docs/EVIDENCE_LOG.md
+```
+
+Commands and observed results:
+
+| Command | Result | Evidence summary |
+|---|---|---|
+| `flutter devices` | PASS | Physical device `SM F956N` and emulator `emulator-5554` were both detected. |
+| `C:\Utils\Android\SDK\platform-tools\adb.exe devices -l` | PASS | Physical target `R3CX70NHJRN` was online as `device`. |
+| Fresh temp-copy `flutter build apk --debug` | PASS | Building the current source from the temporary `C:` copy succeeded in `299.6s`. |
+| `adb install -r <fresh apk>` | PASS | Physical-device install returned `Success`. |
+| Initial launch with `am start -W` | PASS | `com.example.heart_talk/.MainActivity` launched on the physical device. |
+| Consent ON + role select + save memory | PASS | Local memory consent toggled ON, role changed to `코치`, and safe profile/todo/person values were saved. |
+| Personalized insight after save | PASS | `내 기억`, `Growth level: 2`, recurring signal, tomorrow hint, question, `tiny mission`, and coach-tone message appeared on device. |
+| `adb shell am force-stop` + relaunch after save | PASS | Physical-device relaunch completed without ANR; restored `Role: 코치`, saved profile, `Growth level: 2`, people/todos, and personalized insight. |
+| `Clear all local memory` | PASS | In-session reset returned role to friend default, cleared profile/people/todos, set growth to `0`, and restored fallback insight. |
+| Reset + `force-stop` + relaunch | PASS | Physical-device relaunch after reset kept `Role: 친구`, `Profile: -`, `Growth level: 0`, empty people/todos, and fallback insight. |
+| Physical-device log review | PASS with notes | No `ANR` or app crash was observed for the save/relaunch or reset/relaunch flows on physical Android. |
+
+Physical QA observations:
+
+- The physical Android target did not reproduce the emulator restart ANR that previously blocked restore acceptance on `emulator-5554`.
+- Restore worked for consent-backed local memory, role selection, growth state, and deterministic local insight.
+- Full reset also persisted across relaunch and correctly returned the app to fallback local-memory and fallback-insight state.
+- The current app still mixes English and Korean UI labels on Android, including `Local memory consent`, `Save memory`, `Clear all local memory`, `Growth level`, `Entries`, and `tiny mission`. Core role labels and insight body copy rendered correctly in Korean, but the overall Korean product polish remains incomplete.
+- Physical-device screenshots were not committed. UIAutomator text dumps and command output were used to minimize exposure of personal device surfaces.
+
+Security/privacy review:
+
+| Check | Result | Notes |
+|---|---|---|
+| Real personal data entered | NONE | Safe synthetic values only: `testeasy_doc_startfriend`, `coworker_A`, `ally_1`. |
+| Sensitive OS data access | NONE observed | No permission prompt or OS-data access surface appeared during the run. |
+| Network/cloud/analytics/sync | NONE observed | The exercised flow remained local-only. |
+| Medical/diagnostic wording | NONE observed | Insight and role messaging remained companion-style and non-diagnostic. |
+| Evidence retention risk | Controlled | Physical-device screenshots were avoided; evidence is summarized text only. |
+
+Known risks:
+
+- The emulator restart ANR remains a follow-up note, but it is no longer the acceptance blocker for the current Companion + Insight MVP because the physical-device restore path passed.
+- Korean-first UX is still incomplete. Several visible control labels remain in English, so a dedicated localization/polish task is still recommended.
+- ADB text entry on physical Android can flow across fields unexpectedly; this QA run still confirmed durable restore/reset behavior with safe synthetic values.
+
+Recommended next work:
+
+- Prioritize `HT-MORNING-001` for product progression now that physical restore is verified.
+- Open a separate Korean copy/localization task for the remaining mixed-language UI labels and helper text.
+- Keep an emulator-only follow-up note for the prior restart ANR if emulator parity remains important.
+
+Recommended commit message:
+
+```text
+docs: record physical Android restore QA evidence
+```
+
 ## 2026-06-28 - HT-PRIV-001 - Align Privacy and Security Docs With Daily Reflection MVP
 
 Verdict: Pass

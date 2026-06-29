@@ -231,3 +231,19 @@ Updated status after the resumed Android QA run:
 | Restart restore after saved memory | Fail / Blocker | Emulator relaunch after saved local memory repeatedly surfaced `heart_talk isn't responding`, so restore acceptance is still blocked. |
 
 Do not mark `HT-ANDROID-QA-004` complete until restart restore is validated on Android without ANR. The next clean acceptance path is either a successful physical-device rerun or a focused fix for the relaunch ANR.
+
+## HT-PHYSICAL-RESTORE-QA-001 Physical Restore Status
+
+Updated status after the physical Android restore QA run:
+
+| Item | Status | Evidence |
+|---|---|---|
+| Fresh latest APK build via same-drive workaround | Pass | A fresh temporary `C:` copy of the current source built successfully and produced `app-debug.apk`. |
+| Physical Android install and launch | Pass | The fresh APK installed on `SM F956N` / `R3CX70NHJRN` and launched with `am start -W`. |
+| Consent ON + local memory save | Pass | Physical Android showed consent ON, role `코치`, saved profile, growth `2`, people/todos, and personalized local insight. |
+| Restart restore after saved memory | Pass | `force-stop` plus relaunch restored role, profile, growth, people/todos, and personalized insight on physical Android without ANR. |
+| Full reset + relaunch fallback | Pass | `Clear all local memory` plus relaunch returned the app to `Role: 친구`, `Profile: -`, `Growth level: 0`, empty people/todos, and fallback insight. |
+| Emulator ANR isolation | Note | The previous restart ANR remained on the emulator path only and did not reproduce on the physical target. |
+| Korean product polish | Note | Core role labels and Korean insight copy rendered, but several visible controls remain in English and should be localized in a follow-up task. |
+
+`HT-ANDROID-QA-004` acceptance is now `Pass with notes` for the current Companion + Insight MVP because the physical-device restart restore gate passed. The remaining emulator restart issue is no longer the blocking product gate for this milestone.
