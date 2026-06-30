@@ -150,6 +150,21 @@ void main() {
     expect(find.text('내 기억 관리'), findsOneWidget);
   });
 
+  testWidgets('shows the currently selected role in Korean', (tester) async {
+    await _pumpScreen(tester);
+    await _scrollTo(tester, find.byKey(const Key('localMemoryConsentSwitch')));
+
+    expect(find.byKey(const Key('selectedRoleContextLine')), findsOneWidget);
+    expect(find.text('지금은 친구처럼 도와드릴게요.'), findsOneWidget);
+
+    await tester.tap(find.byKey(const Key('localMemoryConsentSwitch')));
+    await tester.pumpAndSettle();
+    await tester.tap(find.byKey(const Key('roleChip-coach')));
+    await tester.pumpAndSettle();
+
+    expect(find.textContaining('코치처럼 도와드릴게요'), findsOneWidget);
+  });
+
   testWidgets('persists consent role profile and todo after restart', (
     tester,
   ) async {

@@ -476,3 +476,27 @@ flutter test test\features\daily_reflection\presentation\daily_reflection_screen
 8. Confirm 함께 알아가는 단계, 오늘의 인사이트, and 오늘 시작하기 continue rendering from the updated snapshot.
 9. Turn consent OFF and confirm 내 기억 관리 hides stored category details behind the fallback management message.
 10. Tap 저장된 기억 모두 지우기 and confirm the app returns to the empty local-memory summary state.
+
+## HT-ROLE-UX-001 Role UX Verification
+
+Use this flow when validating stronger role-based companion tone differences:
+
+1. Run:
+
+`powershell
+cd D:\Views\heart_talk
+flutter test test\features\daily_reflection\domain\companion_models_test.dart
+flutter test test\features\daily_reflection\application\local_insight_service_test.dart
+flutter test test\features\daily_reflection\application\morning_brief_service_test.dart
+flutter test test\features\daily_reflection\presentation\daily_reflection_screen_test.dart
+`
+
+2. Turn 기기 안에 기억하기 ON so role-based local-memory UI remains active.
+3. Select 친구, 코치, 경청자, and 선생님 in turn and confirm the current-role context line changes in Korean.
+4. Confirm friend copy feels easygoing, coach copy points to a first action, listener copy uses a short question, and teacher copy organizes the next step calmly.
+5. Confirm 오늘의 인사이트 changes its 질문/작은 미션 tone by role without claiming certainty or diagnosis.
+6. Confirm 오늘 시작하기 changes its 오늘의 질문/첫 번째 작은 행동/응원 문구 by role.
+7. Confirm custom role uses the saved custom role name plus a safe normalized tone phrase rather than replaying raw unsafe custom text.
+8. Confirm lover wording stays warm without obsession, jealousy, sexual language, or dependency pressure.
+9. Confirm parent wording stays caring without control, blame, shame, or scolding.
+10. Confirm no new permission prompt, account login, network/cloud AI surface, analytics, or sync behavior appears.

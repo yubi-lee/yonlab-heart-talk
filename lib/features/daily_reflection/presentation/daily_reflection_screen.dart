@@ -764,6 +764,11 @@ class _LocalMemoryPanel extends StatelessWidget {
       childrenWidgets: [
         Text(morningBrief.title, key: const Key('morningBriefTitle')),
         const SizedBox(height: 4),
+        Text(
+          snapshot.companionPreference.roleContextLine,
+          key: const Key('selectedRoleContextLine'),
+        ),
+        const SizedBox(height: 4),
         Text(morningBrief.greeting),
         const SizedBox(height: 4),
         Text(morningBrief.carryOverLine),
@@ -841,7 +846,7 @@ class _LocalMemoryPanel extends StatelessWidget {
         ),
         const SizedBox(height: 8),
         const Text('내 기억'),
-        Text('대화 역할: ${snapshot.companionPreference.defaultRole.koreanLabel}'),
+        Text('대화 역할: ${snapshot.companionPreference.roleDisplayName}'),
         Text(
           '내 소개: ${snapshot.profile.displayName.trim().isEmpty ? '-' : snapshot.profile.displayName.trim()}',
         ),

@@ -289,3 +289,19 @@ Current status for `HT-MORNING-QA-001 - Android QA for Morning Brief / Today Sta
 | MEM-006 | Full reset behavior remains available. | Implemented | Existing widget test still covers 저장된 기억 모두 지우기 and empty summary state. |
 | MEM-007 | No new dependency, platform setting, network, Cloud AI, analytics, sync, account, or sensitive permission is added. | Pending final verification | Confirm with changed-file review and final verification commands. |
 | MEM-008 | Verification gate passes after implementation. | Pending final verification | Run powershell -ExecutionPolicy Bypass -File .\scripts\verify.ps1, git diff --check, and git status -sb. |
+
+## HT-ROLE-UX-001 Acceptance Matrix
+
+| ID | Criterion | Status | Evidence |
+|---|---|---|---|
+| ROLEUX-001 | Friend, coach, listener, and teacher role messages differ in a user-visible Korean way. | Implemented | `companion_models_test.dart`, `local_insight_service_test.dart`, and `morning_brief_service_test.dart` cover divergence across companion, insight, and morning flows. |
+| ROLEUX-002 | Coach role emphasizes a first action and execution-oriented next step. | Implemented | Insight and morning-brief service tests assert coach-specific question and first-step wording. |
+| ROLEUX-003 | Listener role emphasizes short reflection and question-centered prompts. | Implemented | Insight and morning-brief service tests assert listener-specific question and tiny-mission wording. |
+| ROLEUX-004 | Teacher role emphasizes calm structure and step-by-step organization. | Implemented | Companion, insight, and morning-brief tests assert structured teacher wording such as `정리`, `차근차근`, and `순서`. |
+| ROLEUX-005 | Custom role reflects a safe tone boundary without replaying raw unsafe text. | Implemented | Service/domain tests assert custom role name plus normalized tone wording while excluding unsafe terms. |
+| ROLEUX-006 | Lover role avoids obsession, sexual language, and dependency-inducing copy. | Implemented | Companion, insight, and morning-brief tests explicitly exclude unsafe lover wording. |
+| ROLEUX-007 | Parent role avoids control, blame, shame, and infantilizing copy. | Implemented | Morning-brief and existing role-safety tests keep parent wording non-controlling and non-shaming. |
+| ROLEUX-008 | The current selected role is clearly visible in the UI in Korean. | Implemented | `daily_reflection_screen_test.dart` asserts the role context line and coach-role update. |
+| ROLEUX-009 | Existing local memory, insight, morning brief, and memory management flows continue to pass. | Implemented | Targeted Flutter test run passed across domain, application, and presentation layers. |
+| ROLEUX-010 | No new dependency, platform setting, network, Cloud AI, analytics, sync, account, or sensitive permission is added. | Pass | Changed-file review stayed inside `lib/features/daily_reflection/**`, `test/features/daily_reflection/**`, `docs/**`, and `specs/006-role-ux-polish/spec.md`. No platform, permission, or dependency file changed. |
+| ROLEUX-011 | Verification gate passes after implementation. | Pass | `powershell -ExecutionPolicy Bypass -File .\scripts\verify.ps1` passed after one formatter rerun. `git diff --check` reported no whitespace errors. |

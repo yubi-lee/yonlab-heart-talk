@@ -172,6 +172,92 @@ void main() {
     expect(listener.roleMessage, contains('질문'));
   });
 
+  test('changes question and first step for coach listener and teacher', () {
+    final snapshot = LocalMemorySnapshot.empty().copyWith(
+      consentSettings: ConsentSettings.allEnabled(),
+      dailyEntries: [
+        DailyReflectionEntry(
+          id: 'entry-1',
+          summary: '어제는 시작이 느렸지만 하나는 끝냈다.',
+          tags: const ['slow-start', 'progress'],
+          createdAt: DateTime.utc(2026, 6, 29),
+        ),
+      ],
+      todos: [
+        TodoMemory(
+          id: 'todo-1',
+          title: '가장 쉬운 문서 정리부터 시작하기',
+          createdAt: DateTime.utc(2026, 6, 29),
+        ),
+      ],
+    );
+    final growthState = growthCalculator.calculate(snapshot);
+
+    MorningBrief generateFor(CompanionRole role) {
+      final preference = CompanionPreference(defaultRole: role);
+      final insight = insightService.generate(
+        snapshot: snapshot,
+        preference: preference,
+        growthState: growthState,
+      );
+      return service.generate(
+        snapshot: snapshot,
+        insight: insight,
+        preference: preference,
+        growthState: growthState,
+      );
+    }
+
+    final coach = generateFor(CompanionRole.coach);
+    final listener = generateFor(CompanionRole.listener);
+    final teacher = generateFor(CompanionRole.teacher);
+
+    expect(coach.todayQuestion.text, contains('막힐'));
+    expect(coach.firstStep.body, contains('바로'));
+    expect(listener.todayQuestion.text, contains('마음'));
+    expect(listener.firstStep.body, contains('천천히'));
+    expect(teacher.todayQuestion.text, contains('정리'));
+    expect(teacher.firstStep.body, contains('순서'));
+  });
+
+  test('uses safe custom role tone hint in morning brief', () {
+    final snapshot = LocalMemorySnapshot.empty().copyWith(
+      consentSettings: ConsentSettings.allEnabled(),
+      dailyEntries: [
+        DailyReflectionEntry(
+          id: 'entry-1',
+          summary: '어제는 생각이 많았지만 한 줄은 적었다.',
+          tags: const ['progress'],
+          createdAt: DateTime.utc(2026, 6, 29),
+        ),
+      ],
+    );
+    final growthState = growthCalculator.calculate(snapshot);
+    const preference = CompanionPreference(
+      defaultRole: CompanionRole.custom,
+      customRoleName: '다정한 메이트',
+      customToneHint: '짧고 차분하게 말해줘',
+    );
+    final insight = insightService.generate(
+      snapshot: snapshot,
+      preference: preference,
+      growthState: growthState,
+    );
+
+    final brief = service.generate(
+      snapshot: snapshot,
+      insight: insight,
+      preference: preference,
+      growthState: growthState,
+    );
+
+    expect(brief.roleMessage, contains('다정한 메이트'));
+    expect(brief.roleMessage, contains('차분'));
+    for (final forbidden in ['집착', '성적', '의존', '통제', '진단']) {
+      expect(brief.roleMessage, isNot(contains(forbidden)));
+    }
+  });
+
   test('keeps lover and parent messages away from unsafe wording', () {
     final snapshot = LocalMemorySnapshot.empty().copyWith(
       consentSettings: ConsentSettings.allEnabled(),

@@ -108,3 +108,23 @@ The current MVP supports:
 - immediate recalculation of deterministic growth, local insight, and morning brief after each update
 
 If consent is off, the app does not expose stored category details and instead shows a fallback management message. The feature remains local-only and does not add network, Cloud AI, sync, analytics, or new permissions.
+
+## HT-ROLE-UX-001 Product Update
+
+HeartTalk now makes the selected companion role feel more distinct inside the existing local-only experience. The current role is shown in Korean inside the local memory area, and deterministic role copy now diverges more clearly across companion message, local insight, and `오늘 시작하기`.
+
+The current implemented role UX slice includes:
+
+- a Korean current-role context line such as `지금은 코치처럼 도와드릴게요`
+- stronger role-aware divergence for friend, lover, family, parent, coach, teacher, listener, and custom
+- role-specific differences in insight question, tiny mission, and tomorrow hint tone
+- role-specific differences in morning question, first small action, and encouragement line
+- custom role tone derived from safe internal tone categories rather than replaying raw custom hints verbatim
+
+Role modes remain companion tone/persona only. They do not replace real relationships, counseling, or clinical support.
+
+Safety constraints remain unchanged:
+
+- lover role stays warm but avoids obsession, jealousy, sexual language, possession, or dependency-inducing phrasing
+- parent role stays caring but avoids control, blame, shame, scolding, or infantilizing phrasing
+- all roles avoid diagnosis, treatment, risk scoring, certainty claims, and user-labeling language

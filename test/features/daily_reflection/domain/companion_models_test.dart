@@ -163,5 +163,43 @@ void main() {
       expect(friendMessage, isNot(contains('진단')));
       expect(coachMessage, isNot(contains('치료')));
     });
+
+    test('creates structured teacher copy and safe custom tone copy', () {
+      final service = const CompanionMessageService();
+      const growth = CompanionGrowthState(
+        level: 2,
+        memoryScore: 5,
+        daysWithEntries: 2,
+        profileCompleteness: 1,
+        recurringKeywordCount: 1,
+        relationshipMemoryCount: 0,
+        todoMemoryCount: 1,
+      );
+
+      final teacherMessage = service.generateMessage(
+        preference: const CompanionPreference(
+          defaultRole: CompanionRole.teacher,
+        ),
+        growthState: growth,
+        reflectionSummary: '오늘은 할 일을 미루지 않으려고 기록해두었다.',
+      );
+      final customMessage = service.generateMessage(
+        preference: const CompanionPreference(
+          defaultRole: CompanionRole.custom,
+          customRoleName: '차분한 파트너',
+          customToneHint: '짧고 차분하게 말해줘',
+        ),
+        growthState: growth,
+        reflectionSummary: '오늘은 할 일을 미루지 않으려고 기록해두었다.',
+      );
+
+      expect(teacherMessage, contains('정리'));
+      expect(teacherMessage, contains('차근차근'));
+      expect(customMessage, contains('차분한 파트너'));
+      expect(customMessage, contains('차분하게'));
+      for (final forbidden in ['집착', '성적', '의존', '진단', '치료']) {
+        expect(customMessage, isNot(contains(forbidden)));
+      }
+    });
   });
 }

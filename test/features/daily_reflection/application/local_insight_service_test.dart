@@ -174,6 +174,89 @@ void main() {
   });
 
   test(
+    'changes insight question and tiny mission by coach listener and teacher roles',
+    () {
+      final snapshot = LocalMemorySnapshot.empty().copyWith(
+        consentSettings: ConsentSettings.allEnabled(),
+        dailyEntries: [
+          DailyReflectionEntry(
+            id: 'entry-1',
+            summary: '오늘은 시작이 조금 느렸지만 할 일 하나는 끝냈다.',
+            tags: const ['slow-start', 'progress'],
+            createdAt: DateTime.utc(2026, 6, 28),
+          ),
+        ],
+        todos: [
+          TodoMemory(
+            id: 'todo-1',
+            title: '아침에 가장 쉬운 문서 정리부터 시작하기',
+            createdAt: DateTime.utc(2026, 6, 28),
+          ),
+        ],
+      );
+      final growthState = growthCalculator.calculate(snapshot);
+
+      final coach = service.generate(
+        snapshot: snapshot,
+        preference: const CompanionPreference(defaultRole: CompanionRole.coach),
+        growthState: growthState,
+      );
+      final listener = service.generate(
+        snapshot: snapshot,
+        preference: const CompanionPreference(
+          defaultRole: CompanionRole.listener,
+        ),
+        growthState: growthState,
+      );
+      final teacher = service.generate(
+        snapshot: snapshot,
+        preference: const CompanionPreference(
+          defaultRole: CompanionRole.teacher,
+        ),
+        growthState: growthState,
+      );
+
+      expect(coach.curiosityQuestion.text, contains('막히'));
+      expect(coach.tinyMission.body, contains('첫 3분'));
+      expect(listener.curiosityQuestion.text, contains('마음'));
+      expect(listener.tinyMission.body, contains('한 장면'));
+      expect(teacher.curiosityQuestion.text, contains('정리'));
+      expect(teacher.tinyMission.body, contains('순서'));
+    },
+  );
+
+  test('reflects custom tone hint without dropping safety', () {
+    final snapshot = LocalMemorySnapshot.empty().copyWith(
+      consentSettings: ConsentSettings.allEnabled(),
+      dailyEntries: [
+        DailyReflectionEntry(
+          id: 'entry-1',
+          summary: '오늘은 생각이 많았지만 한 줄은 적어두었다.',
+          tags: const ['progress'],
+          createdAt: DateTime.utc(2026, 6, 28),
+        ),
+      ],
+    );
+    final growthState = growthCalculator.calculate(snapshot);
+
+    final custom = service.generate(
+      snapshot: snapshot,
+      preference: const CompanionPreference(
+        defaultRole: CompanionRole.custom,
+        customRoleName: '조용한 메이트',
+        customToneHint: '짧고 차분하게 말해줘',
+      ),
+      growthState: growthState,
+    );
+
+    expect(custom.roleMessage, contains('조용한 메이트'));
+    expect(custom.roleMessage, contains('차분'));
+    for (final forbidden in ['집착', '성적', '의존', '진단', '치료']) {
+      expect(custom.roleMessage, isNot(contains(forbidden)));
+    }
+  });
+
+  test(
     'keeps lover parent and growth copy away from unsafe or diagnostic wording',
     () {
       final snapshot = LocalMemorySnapshot.empty().copyWith(

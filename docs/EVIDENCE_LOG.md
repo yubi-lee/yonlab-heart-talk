@@ -1964,3 +1964,81 @@ Conclusion:
 - `HT-MORNING-QA-001` is now completed by this rerun on the requested physical device.
 - Personalized morning brief, restart restore, and post-reset fallback behavior were all validated from the latest build on Android hardware.
 - The remaining caution is test-entry ergonomics when driving Samsung IME through ADB text injection; this did not block the product behavior under test.
+
+## 2026-06-30 - HT-ROLE-UX-001 - Role-based Companion Tone and Interaction Polish
+
+Verdict: Pass
+
+Branch:
+
+```text
+main
+```
+
+Initial status:
+
+```text
+## main...origin/main
+ M lib/features/daily_reflection/application/companion_message_service.dart
+ M lib/features/daily_reflection/application/local_insight_service.dart
+ M lib/features/daily_reflection/application/morning_brief_service.dart
+ M lib/features/daily_reflection/domain/companion_models.dart
+ M lib/features/daily_reflection/presentation/daily_reflection_screen.dart
+ M test/features/daily_reflection/application/local_insight_service_test.dart
+ M test/features/daily_reflection/application/morning_brief_service_test.dart
+ M test/features/daily_reflection/domain/companion_models_test.dart
+ M test/features/daily_reflection/presentation/daily_reflection_screen_test.dart
+```
+
+Implemented scope:
+
+- Added a Korean role context line so the selected role is visible in the `내 기억` area.
+- Strengthened deterministic role copy in companion message, local insight, and morning brief flows.
+- Normalized custom tone hints into safe tone buckets instead of replaying raw custom hints verbatim.
+- Preserved existing local-memory, reset/restore, insight, morning-brief, and memory-management behavior.
+
+Targeted verification evidence:
+
+```text
+flutter test test\features\daily_reflection\domain\companion_models_test.dart test\features\daily_reflection\application\local_insight_service_test.dart test\features\daily_reflection\application\morning_brief_service_test.dart test\features\daily_reflection\presentation\daily_reflection_screen_test.dart
+- +34 All tests passed!
+```
+
+Full verification evidence:
+
+```text
+powershell -ExecutionPolicy Bypass -File .\scripts\verify.ps1
+- first run stopped at dart format because 6 files required formatting
+- reran dart format on the reported files
+- second run passed
+- flutter analyze: No issues found!
+- flutter test: +50 All tests passed!
+
+git diff --check
+- no whitespace errors
+```
+
+Role UX outcome summary:
+
+| Area | Result | Evidence |
+|---|---|---|
+| Friend / coach / listener / teacher divergence | Pass | Service tests now assert role-specific differences across companion, insight, and morning flows. |
+| Coach first-action emphasis | Pass | Coach question and first-step/tiny-mission wording explicitly point to a small immediate start. |
+| Listener question-centered tone | Pass | Listener wording now favors short reflective prompts and gentle questions. |
+| Teacher structure-oriented tone | Pass | Teacher wording now uses calm organizing language such as `정리`, `차근차근`, and `순서`. |
+| Custom role safe tone reflection | Pass | Custom role includes the saved role name and a normalized safe tone descriptor. |
+| Lover / parent safety constraints | Pass | Tests exclude obsession, sexual language, dependency pressure, control, blame, shame, and diagnostic language. |
+| UI visibility of selected role | Pass | Widget test confirms the role context line updates in Korean when the user switches to `코치`. |
+| Regression safety | Pass | Existing local memory, morning brief, and memory management tests remained green in the full verify pass. |
+
+Documentation updates:
+
+- Added `HT-ROLE-UX-001` product update in `docs/PRODUCT_SPEC.md`.
+- Added `HT-ROLE-UX-001` acceptance matrix in `docs/ACCEPTANCE_CRITERIA.md`.
+- Added role UX verification steps to `docs/RUNBOOK.md`.
+- Added `specs/006-role-ux-polish/spec.md`.
+
+Safety notes:
+
+- No new dependency, platform permission, network call, Cloud AI surface, analytics, sync, or account behavior was added.
+- No raw personal input was added to logs while implementing the role UX slice.

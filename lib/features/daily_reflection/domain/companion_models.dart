@@ -11,6 +11,8 @@ enum CompanionRole {
 
 enum CompanionResponseLength { short, medium, long }
 
+enum CustomToneStyle { balanced, calm, warm, direct, reflective }
+
 enum MemoryCategory {
   profile,
   reflectionEntries,
@@ -38,6 +40,78 @@ extension CompanionRoleLabel on CompanionRole {
         return '경청자';
       case CompanionRole.custom:
         return '사용자 지정';
+    }
+  }
+}
+
+extension CompanionPreferencePresentation on CompanionPreference {
+  String get roleDisplayName {
+    if (defaultRole == CompanionRole.custom &&
+        customRoleName.trim().isNotEmpty) {
+      return customRoleName.trim();
+    }
+    return defaultRole.koreanLabel;
+  }
+
+  CustomToneStyle get customToneStyle {
+    final hint = customToneHint.trim();
+    if (hint.isEmpty) {
+      return CustomToneStyle.balanced;
+    }
+    if (hint.contains('차분') || hint.contains('조용')) {
+      return CustomToneStyle.calm;
+    }
+    if (hint.contains('다정') || hint.contains('부드')) {
+      return CustomToneStyle.warm;
+    }
+    if (hint.contains('짧') ||
+        hint.contains('간결') ||
+        hint.contains('직설') ||
+        hint.contains('구체') ||
+        hint.contains('분명')) {
+      return CustomToneStyle.direct;
+    }
+    if (hint.contains('질문') || hint.contains('들어') || hint.contains('경청')) {
+      return CustomToneStyle.reflective;
+    }
+    return CustomToneStyle.balanced;
+  }
+
+  String get customToneDescriptor {
+    switch (customToneStyle) {
+      case CustomToneStyle.calm:
+        return '차분하게';
+      case CustomToneStyle.warm:
+        return '다정하게';
+      case CustomToneStyle.direct:
+        return '짧고 분명하게';
+      case CustomToneStyle.reflective:
+        return '질문을 곁들여';
+      case CustomToneStyle.balanced:
+        return '부드럽고 간결하게';
+    }
+  }
+
+  String get roleContextLine {
+    switch (defaultRole) {
+      case CompanionRole.friend:
+        return '지금은 친구처럼 도와드릴게요.';
+      case CompanionRole.lover:
+        return '지금은 연인처럼 다정하게 도와드릴게요.';
+      case CompanionRole.family:
+        return '지금은 가족처럼 편안하게 도와드릴게요.';
+      case CompanionRole.parent:
+        return '지금은 부모처럼 생활을 챙기듯 도와드릴게요.';
+      case CompanionRole.coach:
+        return '지금은 코치처럼 도와드릴게요.';
+      case CompanionRole.teacher:
+        return '지금은 선생님처럼 정리해드릴게요.';
+      case CompanionRole.listener:
+        return '지금은 경청자처럼 들어드릴게요.';
+      case CompanionRole.custom:
+        return customRoleName.trim().isEmpty
+            ? '지금은 사용자 지정 톤으로 도와드릴게요.'
+            : '지금은 ${customRoleName.trim()} 톤으로 도와드릴게요.';
     }
   }
 }
