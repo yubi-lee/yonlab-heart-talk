@@ -40,7 +40,7 @@ Commands and observed results:
 |---|---|---|
 | `flutter test test\features\daily_reflection\domain\companion_models_test.dart` | PASS | Korean role labels and role-aware companion message expectations passed. |
 | `flutter test test\features\daily_reflection\application\rule_based_reflection_engine_test.dart` | PASS | Korean reflection preview and tomorrow-note copy passed without diagnostic wording. |
-| `flutter test test\features\daily_reflection\application\local_insight_service_test.dart` | PASS | Fallback insight, recurring signals, tomorrow hint, curiosity question, and 작은 미션 copy passed. |
+| `flutter test test\features\daily_reflection\application\local_insight_service_test.dart` | PASS | Fallback insight, recurring signals, tomorrow hint, curiosity question, and ?묒? 誘몄뀡 copy passed. |
 | `flutter test test\features\daily_reflection\presentation\daily_reflection_screen_test.dart` | PASS | Korean-first UI labels, local memory panel, reset, restore, and insight text all passed. |
 | `powershell -ExecutionPolicy Bypass -File .\scripts\verify.ps1` | PASS | `dart format --output=none --set-exit-if-changed .` reported `Formatted 20 files (0 changed)`; `flutter analyze` reported `No issues found!`; `flutter test` reported `+34: All tests passed!`. |
 | `git diff --check` | PASS | No whitespace errors. Git printed LF-to-CRLF warnings for some updated test files only. |
@@ -48,7 +48,7 @@ Commands and observed results:
 Implementation summary:
 
 - Replaced remaining major English UI labels with Korean-first copy across the daily reflection screen, companion message service, local insight service, rule-based reflection engine, and demo repository.
-- Standardized visible labels around local storage and insight flow to phrases such as `기기 안에 기억하기`, `기억 저장하기`, `저장된 기억 모두 지우기`, `함께 알아가는 단계`, `오늘의 인사이트`, `내일의 실마리`, and `작은 미션`.
+- Standardized visible labels around local storage and insight flow to phrases such as `湲곌린 ?덉뿉 湲곗뼲?섍린`, `湲곗뼲 ??ν븯湲?, `??λ맂 湲곗뼲 紐⑤몢 吏?곌린`, `?④퍡 ?뚯븘媛???④퀎`, `?ㅻ뒛???몄궗?댄듃`, `?댁씪???ㅻ쭏由?, and `?묒? 誘몄뀡`.
 - Kept local storage keys, consent logic, restore/reset behavior, and deterministic insight logic unchanged.
 - Updated widget/service tests to assert Korean copy directly and updated `test/widget_test.dart` to match the current app title and privacy panel.
 - Updated the Android QA checklist and runbook so manual QA can verify the new Korean labels directly.
@@ -154,11 +154,11 @@ Commands and observed results:
 | Fresh temp-copy `flutter build apk --debug` | PASS | Building the current source from the temporary `C:` copy succeeded in `299.6s`. |
 | `adb install -r <fresh apk>` | PASS | Physical-device install returned `Success`. |
 | Initial launch with `am start -W` | PASS | `com.example.heart_talk/.MainActivity` launched on the physical device. |
-| Consent ON + role select + save memory | PASS | Local memory consent toggled ON, role changed to `코치`, and safe profile/todo/person values were saved. |
-| Personalized insight after save | PASS | `내 기억`, `Growth level: 2`, recurring signal, tomorrow hint, question, `tiny mission`, and coach-tone message appeared on device. |
-| `adb shell am force-stop` + relaunch after save | PASS | Physical-device relaunch completed without ANR; restored `Role: 코치`, saved profile, `Growth level: 2`, people/todos, and personalized insight. |
+| Consent ON + role select + save memory | PASS | Local memory consent toggled ON, role changed to `肄붿튂`, and safe profile/todo/person values were saved. |
+| Personalized insight after save | PASS | `??湲곗뼲`, `Growth level: 2`, recurring signal, tomorrow hint, question, `tiny mission`, and coach-tone message appeared on device. |
+| `adb shell am force-stop` + relaunch after save | PASS | Physical-device relaunch completed without ANR; restored `Role: 肄붿튂`, saved profile, `Growth level: 2`, people/todos, and personalized insight. |
 | `Clear all local memory` | PASS | In-session reset returned role to friend default, cleared profile/people/todos, set growth to `0`, and restored fallback insight. |
-| Reset + `force-stop` + relaunch | PASS | Physical-device relaunch after reset kept `Role: 친구`, `Profile: -`, `Growth level: 0`, empty people/todos, and fallback insight. |
+| Reset + `force-stop` + relaunch | PASS | Physical-device relaunch after reset kept `Role: 移쒓뎄`, `Profile: -`, `Growth level: 0`, empty people/todos, and fallback insight. |
 | Physical-device log review | PASS with notes | No `ANR` or app crash was observed for the save/relaunch or reset/relaunch flows on physical Android. |
 
 Physical QA observations:
@@ -759,7 +759,7 @@ Commands and observed results:
 Summary:
 
 - Aligned `docs/CODEX_TASK_TEMPLATE.md` final report requirements with the AGENTS reporting standard requested for HeartTalk.
-- Standardized the minimum final report items to: ?묒뾽 ???곹깭, 蹂寃??뚯씪, 援ы쁽/?섏젙 ?댁슜, ?ㅽ뻾??紐낅졊, 寃利?寃곌낵, 蹂댁븞/媛쒖씤?뺣낫 ?먭?, ?⑥? 由ъ뒪?? ?ㅼ쓬 沅뚯옣 ?묒뾽, 而ㅻ컠 沅뚯옣 ?щ?.
+- Standardized the minimum final report items to: ?臾믩씜 ???怨밴묶, 癰궰野????뵬, ?닌뗭겱/??륁젟 ??곸뒠, ??쎈뻬??筌뤿굝議? 野꺜筌?野껉퀗?? 癰귣똻釉?揶쏆뮇??類ｋ궖 ?癒?, ??? ?귐딅뮞?? ??쇱벉 亦낅슣???臾믩씜, ?뚣끇而?亦낅슣?????.
 - Added a HeartTalk-specific `/goal` usage example with allowed/forbidden file scope, privacy-first constraints, verification commands, and completion criteria.
 - Preserved privacy-first, synthetic/demo data only, evidence-gated completion, and no-medical-claims operating principles.
 - Did not change `AGENTS.md`, app code, tests, specs, scripts, Flutter configuration, README, secrets, or signing material.
@@ -1153,12 +1153,12 @@ Initial status observed before implementation:
 Implementation summary:
 
 - Added explicit local memory consent and category-based consent sanitizing.
-- Added companion roles: 移쒓뎄, ?곗씤, 媛議? 遺紐? 肄붿튂, ?좎깮?? 寃쎌껌?? ?ъ슜??吏??
+- Added companion roles: 燁살뮄?? ?怨쀬뵥, 揶쎛鈺? ?봔筌? ?꾨뗄?? ?醫롪문?? 野껋럩猿?? ?????筌왖??
 - Added companion preference, local profile, reflection entry, memory item, person memory, todo memory, local memory snapshot, and deterministic growth state models.
 - Added in-memory and `shared_preferences` local repository implementations.
 - Added deterministic growth level 0-5 calculation.
 - Added Korean role + growth companion message generation.
-- Added UI for local memory consent, role selection, profile/person/todo input, `??湲곗뼲`, and full local memory reset.
+- Added UI for local memory consent, role selection, profile/person/todo input, `??疫꿸퀣堉?, and full local memory reset.
 - Added `specs/002-role-based-local-memory-companion` as the approved follow-up spec to preserve MVP 001 session-only source-of-truth history.
 
 Changed files in this task include:
@@ -1247,7 +1247,7 @@ main
 Task:
 
 ```text
-HT-DESIGN-ALIGN-001 - Design.md 湲곕컲 援ы쁽쨌臾몄꽌쨌?ㅽ럺 ?뺣젹
+HT-DESIGN-ALIGN-001 - Design.md 疫꿸퀡而??닌뗭겱夷뚩눧紐꾧퐣夷??쎈읃 ?類ｌ졊
 ```
 
 Initial status:
@@ -1349,7 +1349,7 @@ Known risks:
 Recommended next milestone:
 
 ```text
-HT-DESIGN-QA-001 - Design.md 湲곗? Android manual QA checklist
+HT-DESIGN-QA-001 - Design.md 疫꿸퀣? Android manual QA checklist
 ```
 ## 2026-06-28 - HT-DESIGN-QA-001 - Android Design/UX Manual QA Checklist
 
@@ -1386,7 +1386,7 @@ Checklist summary:
 
 - Created a HeartTalk-specific Android Design/UX manual QA checklist for the `HT-COMPANION-001` role-based local memory companion.
 - The checklist treats `DESIGN.md` as limited design input and applies only calm, trustworthy, technically restrained Korean UX qualities to HeartTalk.
-- The checklist includes 29 scenarios covering first launch, local memory consent OFF/ON, profile, role selection, custom role, daily note, condition-input gap review, conversation memo, person memory, todo memory, interests/worries/goals gap review, restart restore, `내 기억`, full reset, restart after reset, all required role message tones, growth level, privacy/security copy, Korean readability, Android density, evidence privacy, and `HT-INSIGHT-001` preflight.
+- The checklist includes 29 scenarios covering first launch, local memory consent OFF/ON, profile, role selection, custom role, daily note, condition-input gap review, conversation memo, person memory, todo memory, interests/worries/goals gap review, restart restore, `??湲곗뼲`, full reset, restart after reset, all required role message tones, growth level, privacy/security copy, Korean readability, Android density, evidence privacy, and `HT-INSIGHT-001` preflight.
 - Lover and parent role safety, human-relationship replacement risk, diagnostic/treatment framing, absolute safety claims, and OS/network/cloud access implications are explicit Fail criteria.
 
 Documentation updates:
@@ -1479,7 +1479,7 @@ Implementation summary:
 - Added fallback insight for empty snapshots and local memory consent OFF.
 - Added recurring signal derivation from reflection tags, recurring keywords, todo presence, and relationship memory presence.
 - Added role-aware insight messages with safety constraints for lover and parent roles.
-- Added `오늘의 인사이트` display inside the existing local memory area.
+- Added `?ㅻ뒛???몄궗?댄듃` display inside the existing local memory area.
 - Added `specs/003-local-insight-prediction-engine/spec.md` and updated product, architecture, acceptance, runbook, privacy, and security docs.
 
 Verification results:
@@ -1540,7 +1540,7 @@ Execution summary:
 - `flutter run -d R3CX70NHJRN --no-resident` reached `Running Gradle task 'assembleDebug'...` and did not complete before manual termination.
 - Installed and launched the existing `build\app\outputs\flutter-apk\app-debug.apk` with `adb install -r` and `adb shell monkey -p com.example.heart_talk -c android.intent.category.LAUNCHER 1`.
 - UIAutomator confirmed the older installed app launched and showed the daily reflection demo, privacy notice, safe demo events, manual reflection note, generated reflection preview/card, `Keep for morning`, and morning briefing behavior.
-- The installed APK did not expose the current source's `Local memory consent`, role chips, `내 기억`, or local insight area, so HT-COMPANION-001/HT-INSIGHT-001 Android manual QA could not be completed on this target.
+- The installed APK did not expose the current source's `Local memory consent`, role chips, `??湲곗뼲`, or local insight area, so HT-COMPANION-001/HT-INSIGHT-001 Android manual QA could not be completed on this target.
 
 Blocked evidence:
 
@@ -1574,10 +1574,10 @@ QA result by requested flow:
 | Role selection | Blocked | Latest app containing role chips could not be built/installed. |
 | Profile/person/todo memory input | Blocked | Latest app containing local memory fields could not be built/installed. |
 | Save/restore/reset | Blocked | Latest local persistent memory app could not be built/installed. |
-| 내 기억 area | Blocked | Latest app containing the area could not be built/installed. |
+| ??湲곗뼲 area | Blocked | Latest app containing the area could not be built/installed. |
 | Today insight/tiny mission/fallback | Blocked | Latest insight UI could not be built/installed. |
 | Role-specific safety copy | Blocked on Android | Source/tests remain the latest evidence; Android manual view was not completed. |
-| Korean readability | Fail risk | Current source inspection shows mojibake strings in `daily_reflection_screen.dart` around `내 기억`, recurring signal, question, and some role labels in docs output. Needs Android-visible QA after build blocker is removed. |
+| Korean readability | Fail risk | Current source inspection shows mojibake strings in `daily_reflection_screen.dart` around `??湲곗뼲`, recurring signal, question, and some role labels in docs output. Needs Android-visible QA after build blocker is removed. |
 | Screen density/readability | Partial | Existing daily reflection demo is dense but scrollable enough for the basic reflection flow. Companion/insight density not verified. |
 
 Conclusion:
@@ -1631,10 +1631,10 @@ Android manual QA results from the latest APK:
 | Area | Result | Evidence |
 |---|---|---|
 | First launch | Pass | Latest APK launched on emulator and showed HeartTalk title, privacy-first copy, safe demo buttons, manual note field, and local memory consent section. |
-| Consent OFF | Pass | `Local memory consent` defaulted OFF and `오늘의 인사이트` showed fallback copy with `아직 알아가는 중이에요`, `반복 신호: 아직 없음`, and a tiny mission prompt. |
-| Role list visibility | Pass | `친구`, `연인`, `가족`, `부모`, `코치`, `선생님`, `경청자`, `사용자 지정` chips were visible on Android. |
-| Consent ON + save memory | Pass | Saving `Profile=testfriend`, `Todo=easy_doc_start`, `People=coworker_A`, role `코치` updated `내 기억` and raised `Growth level` to `2`. |
-| Insight after memory save | Pass | Insight changed from fallback to deterministic local guidance: `반복 신호: 관계(1), 할 일(1)`, a tomorrow hint, curiosity question, tiny mission, and coach-tone Korean message. |
+| Consent OFF | Pass | `Local memory consent` defaulted OFF and `?ㅻ뒛???몄궗?댄듃` showed fallback copy with `?꾩쭅 ?뚯븘媛??以묒씠?먯슂`, `諛섎났 ?좏샇: ?꾩쭅 ?놁쓬`, and a tiny mission prompt. |
+| Role list visibility | Pass | `移쒓뎄`, `?곗씤`, `媛議?, `遺紐?, `肄붿튂`, `?좎깮??, `寃쎌껌??, `?ъ슜??吏?? chips were visible on Android. |
+| Consent ON + save memory | Pass | Saving `Profile=testfriend`, `Todo=easy_doc_start`, `People=coworker_A`, role `肄붿튂` updated `??湲곗뼲` and raised `Growth level` to `2`. |
+| Insight after memory save | Pass | Insight changed from fallback to deterministic local guidance: `諛섎났 ?좏샇: 愿怨?1), ????1)`, a tomorrow hint, curiosity question, tiny mission, and coach-tone Korean message. |
 | Reflection preview | Pass | `Work coordination` generated `Reflection preview`, `Companion message`, `Daily reflection card`, and `Keep for morning`. |
 | Keep for morning | Pass | After tapping `Keep for morning`, `Morning briefing`, `Start line`, and `Next action` appeared. |
 | Clear all local memory | Pass in-session | After saving fresh test data and tapping `Clear all local memory`, `Profile: -`, `Growth level: 0`, `Entries: 0`, `People:` and `Todos:` returned to empty state. |
@@ -1646,7 +1646,7 @@ Observed Android copy and UX notes:
 - The insight copy remained non-diagnostic and non-medical in the exercised flow.
 - The coach role message stayed action-oriented without blame or pressure.
 - The current one-screen layout remains dense but workable on emulator after scrolling.
-- `사용자 지정` chip visibility was confirmed, but a separate custom role name/tone input flow was not conclusively exercised in this resumed run.
+- `?ъ슜??吏?? chip visibility was confirmed, but a separate custom role name/tone input flow was not conclusively exercised in this resumed run.
 
 ANR evidence:
 
@@ -1671,9 +1671,9 @@ codex/ht-morning-001
 Implementation summary:
 
 - Added deterministic morning-brief domain models: `MorningBrief`, `MorningQuestion`, and `FirstStepSuggestion`.
-- Added `MorningBriefService` that derives `오늘 시작하기` from consent-filtered local memory, local insight, role preference, and growth state.
-- Kept the existing session-only `Keep for morning -> 내일 시작 메모` flow intact and separate from the persistent morning brief.
-- Added a visible `오늘 시작하기` card to the existing screen with fallback and personalized states.
+- Added `MorningBriefService` that derives `?ㅻ뒛 ?쒖옉?섍린` from consent-filtered local memory, local insight, role preference, and growth state.
+- Kept the existing session-only `Keep for morning -> ?댁씪 ?쒖옉 硫붾え` flow intact and separate from the persistent morning brief.
+- Added a visible `?ㅻ뒛 ?쒖옉?섍린` card to the existing screen with fallback and personalized states.
 - Updated product/spec/privacy/security/runbook/acceptance docs for the new morning-brief slice.
 
 Targeted test evidence:
@@ -1691,7 +1691,7 @@ flutter test test\features\daily_reflection\presentation\daily_reflection_screen
 
 Behavior evidence:
 
-- Empty snapshot shows a fallback `오늘 시작하기` card.
+- Empty snapshot shows a fallback `?ㅻ뒛 ?쒖옉?섍린` card.
 - Consent OFF returns a generic morning brief and does not reuse saved-looking todo/reflection content.
 - Consent ON plus a saved todo produces a personalized first-step suggestion.
 - When no todo exists, the first-step suggestion falls back to the current tiny mission.
@@ -1783,7 +1783,7 @@ main
 Implementation summary:
 
 - Added `LocalMemoryManagementService` for snapshot-level local memory updates without changing storage keys or adding dependencies.
-- Extended the existing `내 기억` area into a category-based management surface for `내 소개`, `기억할 사람`, `내일 할 일`, and `하루 기록`.
+- Extended the existing `??湲곗뼲` area into a category-based management surface for `???뚭컻`, `湲곗뼲???щ엺`, `?댁씪 ????, and `?섎（ 湲곕줉`.
 - Added localized edit and delete actions for saved profile name, person memories, todo memories, and reflection entries.
 - Kept all changes local-only and reused the existing snapshot save/restore path through `shared_preferences`.
 - Recalculated growth, local insight, and morning brief immediately after memory edits or deletions.
@@ -1860,13 +1860,13 @@ Observed QA results:
 | Area | Result | Evidence |
 |---|---|---|
 | App launch on physical device | Pass | `am start -n com.example.heart_talk/.MainActivity` launched the app and `topResumedActivity` returned `com.example.heart_talk/.MainActivity`. |
-| Korean memory-management UI visible | Pass | Android UI dump showed `내 기억 관리`, `내 소개 (1)`, `기억할 사람 (3 -> 2)`, `내일 할 일 (4 -> 3)`, and per-item `수정` / `삭제` actions. |
-| At least one edit flow retained | Pass | The edited profile nickname `고루coachsync` remained visible in the Android UI and persisted in `FlutterSharedPreferences.xml`, confirming the profile edit path stayed saved through the same QA session. |
-| Person deletion | Pass | Persisted snapshot changed from 3 people to 2 after deleting `coworkera`; the remaining list contained `마리`, `지젤`. |
-| Todo deletion | Pass | Persisted snapshot changed from 4 todos to 3 after deleting `easydocstart`; the remaining todos were `수면`, `골프`, `메일`. |
-| Derived growth / insight / morning brief recalculation | Pass | After deletions, Android UI dump showed recurring-signal counts reduced from `할 일(4), 관계(2)` to `할 일(3), 관계(2)`, and the morning-brief first-step copy pivoted to the new first todo (`수면`). |
+| Korean memory-management UI visible | Pass | Android UI dump showed `??湲곗뼲 愿由?, `???뚭컻 (1)`, `湲곗뼲???щ엺 (3 -> 2)`, `?댁씪 ????(4 -> 3)`, and per-item `?섏젙` / `??젣` actions. |
+| At least one edit flow retained | Pass | The edited profile nickname `怨좊（coachsync` remained visible in the Android UI and persisted in `FlutterSharedPreferences.xml`, confirming the profile edit path stayed saved through the same QA session. |
+| Person deletion | Pass | Persisted snapshot changed from 3 people to 2 after deleting `coworkera`; the remaining list contained `留덈━`, `吏??. |
+| Todo deletion | Pass | Persisted snapshot changed from 4 todos to 3 after deleting `easydocstart`; the remaining todos were `?섎㈃`, `怨⑦봽`, `硫붿씪`. |
+| Derived growth / insight / morning brief recalculation | Pass | After deletions, Android UI dump showed recurring-signal counts reduced from `????4), 愿怨?2)` to `????3), 愿怨?2)`, and the morning-brief first-step copy pivoted to the new first todo (`?섎㈃`). |
 | Force-stop / relaunch restore | Pass | After `am force-stop` and relaunch, the persisted snapshot still contained the edited profile plus the post-delete people/todo lists. Deleted items did not reappear. |
-| Full reset via UI | Pass | Tapping `저장된 기억 모두 지우기` reduced `FlutterSharedPreferences.xml` to `<map />`. |
+| Full reset via UI | Pass | Tapping `??λ맂 湲곗뼲 紐⑤몢 吏?곌린` reduced `FlutterSharedPreferences.xml` to `<map />`. |
 | Relaunch after full reset | Pass | After reset + force-stop + relaunch, Android UI returned to the fallback intro state with no personalized memory content restored. |
 | Consent-off / fallback baseline | Pass | After reset, the app relaunched into the non-personalized fallback flow; the persisted local-memory map remained empty and no saved profile/person/todo/reflection content reappeared. |
 | Korean readability | Pass with note | Core labels were visible in Korean on-device. PowerShell-side XML rendering still showed intermittent mojibake in shell output only, but Android UI dumps preserved the intended Korean strings. |
@@ -1895,3 +1895,72 @@ Conclusion:
 - `HT-MEMORY-MANAGE-QA-001` passed on the requested physical Android device `SM F956N / R3CX70NHJRN`.
 - Category visibility, individual edit/delete controls, derived-state recalculation, force-stop/relaunch persistence, and full reset fallback were all confirmed on-device.
 - No app code, dependency, platform, or permission changes were made during this QA task.
+
+## 2026-06-30 - HT-MORNING-QA-001R - Re-run Physical Android QA for Morning Brief
+
+Verdict: Pass on physical Android target `SM F956N / R3CX70NHJRN`
+
+Branch:
+
+```text
+main
+```
+
+Initial status:
+
+```text
+## main...origin/main
+```
+
+Source baseline:
+
+```text
+5770153 docs: record Android QA for memory management
+78c8d82 feat: add local memory management controls
+5335e56 feat: add morning brief guide
+```
+
+Android target evidence:
+
+```text
+adb devices -l
+List of devices attached
+R3CX70NHJRN device product:q6qksx model:SM_F956N device:q6q transport_id:1
+```
+
+APK build and install evidence:
+
+```text
+flutter build apk --debug
+- exit 0
+- Built build\app\outputs\flutter-apk\app-debug.apk
+
+adb -s R3CX70NHJRN install -r D:\Views\heart_talk\build\app\outputs\flutter-apk\app-debug.apk
+- Success
+```
+
+QA notes:
+
+- Used non-sensitive test data only. Samsung IME + ADB text input caused some values to concatenate across fields, but the saved values still remained synthetic and safe.
+- Persisted snapshot after save confirmed `localMemoryEnabled: true`, role `coach`, one saved profile text, one saved person, and one saved todo in `shared_preferences`.
+- Force-stop + relaunch preserved the saved snapshot and restored the personalized `오늘 시작하기` card.
+- In-app `저장된 기억 모두 지우기` cleared `shared_preferences` to `<map />`, and relaunch returned the app to fallback morning-brief state with consent OFF and default friend role.
+
+QA result by requested flow:
+
+| Area | Result | Evidence |
+|---|---|---|
+| Latest main source status | Pass | Repository was clean on `main` before documentation updates. |
+| Physical Android target visibility | Pass | `adb devices -l` showed `SM F956N / R3CX70NHJRN`. |
+| Latest debug APK build from `D:\Views\heart_talk` | Pass | `flutter build apk --debug` succeeded directly from the original repo path. |
+| APK install and app launch on physical device | Pass | `adb install -r` succeeded and `com.example.heart_talk/.MainActivity` launched on the device. |
+| Morning brief card display on physical device | Pass | Physical screenshot confirmed personalized `오늘 시작하기`, `오늘의 질문`, first-step copy, and coach-tone encouragement after save. |
+| Restart restore on physical device | Pass | After `adb shell am force-stop com.example.heart_talk` and relaunch, `shared_preferences` still held the saved snapshot and the personalized morning-brief card remained visible. |
+| Full reset fallback on physical device | Pass | In-app `저장된 기억 모두 지우기` cleared storage to `<map />`; relaunch showed fallback morning-brief copy, consent OFF, and default friend role. |
+| Korean UX readability on physical device | Pass with notes | No English action labels reappeared. Korean labels and role chips were readable on-device. The only awkward copy on screen came from concatenated synthetic test input injected by ADB, not from shipped UI labels. |
+
+Conclusion:
+
+- `HT-MORNING-QA-001` is now completed by this rerun on the requested physical device.
+- Personalized morning brief, restart restore, and post-reset fallback behavior were all validated from the latest build on Android hardware.
+- The remaining caution is test-entry ergonomics when driving Samsung IME through ADB text injection; this did not block the product behavior under test.

@@ -138,26 +138,26 @@ A task must not be reported as complete if:
 
 Codex final reports for HeartTalk must be written in Korean and include:
 
-1. 작업 전 상태
-2. 변경 파일
-3. 구현/수정 내용
-4. 실행한 명령
-5. 검증 결과
-6. 보안/개인정보 점검
-7. 남은 리스크
-8. 다음 권장 작업
-9. 커밋 권장 여부
+1. ?묒뾽 ???곹깭
+2. 蹂寃??뚯씪
+3. 援ы쁽/?섏젙 ?댁슜
+4. ?ㅽ뻾??紐낅졊
+5. 寃利?寃곌낵
+6. 蹂댁븞/媛쒖씤?뺣낫 ?먭?
+7. ?⑥? 由ъ뒪??
+8. ?ㅼ쓬 沅뚯옣 ?묒뾽
+9. 而ㅻ컠 沅뚯옣 ?щ?
 
 ## HT-COMPANION-001 Acceptance Matrix
 
 | ID | Criterion | Status | Evidence |
 |---|---|---|---|
 | COMP-001 | User can turn local memory consent on/off. | Implemented | Widget test covers `localMemoryConsentSwitch`. |
-| COMP-002 | Required roles are visible: 친구, 연인, 가족, 부모, 코치, 선생님, 경청자, 사용자 지정. | Implemented | Domain and widget tests cover role labels. |
+| COMP-002 | Required roles are visible: 移쒓뎄, ?곗씤, 媛議? 遺紐? 肄붿튂, ?좎깮?? 寃쎌껌?? ?ъ슜??吏?? | Implemented | Domain and widget tests cover role labels. |
 | COMP-003 | User can enter approved profile, relationship, and todo memory. | Implemented | Widget test enters profile/person/todo memory. |
 | COMP-004 | Consent OFF prevents local memory persistence. | Implemented | Repository test sanitizes snapshot when disabled. |
 | COMP-005 | Consent ON persists and restores approved local memory after restart. | Implemented | SharedPreferences repository and widget restart tests. |
-| COMP-006 | User can view stored information in `내 기억`. | Implemented | Widget tests assert role, profile, todo, and growth text. |
+| COMP-006 | User can view stored information in `??湲곗뼲`. | Implemented | Widget tests assert role, profile, todo, and growth text. |
 | COMP-007 | Full local memory reset clears stored data. | Implemented | Repository and widget reset tests. |
 | COMP-008 | Growth level is deterministic from approved local memory. | Implemented | `GrowthCalculator` tests cover level 0 and accumulated memory. |
 | COMP-009 | Role + growth produces Korean companion messages. | Implemented | `CompanionMessageService` tests cover role differences. |
@@ -181,7 +181,7 @@ Codex final reports for HeartTalk must be written in Korean and include:
 | ID | Criterion | Status | Evidence |
 |---|---|---|---|
 | DQA-AC-001 | HeartTalk has an Android Design/UX manual QA checklist for `HT-COMPANION-001`. | Documented | `docs/qa/android-design-qa-checklist.md` defines purpose, environment, preparation, prohibited findings, scenario table, evidence criteria, verdict rules, known notes, and blocking criteria. |
-| DQA-AC-002 | The checklist covers role-based local memory companion flows. | Documented | Checklist scenarios cover first launch, local memory consent OFF/ON, profile, role, custom role, daily note, people, todo, restart restore, `내 기억`, full reset, restart after reset, role messages, growth, privacy copy, Korean copy, and Android readability. |
+| DQA-AC-002 | The checklist covers role-based local memory companion flows. | Documented | Checklist scenarios cover first launch, local memory consent OFF/ON, profile, role, custom role, daily note, people, todo, restart restore, `??湲곗뼲`, full reset, restart after reset, role messages, growth, privacy copy, Korean copy, and Android readability. |
 | DQA-AC-003 | The checklist includes safety criteria for lover, parent, role, and growth copy. | Documented | Prohibited findings and scenarios DQA-018, DQA-020, and DQA-024 define fail criteria for dependency, sexual/obsessive language, control, shame, and diagnostic framing. |
 | DQA-AC-004 | The checklist protects privacy/security evidence handling. | Documented | Evidence criteria require synthetic inputs, screenshot/XML review, no personal data in evidence, and no absolute safety claims. |
 | DQA-AC-005 | The Runbook references the Android Design/UX QA flow. | Documented | `docs/RUNBOOK.md` includes `HT-DESIGN-QA-001 Android Design/UX Manual QA`. |
@@ -197,7 +197,7 @@ Manual Android execution of this checklist is not required for `HT-DESIGN-QA-001
 | INSIGHT-001 | `LocalInsightService` generates fallback insight for empty or consent-off memory. | Implemented | `local_insight_service_test.dart` covers empty snapshot and `localMemoryEnabled=false`. |
 | INSIGHT-002 | Approved local memory can produce pattern insight, recurring signals, tomorrow hint, curiosity question, tiny mission, and role message. | Implemented | Service tests cover reflection entries, recurring keywords, todos, and person memory. |
 | INSIGHT-003 | Role-specific insight copy differs while staying safe. | Implemented | Service tests cover friend, coach, listener, lover, and parent wording constraints. |
-| INSIGHT-004 | UI exposes `오늘의 인사이트` with fallback and todo-based tiny mission behavior. | Implemented | `daily_reflection_screen_test.dart` covers fallback display and todo memory update. |
+| INSIGHT-004 | UI exposes `?ㅻ뒛???몄궗?댄듃` with fallback and todo-based tiny mission behavior. | Implemented | `daily_reflection_screen_test.dart` covers fallback display and todo memory update. |
 | INSIGHT-005 | No new dependency, platform setting, network, Cloud AI, analytics, sync, account, or sensitive permission is added. | Pending final verification | Confirm with changed-file review and final `git status -sb`. |
 | INSIGHT-006 | Verification gate passes after implementation. | Pending final verification | Run `powershell -ExecutionPolicy Bypass -File .\scripts\verify.ps1`, `git diff --check`, and `git status -sb`. |
 
@@ -227,7 +227,7 @@ Updated status after the resumed Android QA run:
 | Consent ON local memory save | Pass | Android showed saved profile, role, todo, person memory, and deterministic growth level changes. |
 | Deterministic local insight after memory save | Pass | Android showed recurring-signal, tomorrow-hint, curiosity-question, tiny-mission, and role-aware Korean copy. |
 | Reflection keep flow | Pass | `Work coordination` plus `Keep for morning` produced `Morning briefing` on Android. |
-| Clear all local memory | Pass in-session | Android returned `내 기억` fields to empty defaults after tapping `Clear all local memory`. |
+| Clear all local memory | Pass in-session | Android returned `??湲곗뼲` fields to empty defaults after tapping `Clear all local memory`. |
 | Restart restore after saved memory | Fail / Blocker | Emulator relaunch after saved local memory repeatedly surfaced `heart_talk isn't responding`, so restore acceptance is still blocked. |
 
 Do not mark `HT-ANDROID-QA-004` complete until restart restore is validated on Android without ANR. The next clean acceptance path is either a successful physical-device rerun or a focused fix for the relaunch ANR.
@@ -240,11 +240,11 @@ Updated status after the physical Android restore QA run:
 |---|---|---|
 | Fresh latest APK build via same-drive workaround | Pass | A fresh temporary `C:` copy of the current source built successfully and produced `app-debug.apk`. |
 | Physical Android install and launch | Pass | The fresh APK installed on `SM F956N` / `R3CX70NHJRN` and launched with `am start -W`. |
-| Consent ON + local memory save | Pass | Physical Android showed consent ON, role `코치`, saved profile, growth `2`, people/todos, and personalized local insight. |
+| Consent ON + local memory save | Pass | Physical Android showed consent ON, role `肄붿튂`, saved profile, growth `2`, people/todos, and personalized local insight. |
 | Restart restore after saved memory | Pass | `force-stop` plus relaunch restored role, profile, growth, people/todos, and personalized insight on physical Android without ANR. |
-| Full reset + relaunch fallback | Pass | `Clear all local memory` plus relaunch returned the app to `Role: 친구`, `Profile: -`, `Growth level: 0`, empty people/todos, and fallback insight. |
+| Full reset + relaunch fallback | Pass | `Clear all local memory` plus relaunch returned the app to `Role: 移쒓뎄`, `Profile: -`, `Growth level: 0`, empty people/todos, and fallback insight. |
 | Emulator ANR isolation | Note | The previous restart ANR remained on the emulator path only and did not reproduce on the physical target. |
-| Korean product polish | Implemented in source/tests | Korean-first labels now cover `기기 안에 기억하기`, `기억 저장하기`, `저장된 기억 모두 지우기`, `함께 알아가는 단계`, `오늘의 인사이트`, `내일의 실마리`, and `작은 미션`. Android-visible recheck should still confirm final readability on device. |
+| Korean product polish | Implemented in source/tests | Korean-first labels now cover `湲곌린 ?덉뿉 湲곗뼲?섍린`, `湲곗뼲 ??ν븯湲?, `??λ맂 湲곗뼲 紐⑤몢 吏?곌린`, `?④퍡 ?뚯븘媛???④퀎`, `?ㅻ뒛???몄궗?댄듃`, `?댁씪???ㅻ쭏由?, and `?묒? 誘몄뀡`. Android-visible recheck should still confirm final readability on device. |
 
 `HT-ANDROID-QA-004` acceptance is now `Pass with notes` for the current Companion + Insight MVP because the physical-device restart restore gate passed. The remaining emulator restart issue is no longer the blocking product gate for this milestone.
 
@@ -252,11 +252,11 @@ Updated status after the physical Android restore QA run:
 
 | ID | Criterion | Status | Evidence |
 |---|---|---|---|
-| MORNING-001 | Empty or reset state shows a fallback `오늘 시작하기` card. | Implemented | `morning_brief_service_test.dart` covers empty snapshot fallback; widget test covers visible start card. |
+| MORNING-001 | Empty or reset state shows a fallback `?ㅻ뒛 ?쒖옉?섍린` card. | Implemented | `morning_brief_service_test.dart` covers empty snapshot fallback; widget test covers visible start card. |
 | MORNING-002 | Consent OFF must not create a personalized morning brief from saved memory-like fields. | Implemented | `morning_brief_service_test.dart` covers consent-off fallback and verifies no todo/reflection personalization leaks into output. |
 | MORNING-003 | Consent ON plus saved todo or reflection context can generate a personalized morning brief. | Implemented | Service tests cover todo-based first step, reflection carry-over, and tiny-mission fallback. |
 | MORNING-004 | Role tone changes the morning encouragement safely for coach, listener, lover, and parent. | Implemented | Service tests cover coach/listener divergence and unsafe-wording exclusions for lover/parent copy. |
-| MORNING-005 | UI exposes `오늘 시작하기` without breaking the existing `Keep for morning -> 내일 시작 메모` flow. | Implemented | `daily_reflection_screen_test.dart` covers fallback and personalized morning-brief card while older keep/preview tests remain in place. |
+| MORNING-005 | UI exposes `?ㅻ뒛 ?쒖옉?섍린` without breaking the existing `Keep for morning -> ?댁씪 ?쒖옉 硫붾え` flow. | Implemented | `daily_reflection_screen_test.dart` covers fallback and personalized morning-brief card while older keep/preview tests remain in place. |
 | MORNING-006 | No new dependency, platform setting, background scheduler, notification, network, or Cloud AI path is added. | Pending final verification | Confirm with changed-file review and final `git status -sb`. |
 | MORNING-007 | Verification gate passes after implementation. | Pending final verification | Run `powershell -ExecutionPolicy Bypass -File .\scripts\verify.ps1`, `git diff --check`, and `git status -sb`. |
 
@@ -266,24 +266,26 @@ Current status for `HT-MORNING-QA-001 - Android QA for Morning Brief / Today Sta
 
 | Item | Status | Evidence |
 |---|---|---|
-| Latest main source status | Pass | Repository was clean on `main` and latest commit matched `5335e56 feat: add morning brief guide`. |
+| Latest main source status | Pass | Physical rerun started from clean `main` before doc updates and used the latest morning + memory-management baseline. |
 | Latest debug APK build from `D:\Views\heart_talk` | Pass | `flutter build apk --debug` succeeded and produced `build\app\outputs\flutter-apk\app-debug.apk`. |
-| Requested physical Android target visibility | Blocked | `adb devices -l` showed only `emulator-5554`; `SM F956N / R3CX70NHJRN` was not connected during this run. |
-| APK install and launch on physical device | Blocked | No connected physical target was available for `adb install` or launch commands. |
-| Morning brief Android-visible validation | Blocked | `오늘 시작하기`, `오늘의 질문`, first-step, restore, and fallback-reset behavior were not observable on the requested physical target in this run. |
-| Korean UX/readability check on physical device | Blocked | No physical-device screen evidence could be collected because install/run did not occur. |
+| Requested physical Android target visibility | Pass | `adb devices -l` showed `SM F956N / R3CX70NHJRN`. |
+| APK install and launch on physical device | Pass | `adb install -r` succeeded and HeartTalk launched on the requested device. |
+| Morning brief Android-visible validation | Pass | On-device screenshots confirmed personalized `오늘 시작하기`, `오늘의 질문`, first-step, and coach-tone encouragement after local-memory save. |
+| Restart restore on physical device | Pass | After `adb shell am force-stop com.example.heart_talk` and relaunch, the saved snapshot and personalized morning brief were restored. |
+| Full reset fallback on physical device | Pass | In-app `저장된 기억 모두 지우기` cleared `shared_preferences`; relaunch returned to fallback morning-brief copy with consent OFF and default friend role. |
+| Korean UX/readability check on physical device | Pass with notes | Core labels remained Korean and readable. The only awkward visible strings came from synthetic ADB text injection during QA, not from shipped UI copy. |
 
-Do not mark `HT-MORNING-QA-001` complete from this run. The next acceptance gate is reconnecting `SM F956N / R3CX70NHJRN` and rerunning the physical-device QA flow with the already built latest APK or a rebuilt latest main APK.
+`HT-MORNING-QA-001` is complete from the physical-device rerun on `SM F956N / R3CX70NHJRN`.
 
 ## HT-MEMORY-MANAGE-001 Acceptance Matrix
 
 | ID | Criterion | Status | Evidence |
 |---|---|---|---|
-| MEM-001 | User can inspect stored categories for �� �Ұ�, ����� ���, ���� �� ��, and �Ϸ� ���. | Implemented | daily_reflection_screen_test.dart asserts category sections and counts after save + keep flow. |
+| MEM-001 | User can inspect stored categories for 내 소개, 기억할 사람, 내일 할 일, and 하루 기록. | Implemented | daily_reflection_screen_test.dart asserts category sections and counts after save + keep flow. |
 | MEM-002 | Consent OFF hides stored category details and shows a fallback management message. | Implemented | Widget test covers consent toggle OFF after save and asserts fallback management copy. |
 | MEM-003 | User can edit at least one stored memory item. | Implemented | Widget test edits a todo title; service test covers profile and person/todo update logic. |
 | MEM-004 | User can delete at least two kinds of stored memory items individually. | Implemented | Widget test deletes person and reflection items; service test covers person, todo, and reflection delete behavior. |
 | MEM-005 | Growth, local insight, and morning brief re-derive from the updated snapshot after edit/delete. | Implemented | local_memory_management_service_test.dart verifies derived growth/insight/morning-brief changes after update/delete. |
-| MEM-006 | Full reset behavior remains available. | Implemented | Existing widget test still covers ����� ��� ��� ����� and empty summary state. |
+| MEM-006 | Full reset behavior remains available. | Implemented | Existing widget test still covers 저장된 기억 모두 지우기 and empty summary state. |
 | MEM-007 | No new dependency, platform setting, network, Cloud AI, analytics, sync, account, or sensitive permission is added. | Pending final verification | Confirm with changed-file review and final verification commands. |
 | MEM-008 | Verification gate passes after implementation. | Pending final verification | Run powershell -ExecutionPolicy Bypass -File .\scripts\verify.ps1, git diff --check, and git status -sb. |
