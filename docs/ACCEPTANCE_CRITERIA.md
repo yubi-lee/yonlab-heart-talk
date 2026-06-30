@@ -134,8 +134,8 @@ The following remain out of scope for the current MVP and require a separate app
 | SIM-004 | The generated snapshot does not look like real phone numbers, emails, or URLs. | Implemented | Service test scans synthetic snapshot strings for sensitive patterns. |
 | SIM-005 | Simulation results feed the existing growth, insight, and morning brief logic. | Implemented | Application tests confirm non-fallback insight and morning brief from the synthetic snapshot. |
 | SIM-006 | Simulation memory can be cleared without touching the real local memory snapshot. | Implemented | Repository and widget tests cover separate clear behavior and fallback return. |
-| SIM-007 | The feature remains local-only and does not add dependencies or platform behavior. | Pending final verification | Confirm with changed-file review and final `git status -sb`. |
-| SIM-008 | Verification commands pass or any failures are documented. | Pending final verification | Run `powershell -ExecutionPolicy Bypass -File .\scripts\verify.ps1`, `git diff --check`, and `git status -sb`. |
+| SIM-007 | The feature remains local-only and does not add dependencies or platform behavior. | Implemented | Confirmed by changed-file review and final `git status -sb`. |
+| SIM-008 | Verification commands pass or any failures are documented. | Implemented | `dart format`, `flutter analyze`, `flutter test`, `powershell -ExecutionPolicy Bypass -File .\scripts\verify.ps1`, `git diff --check`, and `git status -sb` completed with no failures. |
 
 ## Failure Criteria
 
