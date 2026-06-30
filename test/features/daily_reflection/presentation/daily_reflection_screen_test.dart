@@ -279,4 +279,29 @@ void main() {
     await tester.pumpAndSettle();
     expect(find.text('하루 기록 (0)'), findsOneWidget);
   });
+
+  testWidgets('shows and clears the synthetic growth simulation panel', (
+    tester,
+  ) async {
+    await _pumpScreen(tester);
+
+    expect(find.byKey(const Key('startSimulationButton')), findsOneWidget);
+    await tester.tap(find.byKey(const Key('startSimulationButton')));
+    await tester.pumpAndSettle();
+
+    await tester.tap(find.text('창업자 바쁜 하루'));
+    await tester.pumpAndSettle();
+
+    expect(find.byKey(const Key('simulationSceneLine')), findsOneWidget);
+    expect(find.byKey(const Key('simulationDayCountLine')), findsOneWidget);
+    expect(find.byKey(const Key('simulationInsightLine')), findsOneWidget);
+    expect(find.byKey(const Key('simulationMorningBriefLine')), findsOneWidget);
+    expect(find.byKey(const Key('simulationQuestionLine')), findsOneWidget);
+
+    await tester.tap(find.byKey(const Key('clearSimulationButton')));
+    await tester.pumpAndSettle();
+
+    expect(find.byKey(const Key('clearSimulationButton')), findsNothing);
+    expect(find.textContaining('아직 체험 중인 씬이 없어요.'), findsOneWidget);
+  });
 }

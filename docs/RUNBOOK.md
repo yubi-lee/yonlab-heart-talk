@@ -524,3 +524,23 @@ flutter test test\features\daily_reflection\presentation\daily_reflection_screen
 5. Confirm ����� ��� ��� ����� remains visible and reachable outside the collapsed memory-management details.
 6. Confirm existing generate / keep / reset behavior still works after the section reorder.
 7. Confirm no new navigation surface, dependency, permission, network, or Cloud AI behavior appears.
+
+## HT-100DAY-SIM-001 Synthetic Growth Simulation Verification
+
+Use this flow when validating the 100-day synthetic growth demo:
+
+1. Launch the app on the current Android target.
+2. Tap `100일 성장 체험하기`.
+3. Choose a Korean scene preset such as `창업자 바쁜 하루`, `회사 업무 스트레스`, or `번아웃 회복`.
+4. Confirm the simulation card shows a richer growth level, 100 day entries, recurring signals, a morning brief, a question, and a tiny mission.
+5. Confirm the demo copy says the data is synthetic and separate from real local memory.
+6. Tap `시뮬레이션 기억 지우기` and confirm the demo returns to fallback state without clearing the real local memory snapshot.
+7. If the real local memory should also be cleared, use the existing `저장된 기억 모두 지우기` control in the normal memory flow.
+8. Keep synthetic scene names and generated labels Korean-first and avoid real phone numbers, emails, addresses, or company names.
+
+Useful test commands:
+
+```powershell
+flutter test test\features\daily_reflection\application\synthetic_growth_simulation_service_test.dart
+flutter test test\features\daily_reflection\presentation\daily_reflection_screen_test.dart
+```

@@ -89,6 +89,10 @@ Use `Pass`, `Fail`, `Notes`, or `N/A` in the result column. `N/A` is allowed onl
 
 ## Pass/Fail Decision Rules
 
+| DQA-026 | Simulation control | 100-day synthetic demo is visible | Tap `100일 성장 체험하기`. | The demo control is visible, Korean-first, and clearly marked as synthetic/local-only. |  |  | Screenshot of the simulation control. |
+| DQA-027 | Scene preset selection | Korean scene presets are selectable | Open the simulation sheet and choose one preset such as `창업자 바쁜 하루`. | At least eight Korean scene presets are available and each shows a short Korean description. |  |  | Screenshot of the scene picker. |
+| DQA-028 | Simulation reset | Simulation clears without touching real memory | Run one simulation, then tap `시뮬레이션 기억 지우기`. | The simulation card returns to fallback state while the real local memory flow stays separate. |  |  | Screenshot of simulation before and after clear. |
+
 | Verdict | Rule |
 |---|---|
 | Pass | All blocking scenarios pass, no prohibited finding appears, and Notes are either minor or explicitly assigned to a later milestone. |

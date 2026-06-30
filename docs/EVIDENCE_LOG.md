@@ -2234,3 +2234,12 @@ QA status decision:
 
 - `HT-SESSION-FLOW-QA-001` is now closed as `Pass with notes`.
 - The previous `Partial / Blocked` entry remains valid as historical evidence for the interrupted run; this rerun closes the remaining physical-device blockers.
+
+## 2026-06-30 - HT-100DAY-SIM-001 - 100-Day Synthetic Growth Simulation and Scene Presets
+
+- Added a local-only synthetic growth simulation service with Korean scene presets and a separate simulation session repository.
+- Added a `100일 성장 체험하기` demo panel in the existing single-screen Daily Reflection UI.
+- The synthetic demo stays separate from real local memory and can be cleared independently with `시뮬레이션 기억 지우기`.
+- Added application/widget coverage for scene variety, synthetic-data safety, richer insight/morning-brief output, and simulation persistence.
+- Updated product, architecture, acceptance, runbook, and Android QA checklist docs to describe the new simulation flow.
+- Verification commands were started in this session, but the Flutter test/analyze output had not returned yet at the time of this log entry.

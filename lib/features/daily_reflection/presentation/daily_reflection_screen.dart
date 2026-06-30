@@ -7,13 +7,16 @@ import '../application/local_insight_service.dart';
 import '../application/local_memory_management_service.dart';
 import '../application/morning_brief_service.dart';
 import '../application/rule_based_reflection_engine.dart';
+import '../application/synthetic_growth_simulation_service.dart';
 import '../data/demo_reflection_repository.dart';
 import '../data/local_memory_repository.dart';
+import '../data/synthetic_growth_simulation_repository.dart';
 import '../data/shared_preferences_memory_repository.dart';
 import '../domain/companion_models.dart';
 import '../domain/local_insight_models.dart';
 import '../domain/local_memory_models.dart';
 import '../domain/morning_brief_models.dart';
+import '../domain/synthetic_growth_simulation_models.dart';
 import '../domain/reflection_models.dart';
 
 class DailyReflectionScreen extends StatefulWidget {
@@ -39,6 +42,8 @@ class _DailyReflectionScreenState extends State<DailyReflectionScreen> {
   LocalMemoryRepository? _memoryRepository;
   ReflectionSessionState _session = const ReflectionSessionState();
   LocalMemorySnapshot _memorySnapshot = LocalMemorySnapshot.empty();
+  SyntheticGrowthSimulationRepository? _simulationRepository;
+  SyntheticGrowthSimulationSession? _simulationSession;
 
   List<DemoReflectionEvent> get _events => _repository.listEvents();
   CompanionGrowthState get _growthState =>
@@ -47,7 +52,7 @@ class _DailyReflectionScreenState extends State<DailyReflectionScreen> {
   @override
   void initState() {
     super.initState();
-    _loadMemoryRepository();
+    _loadPersistentState();
   }
 
   @override
@@ -59,16 +64,21 @@ class _DailyReflectionScreenState extends State<DailyReflectionScreen> {
     super.dispose();
   }
 
-  Future<void> _loadMemoryRepository() async {
+  Future<void> _loadPersistentState() async {
     final preferences = await SharedPreferences.getInstance();
     final repository = SharedPreferencesLocalMemoryRepository(preferences);
+    final simulationRepository =
+        SharedPreferencesSyntheticGrowthSimulationRepository(preferences);
     final snapshot = await repository.loadSnapshot();
+    final simulationSession = await simulationRepository.loadSession();
     if (!mounted) {
       return;
     }
     setState(() {
       _memoryRepository = repository;
+      _simulationRepository = simulationRepository;
       _memorySnapshot = snapshot;
+      _simulationSession = simulationSession;
       _profileNameController.text = snapshot.profile.displayName;
     });
   }
@@ -202,12 +212,98 @@ class _DailyReflectionScreenState extends State<DailyReflectionScreen> {
     if (repository != null) {
       await repository.clearAll();
     }
+    final simulationRepository = _simulationRepository;
+    if (simulationRepository != null) {
+      await simulationRepository.clearSession();
+    }
     setState(() {
       _memorySnapshot = LocalMemorySnapshot.empty();
+      _simulationSession = null;
       _profileNameController.clear();
       _todoMemoryController.clear();
       _personMemoryController.clear();
     });
+  }
+
+  LifeScenePreset? _simulationPreset() {
+    final session = _simulationSession;
+    if (session == null) {
+      return null;
+    }
+    for (final preset in syntheticGrowthScenePresets) {
+      if (preset.id == session.presetId) {
+        return preset;
+      }
+    }
+    return null;
+  }
+
+  Future<void> _startSimulation(LifeScenePreset preset) async {
+    final session = const SyntheticGrowthSimulationService().generate(
+      scene: preset,
+      dayCount: 100,
+    );
+    final repository = _simulationRepository;
+    if (repository != null) {
+      await repository.saveSession(session);
+    }
+    if (!mounted) {
+      return;
+    }
+    setState(() {
+      _simulationSession = session;
+    });
+  }
+
+  Future<void> _clearSimulation() async {
+    final repository = _simulationRepository;
+    if (repository != null) {
+      await repository.clearSession();
+    }
+    if (!mounted) {
+      return;
+    }
+    setState(() {
+      _simulationSession = null;
+    });
+  }
+
+  Future<void> _showSimulationPicker() async {
+    final selectedPreset = await showModalBottomSheet<LifeScenePreset>(
+      context: context,
+      showDragHandle: true,
+      builder: (sheetContext) {
+        return SafeArea(
+          child: ListView(
+            shrinkWrap: true,
+            padding: const EdgeInsets.fromLTRB(16, 8, 16, 16),
+            children: [
+              Text(
+                '100일 성장 체험하기',
+                style: Theme.of(sheetContext).textTheme.titleMedium,
+              ),
+              const SizedBox(height: 8),
+              const Text(
+                '실제 기억과 섞이지 않는 가상 데이터예요. 씬을 골라 100일 성장 체험을 바로 시작할 수 있어요.',
+              ),
+              const SizedBox(height: 12),
+              for (final preset in syntheticGrowthScenePresets) ...[
+                ListTile(
+                  title: Text(preset.displayNameKo),
+                  subtitle: Text(preset.descriptionKo),
+                  onTap: () => Navigator.of(sheetContext).pop(preset),
+                ),
+                const Divider(height: 1),
+              ],
+            ],
+          ),
+        );
+      },
+    );
+
+    if (selectedPreset != null) {
+      await _startSimulation(selectedPreset);
+    }
   }
 
   void _selectEvent(DemoReflectionEvent event) {
@@ -311,6 +407,27 @@ class _DailyReflectionScreenState extends State<DailyReflectionScreen> {
       preference: _memorySnapshot.companionPreference,
       growthState: _growthState,
     );
+    final simulationSession = _simulationSession;
+    final simulationPreset = _simulationPreset();
+    final simulationSnapshot = simulationSession?.snapshot;
+    final simulationGrowthState = simulationSnapshot == null
+        ? null
+        : _growthCalculator.calculate(simulationSnapshot);
+    final simulationInsight = simulationSnapshot == null
+        ? null
+        : _insightService.generate(
+            snapshot: simulationSnapshot,
+            preference: simulationSnapshot.companionPreference,
+            growthState: simulationGrowthState!,
+          );
+    final simulationMorningBrief = simulationSnapshot == null
+        ? null
+        : _morningBriefService.generate(
+            snapshot: simulationSnapshot,
+            insight: simulationInsight!,
+            preference: simulationSnapshot.companionPreference,
+            growthState: simulationGrowthState!,
+          );
 
     return Scaffold(
       appBar: AppBar(title: const Text('HeartTalk 하루 대화')),
@@ -350,6 +467,16 @@ class _DailyReflectionScreenState extends State<DailyReflectionScreen> {
                   Text('함께 알아가는 단계: ${_growthState.level}'),
                   Text('하루 기록: ${_memorySnapshot.dailyEntries.length}'),
                 ],
+              ),
+              const SizedBox(height: 16),
+              _SimulationPanel(
+                preset: simulationPreset,
+                session: simulationSession,
+                growthState: simulationGrowthState,
+                insight: simulationInsight,
+                morningBrief: simulationMorningBrief,
+                onStartSimulation: _showSimulationPicker,
+                onClearSimulation: _clearSimulation,
               ),
               const SizedBox(height: 16),
               _InfoPanel(
@@ -569,6 +696,97 @@ class _DailyReflectionScreenState extends State<DailyReflectionScreen> {
           ),
         ),
       ),
+    );
+  }
+}
+
+class _SimulationPanel extends StatelessWidget {
+  const _SimulationPanel({
+    required this.preset,
+    required this.session,
+    required this.growthState,
+    required this.insight,
+    required this.morningBrief,
+    required this.onStartSimulation,
+    required this.onClearSimulation,
+  });
+
+  final LifeScenePreset? preset;
+  final SyntheticGrowthSimulationSession? session;
+  final CompanionGrowthState? growthState;
+  final LocalInsightSummary? insight;
+  final MorningBrief? morningBrief;
+  final Future<void> Function() onStartSimulation;
+  final Future<void> Function() onClearSimulation;
+
+  @override
+  Widget build(BuildContext context) {
+    final hasSession =
+        preset != null &&
+        session != null &&
+        growthState != null &&
+        insight != null &&
+        morningBrief != null;
+    final signalLine = insight == null || insight!.recurringSignals.isEmpty
+        ? '아직 없어요'
+        : insight!.recurringSignals.map((signal) => signal.label).join(', ');
+
+    return _InfoPanel(
+      title: '100일 성장 체험하기',
+      childrenWidgets: [
+        const Text(
+          '실제 기억과 섞이지 않는 가상 데이터예요. 선택한 씬으로 100일 성장 체험을 볼 수 있어요.',
+        ),
+        const SizedBox(height: 8),
+        if (!hasSession) ...[
+          const Text('아직 체험 중인 씬이 없어요.'),
+        ] else ...[
+          Text('씬: ${preset!.displayNameKo}', key: const Key('simulationSceneLine')),
+          Text('설명: ${preset!.descriptionKo}'),
+          Text('함께 알아가는 단계: ${growthState!.level}'),
+          Text(
+            '하루 기록 수: ${session!.snapshot.dailyEntries.length}',
+            key: const Key('simulationDayCountLine'),
+          ),
+          Text('반복 신호: $signalLine'),
+          Text(
+            '오늘의 인사이트: ${insight!.patternTitle}',
+            key: const Key('simulationInsightLine'),
+          ),
+          Text(
+            '오늘 시작하기: ${morningBrief!.greeting}',
+            key: const Key('simulationMorningBriefLine'),
+          ),
+          Text(
+            '오늘의 질문: ${morningBrief!.todayQuestion.text}',
+            key: const Key('simulationQuestionLine'),
+          ),
+          Text(
+            '작은 미션: ${insight!.tinyMission.body}',
+            key: const Key('simulationMissionLine'),
+          ),
+          Text('첫 번째 행동: ${morningBrief!.firstStep.body}'),
+          Text('역할 메시지: ${morningBrief!.roleMessage}'),
+        ],
+        const SizedBox(height: 12),
+        Wrap(
+          spacing: 8,
+          runSpacing: 8,
+          children: [
+            FilledButton.tonal(
+              key: const Key('startSimulationButton'),
+              onPressed: () => onStartSimulation(),
+              child: const Text('100일 성장 체험하기'),
+            ),
+            if (hasSession)
+              OutlinedButton(
+                key: const Key('clearSimulationButton'),
+                onPressed: () => onClearSimulation(),
+                child: const Text('시뮬레이션 기억 지우기'),
+              ),
+          ],
+        ),
+      ],
     );
   }
 }

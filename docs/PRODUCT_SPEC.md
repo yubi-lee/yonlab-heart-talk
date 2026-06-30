@@ -153,3 +153,18 @@ The current UI polish slice includes:
 - `전체 초기화` separated into its own lower-priority section
 
 This slice changes presentation order and visual grouping only. It does not change local-memory schema, repository behavior, insight logic, morning-brief logic, role-message logic, permissions, dependencies, or network behavior.
+
+## HT-100DAY-SIM-001 Product Update
+
+HeartTalk now includes a local-only synthetic growth simulation that helps the user preview how the companion feels after 100 days of remembered days without waiting in real time. The demo uses Korean scene presets such as `창업자 바쁜 하루`, `회사 업무 스트레스`, and `번아웃 회복` to generate fake-but-plausible local memory.
+
+The current implemented simulation slice includes:
+
+- a visible `100일 성장 체험하기` control in the existing daily reflection screen
+- Korean scene preset selection with at least eight scenes
+- synthetic daily entries, people, todos, memory items, recurring signals, and profile context
+- a separate simulation session so the demo does not mix with real local memory
+- a clear `시뮬레이션 기억 지우기` control to return to fallback display
+- immediate recalculation of deterministic growth, local insight, and morning brief from the synthetic snapshot
+
+The simulation remains local-only, deterministic, non-diagnostic, and privacy-first. It must not look like real personal data and must not introduce network, Cloud AI, analytics, sync, account, or new permission behavior.

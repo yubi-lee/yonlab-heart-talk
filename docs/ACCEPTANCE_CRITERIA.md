@@ -124,6 +124,19 @@ The following remain out of scope for the current MVP and require a separate app
 - Medical diagnosis, treatment advice, disease prediction, mental-health classification, emergency guidance, or risk scoring
 - Android/iOS release signing or production secret handling
 
+## HT-100DAY-SIM-001 Acceptance Matrix
+
+| ID | Criterion | Status | Evidence |
+|---|---|---|---|
+| SIM-001 | The app exposes a visible `100일 성장 체험하기` control in the existing screen. | Implemented | Widget test covers the simulation button and panel. |
+| SIM-002 | At least eight Korean scene presets are available. | Implemented | `synthetic_growth_simulation_service_test.dart` checks preset count and Korean names. |
+| SIM-003 | The generated snapshot contains 100 synthetic days of memory with richer growth state. | Implemented | Service test checks day count, growth level 5, people, todos, and recurring keywords. |
+| SIM-004 | The generated snapshot does not look like real phone numbers, emails, or URLs. | Implemented | Service test scans synthetic snapshot strings for sensitive patterns. |
+| SIM-005 | Simulation results feed the existing growth, insight, and morning brief logic. | Implemented | Application tests confirm non-fallback insight and morning brief from the synthetic snapshot. |
+| SIM-006 | Simulation memory can be cleared without touching the real local memory snapshot. | Implemented | Repository and widget tests cover separate clear behavior and fallback return. |
+| SIM-007 | The feature remains local-only and does not add dependencies or platform behavior. | Pending final verification | Confirm with changed-file review and final `git status -sb`. |
+| SIM-008 | Verification commands pass or any failures are documented. | Pending final verification | Run `powershell -ExecutionPolicy Bypass -File .\scripts\verify.ps1`, `git diff --check`, and `git status -sb`. |
+
 ## Failure Criteria
 
 A task must not be reported as complete if:

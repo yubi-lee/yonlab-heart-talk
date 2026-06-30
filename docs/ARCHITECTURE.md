@@ -140,3 +140,14 @@ Local memory management is implemented inside the existing daily_reflection feat
 - 	est/features/daily_reflection/presentation/daily_reflection_screen_test.dart: widget coverage for category counts, consent-off hiding, edit, delete, and unchanged reset/restore flow.
 
 The implementation keeps persistence behind the existing repository path and reuses LocalMemorySnapshot plus sanitizeSnapshotForConsent. No new dependency, platform adapter, or network-facing boundary is introduced. Growth, insight, and morning-brief state continue to be derived at render time from the latest consent-filtered snapshot.
+
+## HT-100DAY-SIM-001 Architecture Update
+
+The synthetic growth simulation is implemented as a separate local-only path so it can preview richer memory without touching the real local snapshot:
+
+- `domain/synthetic_growth_simulation_models.dart`: scene preset and simulation session models.
+- `application/synthetic_growth_simulation_service.dart`: deterministic 100-day synthetic snapshot generator.
+- `data/synthetic_growth_simulation_repository.dart`: separate shared-preferences repository for simulation session persistence.
+- `presentation/daily_reflection_screen.dart`: demo control, scene picker, simulation preview card, and clear-simulation action.
+
+The simulation stores its session under a separate local key and generates a synthetic `LocalMemorySnapshot` that can be fed back into the existing growth, insight, and morning-brief services. The real local-memory repository remains untouched unless the user edits or clears actual memory through the normal flow. No new dependency, platform adapter, or network-facing boundary is introduced.
