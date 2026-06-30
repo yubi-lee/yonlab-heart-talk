@@ -2042,3 +2042,70 @@ Safety notes:
 
 - No new dependency, platform permission, network call, Cloud AI surface, analytics, sync, or account behavior was added.
 - No raw personal input was added to logs while implementing the role UX slice.
+
+## 2026-06-30 - HT-SESSION-FLOW-001 - Simplify Daily Companion Session Flow
+
+Verdict: Pass
+
+Branch:
+
+```text
+main
+```
+
+Initial status:
+
+```text
+## main...origin/main
+```
+
+Implemented scope:
+
+- Reordered the single-screen companion journey so the visible flow now reads as current companion state -> local memory consent -> today record -> local insight -> morning brief -> memory management -> full reset.
+- Kept all behavior changes inside `presentation/daily_reflection_screen.dart` without touching application, domain, or data logic.
+- Moved `내 기억 관리` behind an explicit expandable section to lower screen density while preserving edit/delete access.
+- Kept existing session preview / keep / reset behavior intact below the main companion guidance flow.
+
+Targeted widget evidence:
+
+```text
+flutter test test\features\daily_reflection\presentation\daily_reflection_screen_test.dart
+- +9 All tests passed!
+```
+
+Full verification evidence:
+
+```text
+powershell -ExecutionPolicy Bypass -File .\scripts\verify.ps1
+- first run stopped at dart format because 2 files required formatting
+- reran dart format on the presentation screen and widget test file
+- second run passed
+- flutter analyze: No issues found!
+- flutter test: +50 All tests passed!
+
+git diff --check
+- no whitespace errors
+```
+
+Session-flow outcome summary:
+
+| Area | Result | Evidence |
+|---|---|---|
+| Top-of-screen status visibility | Pass | Widget tests now assert `현재 companion 상태` and the role context line in the upper flow. |
+| Consent before entry flow | Pass | Screen order now places `기기 안에 기억하기` before `오늘 기록하기`. |
+| Insight before morning brief | Pass | Widget tests assert `오늘의 인사이트` appears before `오늘 시작하기`. |
+| Lower-priority memory management | Pass | `내 기억 관리` now uses an explicit expandable section before showing stored category details. |
+| Full reset reachability | Pass | `전체 초기화` is its own lower-priority section and keeps `저장된 기억 모두 지우기` visible. |
+| Behavior regression safety | Pass | Full verify remained green with +50 passing tests after the presentation-only refactor. |
+
+Documentation updates:
+
+- Added `HT-SESSION-FLOW-001` product update in `docs/PRODUCT_SPEC.md`.
+- Added `HT-SESSION-FLOW-001` verification flow in `docs/RUNBOOK.md`.
+- Updated Android Design/UX QA expectations in `docs/qa/android-design-qa-checklist.md`.
+- Added `specs/007-session-flow-polish/spec.md`.
+
+Safety notes:
+
+- No new dependency, platform permission, network path, Cloud AI surface, or storage-schema change was added.
+- Application/domain/data layer files were left unchanged.

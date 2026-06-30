@@ -321,50 +321,153 @@ class _DailyReflectionScreenState extends State<DailyReflectionScreen> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                '기기 안에서만 이어지는 하루 대화예요. 오늘을 다정하게 정리하고, 내일의 작은 시작도 함께 꺼내볼 수 있어요.',
+                '기기 안에서만 이어지는 하루 대화예요. 오늘 기록을 남기고, 인사이트를 보고, 내일의 작은 시작까지 차분하게 이어가볼게요.',
                 style: Theme.of(context).textTheme.bodyLarge,
               ),
               _InfoPanel(
                 title: '사생활을 지키는 대화',
                 children: const [
                   '이 MVP는 통화, 문자, 메신저, 알림, 음성, PPG, 연락처, 위치, 건강 정보를 읽지 않아요.',
-                  '직접 적는 짧은 문장이나 안전한 데모 예시만 사용해 주세요.',
-                  '처리는 기기 안에서만 이뤄지고 Cloud AI, 분석, 동기화, 외부 데이터베이스, 추가 권한 요청은 없어요.',
+                  '직접 적는 짧은 문장과 안전한 데모 예시만 사용해 주세요.',
+                  '모든 처리는 기기 안에서만 이뤄지고 Cloud AI, 분석, 동기화, 데이터베이스, 추가 권한 요청은 없어요.',
                 ],
               ),
               const SizedBox(height: 16),
-              Text('안전한 데모 예시', style: Theme.of(context).textTheme.titleMedium),
-              const SizedBox(height: 8),
-              Wrap(
-                spacing: 8,
-                runSpacing: 8,
-                children: [
-                  for (final event in _events)
-                    ChoiceChip(
-                      label: Text(event.title),
-                      selected: _session.selectedEvent?.id == event.id,
-                      onSelected: (_) => _selectEvent(event),
+              _InfoPanel(
+                title: '현재 companion 상태',
+                childrenWidgets: [
+                  Text(
+                    _memorySnapshot.companionPreference.roleContextLine,
+                    key: const Key('selectedRoleContextLine'),
+                  ),
+                  const SizedBox(height: 4),
+                  Text(
+                    '대화 역할: ${_memorySnapshot.companionPreference.roleDisplayName}',
+                  ),
+                  Text(
+                    '내 소개: ${_memorySnapshot.profile.displayName.trim().isEmpty ? '-' : _memorySnapshot.profile.displayName.trim()}',
+                  ),
+                  Text('함께 알아가는 단계: ${_growthState.level}'),
+                  Text('하루 기록: ${_memorySnapshot.dailyEntries.length}'),
+                ],
+              ),
+              const SizedBox(height: 16),
+              _InfoPanel(
+                title: '기기 안에 기억하기',
+                childrenWidgets: [
+                  const Text('동의한 정보만 이 기기에 저장하고, 언제든 다시 지울 수 있어요.'),
+                  const SizedBox(height: 12),
+                  SwitchListTile(
+                    key: const Key('localMemoryConsentSwitch'),
+                    contentPadding: EdgeInsets.zero,
+                    title: const Text('동의한 정보만 기기 안에 기억해요'),
+                    subtitle: const Text(
+                      '내 소개, 하루 기록, 기억할 사람, 내일 할 일, 반복 키워드를 동의한 경우에만 저장해요.',
                     ),
+                    value: _memorySnapshot.consentSettings.localMemoryEnabled,
+                    onChanged: _toggleLocalMemory,
+                  ),
+                  const SizedBox(height: 4),
+                  Text('대화 역할', style: Theme.of(context).textTheme.titleSmall),
+                  const SizedBox(height: 8),
+                  Wrap(
+                    spacing: 8,
+                    runSpacing: 4,
+                    children: [
+                      for (final role in CompanionRole.values)
+                        ChoiceChip(
+                          key: Key('roleChip-${role.name}'),
+                          label: Text(role.koreanLabel),
+                          selected:
+                              _memorySnapshot.companionPreference.defaultRole ==
+                              role,
+                          onSelected: (_) => _selectRole(role),
+                        ),
+                    ],
+                  ),
                 ],
               ),
               const SizedBox(height: 16),
-              TextField(
-                key: const Key('reflectionNoteField'),
-                controller: _controller,
-                minLines: 3,
-                maxLines: 5,
-                decoration: const InputDecoration(
-                  labelText: '오늘 있었던 일 한 줄',
-                  hintText: '오늘 있었던 일을 짧고 편하게 적어보세요.',
-                  helperText: '실제 개인정보, 건강 정보, 전화번호, 사적인 대화 전문은 적지 마세요.',
-                  border: OutlineInputBorder(),
-                ),
-              ),
-              const SizedBox(height: 12),
-              FilledButton(
-                key: const Key('generateButton'),
-                onPressed: _generateFromManualText,
-                child: const Text('대화 만들기'),
+              _InfoPanel(
+                title: '오늘 기록하기',
+                childrenWidgets: [
+                  const Text('오늘 있었던 일과 기억하고 싶은 사람, 할 일을 가볍게 남겨보세요.'),
+                  const SizedBox(height: 12),
+                  Text(
+                    '안전한 데모 예시',
+                    style: Theme.of(context).textTheme.titleSmall,
+                  ),
+                  const SizedBox(height: 8),
+                  Wrap(
+                    spacing: 8,
+                    runSpacing: 8,
+                    children: [
+                      for (final event in _events)
+                        ChoiceChip(
+                          label: Text(event.title),
+                          selected: _session.selectedEvent?.id == event.id,
+                          onSelected: (_) => _selectEvent(event),
+                        ),
+                    ],
+                  ),
+                  const SizedBox(height: 12),
+                  TextField(
+                    key: const Key('reflectionNoteField'),
+                    controller: _controller,
+                    minLines: 3,
+                    maxLines: 5,
+                    decoration: const InputDecoration(
+                      labelText: '오늘 있었던 일 한 줄',
+                      hintText: '오늘 있었던 일을 짧고 편하게 적어보세요.',
+                      helperText: '실제 개인정보, 건강 정보, 전화번호, 사적인 대화 전문은 적지 마세요.',
+                      border: OutlineInputBorder(),
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+                  TextField(
+                    key: const Key('profileNameField'),
+                    controller: _profileNameController,
+                    decoration: const InputDecoration(
+                      labelText: '내 소개',
+                      border: OutlineInputBorder(),
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+                  TextField(
+                    key: const Key('personMemoryField'),
+                    controller: _personMemoryController,
+                    decoration: const InputDecoration(
+                      labelText: '기억할 사람',
+                      border: OutlineInputBorder(),
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+                  TextField(
+                    key: const Key('todoMemoryField'),
+                    controller: _todoMemoryController,
+                    decoration: const InputDecoration(
+                      labelText: '내일 할 일',
+                      border: OutlineInputBorder(),
+                    ),
+                  ),
+                  const SizedBox(height: 12),
+                  Wrap(
+                    spacing: 8,
+                    runSpacing: 8,
+                    children: [
+                      FilledButton(
+                        key: const Key('generateButton'),
+                        onPressed: _generateFromManualText,
+                        child: const Text('대화 만들기'),
+                      ),
+                      FilledButton.tonal(
+                        key: const Key('saveMemoryButton'),
+                        onPressed: _saveMemoryInputs,
+                        child: const Text('기억 저장하기'),
+                      ),
+                    ],
+                  ),
+                ],
               ),
               const SizedBox(height: 16),
               _LocalMemoryPanel(
@@ -759,84 +862,79 @@ class _LocalMemoryPanel extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return _InfoPanel(
-      title: '기기 안에 기억하기',
-      childrenWidgets: [
-        Text(morningBrief.title, key: const Key('morningBriefTitle')),
-        const SizedBox(height: 4),
-        Text(
-          snapshot.companionPreference.roleContextLine,
-          key: const Key('selectedRoleContextLine'),
-        ),
-        const SizedBox(height: 4),
-        Text(morningBrief.greeting),
-        const SizedBox(height: 4),
-        Text(morningBrief.carryOverLine),
-        const SizedBox(height: 4),
-        Text('오늘의 질문: ${morningBrief.todayQuestion.text}'),
-        Text('${morningBrief.firstStep.title}: ${morningBrief.firstStep.body}'),
-        Text(morningBrief.roleMessage),
-        const SizedBox(height: 12),
-        SwitchListTile(
-          key: const Key('localMemoryConsentSwitch'),
-          contentPadding: EdgeInsets.zero,
-          title: const Text('동의한 정보만 기기 안에 기억해요'),
-          subtitle: const Text(
-            '내 소개, 하루 기록, 기억할 사람, 내일 할 일, 반복 키워드를 동의한 경우에만 저장해요.',
-          ),
-          value: snapshot.consentSettings.localMemoryEnabled,
-          onChanged: onConsentChanged,
-        ),
-        Wrap(
-          spacing: 8,
-          runSpacing: 4,
-          children: [
-            for (final role in CompanionRole.values)
-              ChoiceChip(
-                key: Key('roleChip-${role.name}'),
-                label: Text(role.koreanLabel),
-                selected: snapshot.companionPreference.defaultRole == role,
-                onSelected: (_) => onRoleSelected(role),
-              ),
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        _InfoPanel(
+          title: insight.patternTitle,
+          titleKey: const Key('localInsightTitle'),
+          childrenWidgets: [
+            Text(insight.patternBody),
+            const SizedBox(height: 4),
+            Text(_signalLine(insight.recurringSignals)),
+            const SizedBox(height: 4),
+            Text('${insight.tomorrowHint.title}: ${insight.tomorrowHint.body}'),
+            Text('질문: ${insight.curiosityQuestion.text}'),
+            Text('${insight.tinyMission.title}: ${insight.tinyMission.body}'),
+            Text(insight.roleMessage),
           ],
         ),
-        const SizedBox(height: 8),
-        TextField(
-          key: const Key('profileNameField'),
-          controller: profileNameController,
-          decoration: const InputDecoration(
-            labelText: '내 소개',
-            border: OutlineInputBorder(),
-          ),
-        ),
-        const SizedBox(height: 8),
-        TextField(
-          key: const Key('todoMemoryField'),
-          controller: todoMemoryController,
-          decoration: const InputDecoration(
-            labelText: '내일 할 일',
-            border: OutlineInputBorder(),
-          ),
-        ),
-        const SizedBox(height: 8),
-        TextField(
-          key: const Key('personMemoryField'),
-          controller: personMemoryController,
-          decoration: const InputDecoration(
-            labelText: '기억할 사람',
-            border: OutlineInputBorder(),
-          ),
-        ),
-        const SizedBox(height: 8),
-        Wrap(
-          spacing: 8,
-          runSpacing: 8,
-          children: [
-            FilledButton.tonal(
-              key: const Key('saveMemoryButton'),
-              onPressed: onSaveMemory,
-              child: const Text('기억 저장하기'),
+        const SizedBox(height: 16),
+        _InfoPanel(
+          title: morningBrief.title,
+          titleKey: const Key('morningBriefTitle'),
+          childrenWidgets: [
+            Text(morningBrief.greeting),
+            const SizedBox(height: 4),
+            Text(morningBrief.carryOverLine),
+            const SizedBox(height: 4),
+            Text('오늘의 질문: ${morningBrief.todayQuestion.text}'),
+            Text(
+              '${morningBrief.firstStep.title}: ${morningBrief.firstStep.body}',
             ),
+            Text(morningBrief.roleMessage),
+          ],
+        ),
+        const SizedBox(height: 16),
+        _InfoPanel(
+          title: '내 기억 관리',
+          titleKey: const Key('memoryManagementTitle'),
+          childrenWidgets: [
+            const Text('저장된 정보를 보고 고치거나 지울 수 있어요.'),
+            const SizedBox(height: 8),
+            ExpansionTile(
+              key: const Key('memoryManagementExpansion'),
+              tilePadding: EdgeInsets.zero,
+              childrenPadding: const EdgeInsets.only(bottom: 8),
+              title: const Text('저장된 기억 펼쳐보기'),
+              children: [
+                if (!snapshot.consentSettings.localMemoryEnabled)
+                  const Padding(
+                    padding: EdgeInsets.only(top: 8),
+                    child: Text(
+                      '기기 안에 기억하기를 켜면 저장된 정보를 여기서 관리할 수 있어요.',
+                      key: Key('memoryConsentOffMessage'),
+                    ),
+                  )
+                else ...[
+                  _buildProfileSection(context),
+                  const SizedBox(height: 8),
+                  _buildPeopleSection(context),
+                  const SizedBox(height: 8),
+                  _buildTodoSection(context),
+                  const SizedBox(height: 8),
+                  _buildReflectionSection(),
+                ],
+              ],
+            ),
+          ],
+        ),
+        const SizedBox(height: 16),
+        _InfoPanel(
+          title: '전체 초기화',
+          childrenWidgets: [
+            const Text('저장된 기억을 모두 지우고 처음 상태로 돌아가요.'),
+            const SizedBox(height: 8),
             OutlinedButton(
               key: const Key('clearAllMemoryButton'),
               onPressed: onClearAll,
@@ -844,42 +942,6 @@ class _LocalMemoryPanel extends StatelessWidget {
             ),
           ],
         ),
-        const SizedBox(height: 8),
-        const Text('내 기억'),
-        Text('대화 역할: ${snapshot.companionPreference.roleDisplayName}'),
-        Text(
-          '내 소개: ${snapshot.profile.displayName.trim().isEmpty ? '-' : snapshot.profile.displayName.trim()}',
-        ),
-        Text('함께 알아가는 단계: ${growthState.level}'),
-        Text('하루 기록: ${snapshot.dailyEntries.length}'),
-        const SizedBox(height: 12),
-        const Text('내 기억 관리', key: Key('memoryManagementTitle')),
-        if (!snapshot.consentSettings.localMemoryEnabled)
-          const Padding(
-            padding: EdgeInsets.only(top: 8),
-            child: Text(
-              '기기 안에 기억하기를 켜면 저장된 정보를 여기서 관리할 수 있어요.',
-              key: Key('memoryConsentOffMessage'),
-            ),
-          )
-        else ...[
-          const SizedBox(height: 8),
-          _buildProfileSection(context),
-          const SizedBox(height: 8),
-          _buildPeopleSection(context),
-          const SizedBox(height: 8),
-          _buildTodoSection(context),
-          const SizedBox(height: 8),
-          _buildReflectionSection(),
-        ],
-        const SizedBox(height: 8),
-        Text(insight.patternTitle, key: const Key('localInsightTitle')),
-        Text(insight.patternBody),
-        Text(_signalLine(insight.recurringSignals)),
-        Text('${insight.tomorrowHint.title}: ${insight.tomorrowHint.body}'),
-        Text('질문: ${insight.curiosityQuestion.text}'),
-        Text('${insight.tinyMission.title}: ${insight.tinyMission.body}'),
-        Text(insight.roleMessage),
       ],
     );
   }
@@ -970,11 +1032,13 @@ class _MemoryItemRow extends StatelessWidget {
 class _InfoPanel extends StatelessWidget {
   const _InfoPanel({
     required this.title,
+    this.titleKey,
     this.children = const [],
     this.childrenWidgets = const [],
   });
 
   final String title;
+  final Key? titleKey;
   final List<String> children;
   final List<Widget> childrenWidgets;
 
@@ -990,7 +1054,11 @@ class _InfoPanel extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(title, style: Theme.of(context).textTheme.titleMedium),
+            Text(
+              title,
+              key: titleKey,
+              style: Theme.of(context).textTheme.titleMedium,
+            ),
             const SizedBox(height: 8),
             for (final child in children) ...[
               Text(child),

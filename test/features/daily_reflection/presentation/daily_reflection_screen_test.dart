@@ -21,6 +21,10 @@ Future<void> _pumpScreen(WidgetTester tester) async {
   await tester.pumpAndSettle();
 }
 
+double _top(WidgetTester tester, String text) {
+  return tester.getTopLeft(find.text(text)).dy;
+}
+
 Future<void> _enableMemoryAndSeedBasicInputs(WidgetTester tester) async {
   await _scrollTo(tester, find.byKey(const Key('localMemoryConsentSwitch')));
   await tester.tap(find.byKey(const Key('localMemoryConsentSwitch')));
@@ -47,7 +51,7 @@ Future<void> _enableMemoryAndSeedBasicInputs(WidgetTester tester) async {
 Future<void> _createAndKeepReflection(WidgetTester tester) async {
   await tester.enterText(
     find.byKey(const Key('reflectionNoteField')),
-    '오늘은 회의가 많아서 조금 피곤했지만, 해야 할 일을 하나 끝냈다.',
+    '오늘은 회의가 많아서 조금 피곤했지만 해야 할 일을 하나 끝냈다.',
   );
   await _scrollTo(tester, find.byKey(const Key('generateButton')));
   await tester.tap(
@@ -72,9 +76,10 @@ void main() {
     expect(find.text('사생활을 지키는 대화'), findsOneWidget);
     expect(find.byKey(const Key('reflectionNoteField')), findsOneWidget);
     expect(find.byKey(const Key('generateButton')), findsOneWidget);
-    await _scrollTo(tester, find.byKey(const Key('emptyState')));
     expect(find.byKey(const Key('emptyState')), findsOneWidget);
     expect(find.byKey(const Key('morningBriefTitle')), findsOneWidget);
+    expect(find.text('현재 companion 상태'), findsOneWidget);
+    expect(find.text('오늘 기록하기'), findsOneWidget);
     expect(find.text('내 기억 관리'), findsOneWidget);
   });
 
@@ -85,7 +90,7 @@ void main() {
 
     await tester.enterText(
       find.byKey(const Key('reflectionNoteField')),
-      '오늘은 회의를 정리하고, 내일 다시 볼 문서를 하나 남겼다.',
+      '오늘은 회의를 정리하고 내일 다시 볼 문서를 하나 남겼다.',
     );
     await _scrollTo(tester, find.byKey(const Key('generateButton')));
     await tester.tap(
@@ -137,17 +142,28 @@ void main() {
     expect(find.text('대화 미리보기'), findsNothing);
   });
 
-  testWidgets('shows consent role selection and reset controls', (
+  testWidgets('shows the companion session headings in user-journey order', (
     tester,
   ) async {
     await _pumpScreen(tester);
 
-    await _scrollTo(tester, find.text('기기 안에 기억하기'));
-    expect(find.byKey(const Key('localMemoryConsentSwitch')), findsOneWidget);
-    expect(find.byKey(const Key('roleChip-coach')), findsOneWidget);
-    expect(find.byKey(const Key('saveMemoryButton')), findsOneWidget);
-    expect(find.byKey(const Key('clearAllMemoryButton')), findsOneWidget);
+    expect(find.text('현재 companion 상태'), findsOneWidget);
+    expect(find.text('기기 안에 기억하기'), findsOneWidget);
+    expect(find.text('오늘 기록하기'), findsOneWidget);
+    expect(find.text('오늘의 인사이트'), findsOneWidget);
+    expect(find.text('오늘 시작하기'), findsOneWidget);
     expect(find.text('내 기억 관리'), findsOneWidget);
+    expect(find.text('전체 초기화'), findsOneWidget);
+
+    expect(
+      _top(tester, '현재 companion 상태') < _top(tester, '기기 안에 기억하기'),
+      isTrue,
+    );
+    expect(_top(tester, '기기 안에 기억하기') < _top(tester, '오늘 기록하기'), isTrue);
+    expect(_top(tester, '오늘 기록하기') < _top(tester, '오늘의 인사이트'), isTrue);
+    expect(_top(tester, '오늘의 인사이트') < _top(tester, '오늘 시작하기'), isTrue);
+    expect(_top(tester, '오늘 시작하기') < _top(tester, '내 기억 관리'), isTrue);
+    expect(_top(tester, '내 기억 관리') < _top(tester, '전체 초기화'), isTrue);
   });
 
   testWidgets('shows the currently selected role in Korean', (tester) async {
@@ -192,6 +208,9 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(find.text('내 소개: -'), findsOneWidget);
+    await _scrollTo(tester, find.byKey(const Key('memoryManagementTitle')));
+    await tester.tap(find.byKey(const Key('memoryManagementExpansion')));
+    await tester.pumpAndSettle();
     expect(find.byKey(const Key('memoryConsentOffMessage')), findsOneWidget);
   });
 
@@ -206,6 +225,9 @@ void main() {
     await tester.pumpAndSettle();
 
     await _scrollTo(tester, find.byKey(const Key('memoryManagementTitle')));
+    await tester.tap(find.byKey(const Key('memoryManagementExpansion')));
+    await tester.pumpAndSettle();
+
     expect(find.byKey(const Key('memoryConsentOffMessage')), findsOneWidget);
     expect(find.text('내 소개 (1)'), findsNothing);
     expect(find.text('기억할 사람 (1)'), findsNothing);
@@ -220,6 +242,12 @@ void main() {
     await _createAndKeepReflection(tester);
 
     await _scrollTo(tester, find.byKey(const Key('memoryManagementTitle')));
+    expect(find.byKey(const Key('memoryManagementExpansion')), findsOneWidget);
+    expect(find.text('내 소개 (1)'), findsNothing);
+
+    await tester.tap(find.byKey(const Key('memoryManagementExpansion')));
+    await tester.pumpAndSettle();
+
     expect(find.text('내 소개 (1)'), findsOneWidget);
     expect(find.text('기억할 사람 (1)'), findsOneWidget);
     expect(find.text('내일 할 일 (1)'), findsOneWidget);
@@ -229,11 +257,11 @@ void main() {
     await tester.pumpAndSettle();
     await tester.enterText(
       find.byKey(const Key('editTodoTitleField')),
-      '아침에 가장 쉬운 문서부터 정리하기',
+      '가장 쉬운 문서부터 정리하기',
     );
     await tester.tap(find.byKey(const Key('confirmEditTodoButton')));
     await tester.pumpAndSettle();
-    expect(find.textContaining('아침에 가장 쉬운 문서부터 정리하기'), findsWidgets);
+    expect(find.textContaining('가장 쉬운 문서부터 정리하기'), findsWidgets);
 
     await _scrollTo(tester, find.byKey(const Key('deletePersonButton-0')));
     await tester.tap(

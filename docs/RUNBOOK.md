@@ -500,3 +500,27 @@ flutter test test\features\daily_reflection\presentation\daily_reflection_screen
 8. Confirm lover wording stays warm without obsession, jealousy, sexual language, or dependency pressure.
 9. Confirm parent wording stays caring without control, blame, shame, or scolding.
 10. Confirm no new permission prompt, account login, network/cloud AI surface, analytics, or sync behavior appears.
+## HT-SESSION-FLOW-001 Session Flow Verification
+
+Use this flow when validating the simplified single-screen companion journey:
+
+1. Run:
+
+`powershell
+cd D:\Views\heart_talk
+flutter test test\features\daily_reflection\presentation\daily_reflection_screen_test.dart
+`
+
+2. Confirm the visible section order reads naturally as:
+   - 현재 companion 상태
+   - 기기 안에 기억하기
+   - 오늘 기록하기
+   - 오늘의 인사이트
+   - 오늘 시작하기
+   - 내 기억 관리
+   - 전체 초기화
+3. Confirm 오늘의 인사이트 appears before 오늘 시작하기.
+4. Confirm 내 기억 관리 stays reachable through an explicit expand/collapse control and does not crowd the main entry flow.
+5. Confirm 저장된 기억 모두 지우기 remains visible and reachable outside the collapsed memory-management details.
+6. Confirm existing generate / keep / reset behavior still works after the section reorder.
+7. Confirm no new navigation surface, dependency, permission, network, or Cloud AI behavior appears.

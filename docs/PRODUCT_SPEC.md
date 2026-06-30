@@ -128,3 +128,28 @@ Safety constraints remain unchanged:
 - lover role stays warm but avoids obsession, jealousy, sexual language, possession, or dependency-inducing phrasing
 - parent role stays caring but avoids control, blame, shame, scolding, or infantilizing phrasing
 - all roles avoid diagnosis, treatment, risk scoring, certainty claims, and user-labeling language
+
+## HT-SESSION-FLOW-001 Product Update
+
+HeartTalk now presents the existing companion features in a clearer single-screen session order. The current MVP still uses one Flutter screen, but the visible flow is now organized so the user can understand what to do next without learning a new navigation model.
+
+The current implemented session order is:
+
+- current companion state
+- local memory consent and role selection
+- today record entry
+- local insight
+- morning brief
+- memory management
+- full reset
+
+The current UI polish slice includes:
+
+- a dedicated `현재 companion 상태` section near the top
+- a dedicated `기기 안에 기억하기` section before entry and management controls
+- a dedicated `오늘 기록하기` section that groups daily note, person, todo, and save/generate actions
+- `오늘의 인사이트` and `오늘 시작하기` shown as adjacent guidance sections
+- `내 기억 관리` moved behind a lower-priority expandable area to reduce density
+- `전체 초기화` separated into its own lower-priority section
+
+This slice changes presentation order and visual grouping only. It does not change local-memory schema, repository behavior, insight logic, morning-brief logic, role-message logic, permissions, dependencies, or network behavior.
