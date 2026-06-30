@@ -285,6 +285,7 @@ void main() {
   ) async {
     await _pumpScreen(tester);
 
+    await _scrollTo(tester, find.byKey(const Key('startSimulationButton')));
     expect(find.byKey(const Key('startSimulationButton')), findsOneWidget);
     await tester.tap(find.byKey(const Key('startSimulationButton')));
     await tester.pumpAndSettle();
@@ -298,6 +299,7 @@ void main() {
     expect(find.byKey(const Key('simulationMorningBriefLine')), findsOneWidget);
     expect(find.byKey(const Key('simulationQuestionLine')), findsOneWidget);
 
+    await _scrollTo(tester, find.byKey(const Key('clearSimulationButton')));
     await tester.tap(find.byKey(const Key('clearSimulationButton')));
     await tester.pumpAndSettle();
 

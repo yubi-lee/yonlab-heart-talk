@@ -240,8 +240,9 @@ class SyntheticGrowthSimulationService {
       directnessLevel: _directnessFor(activeRole),
       avoidPhrases: const [],
       customRoleName: activeRole == CompanionRole.custom ? '시뮬레이션 동행' : '',
-      customToneHint:
-          activeRole == CompanionRole.custom ? '가볍고 따뜻한 한국어 응원' : '',
+      customToneHint: activeRole == CompanionRole.custom
+          ? '가볍고 따뜻한 한국어 응원'
+          : '',
     );
 
     final profile = LocalUserProfile(
@@ -260,10 +261,12 @@ class SyntheticGrowthSimulationService {
       final dayIndex = index + 1;
       final day = now.subtract(Duration(days: safeDayCount - dayIndex));
       final mood = scene.moodPattern[index % scene.moodPattern.length];
-      final keyword = scene.recurringKeywords[index % scene.recurringKeywords.length];
+      final keyword =
+          scene.recurringKeywords[index % scene.recurringKeywords.length];
       final todoTheme = scene.todoThemes[index % scene.todoThemes.length];
       final personTheme = scene.personThemes[index % scene.personThemes.length];
-      final template = scene.reflectionTemplates[index % scene.reflectionTemplates.length];
+      final template =
+          scene.reflectionTemplates[index % scene.reflectionTemplates.length];
       final summary = _composeReflection(
         template: template,
         mood: mood,
@@ -315,7 +318,7 @@ class SyntheticGrowthSimulationService {
         PersonMemory(
           id: '${scene.id}-person-${index + 1}',
           label: '$theme ${index + 1}',
-          note: '${scene.displayNameKo}에서 ${theme}를 반복해서 기억해둔 가상 메모예요.',
+          note: '${scene.displayNameKo}에서 $theme를 반복해서 기억해둔 가상 메모예요.',
           createdAt: DateTime.utc(2026, 1, index + 1),
         ),
       );

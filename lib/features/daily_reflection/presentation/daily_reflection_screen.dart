@@ -734,14 +734,15 @@ class _SimulationPanel extends StatelessWidget {
     return _InfoPanel(
       title: '100일 성장 체험하기',
       childrenWidgets: [
-        const Text(
-          '실제 기억과 섞이지 않는 가상 데이터예요. 선택한 씬으로 100일 성장 체험을 볼 수 있어요.',
-        ),
+        const Text('실제 기억과 섞이지 않는 가상 데이터예요. 선택한 씬으로 100일 성장 체험을 볼 수 있어요.'),
         const SizedBox(height: 8),
         if (!hasSession) ...[
           const Text('아직 체험 중인 씬이 없어요.'),
         ] else ...[
-          Text('씬: ${preset!.displayNameKo}', key: const Key('simulationSceneLine')),
+          Text(
+            '씬: ${preset!.displayNameKo}',
+            key: const Key('simulationSceneLine'),
+          ),
           Text('설명: ${preset!.descriptionKo}'),
           Text('함께 알아가는 단계: ${growthState!.level}'),
           Text(

@@ -87,16 +87,12 @@ class SyntheticGrowthSimulationSession {
     'snapshot': snapshot.toJson(),
   };
 
-  factory SyntheticGrowthSimulationSession.fromJson(
-    Map<String, Object?> json,
-  ) {
+  factory SyntheticGrowthSimulationSession.fromJson(Map<String, Object?> json) {
     return SyntheticGrowthSimulationSession(
       presetId: json['presetId'] as String? ?? '',
       generatedAt: _dateTime(json['generatedAt']),
       dayCount: json['dayCount'] as int? ?? 100,
-      snapshot: LocalMemorySnapshot.fromJson(
-        _map(json['snapshot']),
-      ),
+      snapshot: LocalMemorySnapshot.fromJson(_map(json['snapshot'])),
     );
   }
 }
