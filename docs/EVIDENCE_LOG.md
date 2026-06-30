@@ -2109,3 +2109,66 @@ Safety notes:
 
 - No new dependency, platform permission, network path, Cloud AI surface, or storage-schema change was added.
 - Application/domain/data layer files were left unchanged.
+
+## 2026-06-30 - HT-SESSION-FLOW-QA-001 - Physical Android QA for Simplified Session Flow
+
+Verdict: Partial / Blocked
+
+Branch:
+
+```text
+main
+```
+
+Initial status:
+
+```text
+## main...origin/main
+```
+
+Physical-device setup evidence:
+
+```text
+C:\Utils\Android\SDK\platform-tools\adb.exe devices -l
+- R3CX70NHJRN device product:q6qksx model:SM_F956N device:q6q transport_id:5
+
+flutter build apk --debug
+- Built build\app\outputs\flutter-apk\app-debug.apk
+
+adb -s R3CX70NHJRN install -r build\app\outputs\flutter-apk\app-debug.apk
+- Success
+
+adb -s R3CX70NHJRN shell am start -W -n com.example.heart_talk/.MainActivity
+- Status: ok
+- LaunchState: COLD
+```
+
+Observed Android QA evidence:
+
+- Initial screenshot confirmed the simplified upper flow with `현재 companion 상태` visible near the top and Korean title rendering intact.
+- Mid-screen screenshot and UI dump confirmed the reordered journey: `기기 안에 기억하기` -> `대화 역할` -> `오늘 기록하기`.
+- Physical screenshot confirmed the local-memory consent switch changed to ON and the Korean helper copy about device-only storage stayed readable.
+- The session form remained Korean-first on device, including `오늘 기록하기`, `오늘 있었던 일 한 줄`, `내 소개`, `기억할 사람`, `내일 할 일`, `대화 만들기`, `기억 저장하기`, and `오늘의 인사이트`.
+- `오늘의 인사이트` stayed directly below the entry card, which matches the intended flow after the session-flow polish.
+
+Session-flow QA outcome summary:
+
+| Area | Result | Evidence |
+|---|---|---|
+| Simplified section order on device | Pass | Physical screenshots and pulled UI dumps showed `기기 안에 기억하기`, `대화 역할`, `오늘 기록하기`, and `오늘의 인사이트` in the expected order. |
+| Korean heading readability | Pass | Titles and helper copy remained Korean-first and visually legible on `SM F956N`. No English UI labels reappeared during the checked flow. |
+| Consent toggle visibility and comprehension | Pass | The device-only memory switch was clearly visible and could be toggled ON on physical Android. |
+| Role section discoverability | Pass with note | The role chips were visible and readable. The QA run visually confirmed the section, though the interrupted run did not finish a full saved-state verification for the requested coach role. |
+| Entry card density | Pass | On-device spacing between the entry card and the insight card looked improved versus the older single-screen density. |
+| Memory-management expansion QA | Partial | The current run validated the section order and reduced density direction, but the device disconnected before the run reached a full expansion/collapse interaction check. |
+| Save -> force-stop -> relaunch restore | Blocked | The device connection dropped before the save/relaunch validation could be completed. |
+| Full reset -> relaunch fallback | Blocked | The device connection dropped before full-reset relaunch validation could be completed. |
+
+Blocker note:
+
+- While continuing the QA run, `adb devices -l` changed from showing `R3CX70NHJRN` to an empty device list.
+- Because the physical device disconnected mid-run, the remaining steps for saved-state restore, full reset fallback, and memory-management expansion retest could not be completed in this session.
+
+Next action:
+
+- Reconnect `SM F956N / R3CX70NHJRN` and rerun the remaining physical steps for save, force-stop/relaunch restore, memory-management expansion, and full reset fallback.
