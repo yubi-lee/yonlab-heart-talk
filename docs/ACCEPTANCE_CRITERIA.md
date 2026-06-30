@@ -305,3 +305,18 @@ Current status for `HT-MORNING-QA-001 - Android QA for Morning Brief / Today Sta
 | ROLEUX-009 | Existing local memory, insight, morning brief, and memory management flows continue to pass. | Implemented | Targeted Flutter test run passed across domain, application, and presentation layers. |
 | ROLEUX-010 | No new dependency, platform setting, network, Cloud AI, analytics, sync, account, or sensitive permission is added. | Pass | Changed-file review stayed inside `lib/features/daily_reflection/**`, `test/features/daily_reflection/**`, `docs/**`, and `specs/006-role-ux-polish/spec.md`. No platform, permission, or dependency file changed. |
 | ROLEUX-011 | Verification gate passes after implementation. | Pass | `powershell -ExecutionPolicy Bypass -File .\scripts\verify.ps1` passed after one formatter rerun. `git diff --check` reported no whitespace errors. |
+
+## HT-SESSION-FLOW-QA-001 Physical Android QA Status
+
+Updated status after the remaining physical rerun:
+
+| Item | Status | Evidence |
+|---|---|---|
+| Latest APK build/install on `SM F956N` | Pass | `flutter build apk --debug` rebuilt `build\app\outputs\flutter-apk\app-debug.apk`, and `adb install -r` returned `Success`. |
+| Simplified session-flow section order on device | Pass | The physical rerun preserved the intended order, with `오늘의 인사이트` remaining above `오늘 시작하기`. |
+| `내 기억 관리` expand/collapse interaction | Pass | `저장된 기억 펼쳐보기` was collapsed by default and expanded successfully on tap. |
+| Save -> force-stop -> relaunch restore | Pass | Relaunch restored role, profile presence, growth state, insight, and morning-brief surfaces. |
+| Full reset -> force-stop -> relaunch fallback | Pass | Relaunch after `저장된 기억 모두 지우기` returned to default friend role, empty profile, stage 0 growth, and fallback insight/morning brief. |
+| Korean UX/readability follow-up | Pass with notes | Core labels stayed Korean-first and readable on `SM F956N`. QA reporting intentionally omitted copying a pre-existing saved profile string observed on-device. |
+
+`HT-SESSION-FLOW-QA-001` is accepted as `Pass with notes` after the physical-device rerun closed the remaining restore/reset blockers.

@@ -2172,3 +2172,65 @@ Blocker note:
 Next action:
 
 - Reconnect `SM F956N / R3CX70NHJRN` and rerun the remaining physical steps for save, force-stop/relaunch restore, memory-management expansion, and full reset fallback.
+
+## 2026-06-30 - HT-SESSION-FLOW-QA-001R - Remaining Physical Android QA for Simplified Session Flow
+
+Verdict: Pass with notes
+
+Branch:
+
+```text
+main
+```
+
+Initial status:
+
+```text
+## main...origin/main
+```
+
+Physical-device reconnect evidence:
+
+```text
+C:\Utils\Android\SDK\platform-tools\adb.exe kill-server
+- completed
+
+C:\Utils\Android\SDK\platform-tools\adb.exe start-server
+- daemon started successfully
+
+C:\Utils\Android\SDK\platform-tools\adb.exe devices -l
+- R3CX70NHJRN device product:q6qksx model:SM_F956N device:q6q transport_id:1
+
+flutter build apk --debug
+- Built build\app\outputs\flutter-apk\app-debug.apk
+
+adb -s R3CX70NHJRN install -r build\app\outputs\flutter-apk\app-debug.apk
+- Success
+
+adb -s R3CX70NHJRN shell am start -W -n com.example.heart_talk/.MainActivity
+- Status: ok
+- LaunchState: UNKNOWN / COLD during relaunch checks
+```
+
+Focused rerun observations:
+
+- `내 기억 관리`는 기본 접힘 상태에서 과밀하지 않았고, `저장된 기억 펼쳐보기`를 눌러 확장할 수 있었다.
+- 확장 후 `내 소개` 카드와 `수정` 액션이 보였고, 저장된 기억 상세 관리 UI 접근이 가능했다.
+- 저장된 상태에서 `force-stop -> relaunch`를 수행한 뒤 역할, 내 소개, 함께 알아가는 단계, 오늘의 인사이트, 오늘 시작하기가 다시 보였다.
+- `저장된 기억 모두 지우기` 후 재실행에서는 `대화 역할: 친구`, `내 소개: -`, `함께 알아가는 단계: 0`, `하루 기록: 0`으로 돌아왔다.
+- 초기화 후 `오늘의 인사이트`와 `오늘 시작하기`는 개인화 문구 대신 fallback 문구로 복귀했다.
+- 한국어 헤딩과 주요 CTA는 실기기에서 계속 읽기 쉬웠다.
+
+Remaining-blocker closure summary:
+
+| Area | Result | Evidence |
+|---|---|---|
+| Memory-management expand/collapse interaction | Pass | Physical screenshots confirmed `저장된 기억 펼쳐보기` collapsed by default and expanded on tap. |
+| Save -> force-stop -> relaunch restore | Pass | Relaunch preserved the populated snapshot state, including role, profile presence, growth, insight, and morning brief. |
+| Full reset -> force-stop -> relaunch fallback | Pass | Relaunch after `저장된 기억 모두 지우기` returned to default friend role, empty profile, level 0 growth, and fallback insight/morning brief. |
+| Korean UX follow-up check | Pass with notes | No English labels reappeared. One pre-existing saved profile value on device was observed during QA, so evidence was summarized without copying raw personal text. |
+
+QA status decision:
+
+- `HT-SESSION-FLOW-QA-001` is now closed as `Pass with notes`.
+- The previous `Partial / Blocked` entry remains valid as historical evidence for the interrupted run; this rerun closes the remaining physical-device blockers.
