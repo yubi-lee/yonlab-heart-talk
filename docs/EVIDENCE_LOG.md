@@ -1812,3 +1812,86 @@ Behavior evidence:
 - Saved people, todos, and reflections appear with Korean labels and per-category counts.
 - Deleting or editing saved memory updates the visible summary immediately.
 - Derived companion state changes with the updated snapshot rather than waiting for a restart.
+
+## 2026-06-30 - HT-MEMORY-MANAGE-QA-001 - Physical Android QA for Local Memory Management
+
+Verdict: Pass
+
+Branch:
+
+```text
+main
+```
+
+Initial status:
+
+```text
+## main...origin/main
+```
+
+Physical device evidence:
+
+```text
+C:\Utils\Android\SDK\platform-tools\adb.exe devices -l
+List of devices attached
+R3CX70NHJRN            device product:q6qksx model:SM_F956N device:q6q transport_id:1
+```
+
+APK evidence:
+
+```text
+flutter build apk --debug
+- exit 0
+- Built build\app\outputs\flutter-apk\app-debug.apk
+
+adb -s R3CX70NHJRN install -r build\app\outputs\flutter-apk\app-debug.apk
+- Success
+```
+
+Built APK:
+
+```text
+Path: D:\Views\heart_talk\build\app\outputs\flutter-apk\app-debug.apk
+Package: com.example.heart_talk
+```
+
+Observed QA results:
+
+| Area | Result | Evidence |
+|---|---|---|
+| App launch on physical device | Pass | `am start -n com.example.heart_talk/.MainActivity` launched the app and `topResumedActivity` returned `com.example.heart_talk/.MainActivity`. |
+| Korean memory-management UI visible | Pass | Android UI dump showed `내 기억 관리`, `내 소개 (1)`, `기억할 사람 (3 -> 2)`, `내일 할 일 (4 -> 3)`, and per-item `수정` / `삭제` actions. |
+| At least one edit flow retained | Pass | The edited profile nickname `고루coachsync` remained visible in the Android UI and persisted in `FlutterSharedPreferences.xml`, confirming the profile edit path stayed saved through the same QA session. |
+| Person deletion | Pass | Persisted snapshot changed from 3 people to 2 after deleting `coworkera`; the remaining list contained `마리`, `지젤`. |
+| Todo deletion | Pass | Persisted snapshot changed from 4 todos to 3 after deleting `easydocstart`; the remaining todos were `수면`, `골프`, `메일`. |
+| Derived growth / insight / morning brief recalculation | Pass | After deletions, Android UI dump showed recurring-signal counts reduced from `할 일(4), 관계(2)` to `할 일(3), 관계(2)`, and the morning-brief first-step copy pivoted to the new first todo (`수면`). |
+| Force-stop / relaunch restore | Pass | After `am force-stop` and relaunch, the persisted snapshot still contained the edited profile plus the post-delete people/todo lists. Deleted items did not reappear. |
+| Full reset via UI | Pass | Tapping `저장된 기억 모두 지우기` reduced `FlutterSharedPreferences.xml` to `<map />`. |
+| Relaunch after full reset | Pass | After reset + force-stop + relaunch, Android UI returned to the fallback intro state with no personalized memory content restored. |
+| Consent-off / fallback baseline | Pass | After reset, the app relaunched into the non-personalized fallback flow; the persisted local-memory map remained empty and no saved profile/person/todo/reflection content reappeared. |
+| Korean readability | Pass with note | Core labels were visible in Korean on-device. PowerShell-side XML rendering still showed intermittent mojibake in shell output only, but Android UI dumps preserved the intended Korean strings. |
+
+Key persisted-snapshot checkpoints:
+
+```text
+Before delete:
+- people: 3
+- todos: 4
+
+After person delete:
+- people: 2
+- todos: 4
+
+After todo delete:
+- people: 2
+- todos: 3
+
+After clear all:
+- shared_prefs/FlutterSharedPreferences.xml => <map />
+```
+
+Conclusion:
+
+- `HT-MEMORY-MANAGE-QA-001` passed on the requested physical Android device `SM F956N / R3CX70NHJRN`.
+- Category visibility, individual edit/delete controls, derived-state recalculation, force-stop/relaunch persistence, and full reset fallback were all confirmed on-device.
+- No app code, dependency, platform, or permission changes were made during this QA task.
