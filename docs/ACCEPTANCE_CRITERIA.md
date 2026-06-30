@@ -333,3 +333,14 @@ Updated status after the remaining physical rerun:
 | Korean UX/readability follow-up | Pass with notes | Core labels stayed Korean-first and readable on `SM F956N`. QA reporting intentionally omitted copying a pre-existing saved profile string observed on-device. |
 
 `HT-SESSION-FLOW-QA-001` is accepted as `Pass with notes` after the physical-device rerun closed the remaining restore/reset blockers.
+
+## HT-100DAY-SIM-QA-001 Physical Android QA Note
+
+| Area | Status | Evidence |
+|---|---|---|
+| 100일 성장 체험 UI 노출 | Pass | SM F956N에서 100일 성장 체험하기 버튼과 시뮬레이션 안내 문구를 확인했다. |
+| 씬 선택과 풍부화 | Pass | 창업자 바쁜 하루, 회사 업무 스트레스, 가족과의 대화 씬에서 오늘 시작하기, 오늘의 질문, 작은 미션, 역할 메시지가 서로 다르게 표시되었다. |
+| force-stop/relaunch 유지 | Pass | 앱 강제 종료 후 다시 열었을 때 선택한 시뮬레이션 씬과 풍부한 인사이트/오늘 시작하기가 유지되었다. |
+| 시뮬레이션 기억 지우기 | Pass | 시뮬레이션 기억 지우기 후 다시 열면 아직 체험 중인 씬이 없어요. fallback 상태로 돌아갔다. |
+| 실제 memory 분리 | Pass | 시뮬레이션 기억은 실사용 local memory와 섞이지 않았고, 안내 문구로 가상 데이터임이 확인되었다. |
+| 한국어 UX | Pass with notes | 전체 문구는 한국어 중심이었고, 영어 라벨 재노출은 없었다. |

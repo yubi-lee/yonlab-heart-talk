@@ -2243,3 +2243,13 @@ QA status decision:
 - Added application/widget coverage for scene variety, synthetic-data safety, richer insight/morning-brief output, and simulation persistence.
 - Updated product, architecture, acceptance, runbook, and Android QA checklist docs to describe the new simulation flow.
 - Verification commands completed successfully in the stabilization follow-up: `dart format`, `flutter analyze`, `flutter test`, `powershell -ExecutionPolicy Bypass -File .\scripts\verify.ps1`, and `git diff --check` all passed.
+
+## 2026-07-01 - HT-100DAY-SIM-QA-001 - Physical Android QA for 100-Day Synthetic Growth Simulation
+
+- SM F956N (R3CX70NHJRN)에서 최신 debug APK를 설치하고 실행했다.
+- 100일 성장 체험하기 버튼과 가상 데이터 안내 문구를 물리 기기에서 확인했다.
+- 창업자 바쁜 하루, 회사 업무 스트레스, 가족과의 대화 씬을 확인했고, 씬별로 오늘 시작하기, 오늘의 질문, 작은 미션, 역할 메시지가 다르게 표시되는 것을 확인했다.
+- 앱을 강제 종료한 뒤 다시 열었을 때 선택한 시뮬레이션 씬과 풍부한 인사이트/오늘 시작하기가 유지되었다.
+- 시뮬레이션 기억 지우기 후 다시 열었을 때 아직 체험 중인 씬이 없어요. fallback 상태로 돌아갔다.
+- 시뮬레이션 기억은 실제 local memory와 섞이지 않았고, 한국어 UX 중심으로 동작했다.
+- 이번 QA에서는 앱 기능 코드를 수정하지 않았고, 작업 트리는 깨끗한 상태를 유지했다.
