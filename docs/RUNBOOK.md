@@ -1,5 +1,10 @@
 ï»¿# HeartTalk Runbook
 
+## Release Candidate Readiness
+
+The current rc1 review is summarized in docs/releases/HT-MVP-RC1.md. The operational commands and Android QA flows below remain the source of truth for day-to-day verification.
+
+
 ## Standard Shell
 
 Use Windows PowerShell Native.
@@ -467,15 +472,15 @@ flutter test test\features\daily_reflection\application\local_memory_management_
 flutter test test\features\daily_reflection\presentation\daily_reflection_screen_test.dart
 `
 
-2. Turn ±â±â ¾È¿¡ ±â¾ïÇÏ±â ON.
+2. Turn ï¿½ï¿½ï¿½ ï¿½È¿ï¿½ ï¿½ï¿½ï¿½ï¿½Ï±ï¿½ ON.
 3. Save one profile name, one person memory, and one todo memory.
-4. Keep one reflection so ÇÏ·ç ±â·Ï appears in ³» ±â¾ï °ü¸®.
-5. Confirm ³» ¼Ò°³, ±â¾ïÇÒ »ç¶÷, ³»ÀÏ ÇÒ ÀÏ, and ÇÏ·ç ±â·Ï each show a category count.
+4. Keep one reflection so ï¿½Ï·ï¿½ ï¿½ï¿½ï¿½ appears in ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½.
+5. Confirm ï¿½ï¿½ ï¿½Ò°ï¿½, ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½, ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½, and ï¿½Ï·ï¿½ ï¿½ï¿½ï¿½ each show a category count.
 6. Edit at least one saved item and confirm the updated text appears immediately.
 7. Delete at least two saved item types and confirm the counts shrink immediately.
-8. Confirm ÇÔ²² ¾Ë¾Æ°¡´Â ´Ü°è, ¿À´ÃÀÇ ÀÎ»çÀÌÆ®, and ¿À´Ã ½ÃÀÛÇÏ±â continue rendering from the updated snapshot.
-9. Turn consent OFF and confirm ³» ±â¾ï °ü¸® hides stored category details behind the fallback management message.
-10. Tap ÀúÀåµÈ ±â¾ï ¸ðµÎ Áö¿ì±â and confirm the app returns to the empty local-memory summary state.
+8. Confirm ï¿½Ô²ï¿½ ï¿½Ë¾Æ°ï¿½ï¿½ï¿½ ï¿½Ü°ï¿½, ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Î»ï¿½ï¿½ï¿½Æ®, and ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï±ï¿½ continue rendering from the updated snapshot.
+9. Turn consent OFF and confirm ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ hides stored category details behind the fallback management message.
+10. Tap ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ and confirm the app returns to the empty local-memory summary state.
 
 ## HT-ROLE-UX-001 Role UX Verification
 
@@ -491,11 +496,11 @@ flutter test test\features\daily_reflection\application\morning_brief_service_te
 flutter test test\features\daily_reflection\presentation\daily_reflection_screen_test.dart
 `
 
-2. Turn ±â±â ¾È¿¡ ±â¾ïÇÏ±â ON so role-based local-memory UI remains active.
-3. Select Ä£±¸, ÄÚÄ¡, °æÃ»ÀÚ, and ¼±»ý´Ô in turn and confirm the current-role context line changes in Korean.
+2. Turn ï¿½ï¿½ï¿½ ï¿½È¿ï¿½ ï¿½ï¿½ï¿½ï¿½Ï±ï¿½ ON so role-based local-memory UI remains active.
+3. Select Ä£ï¿½ï¿½, ï¿½ï¿½Ä¡, ï¿½ï¿½Ã»ï¿½ï¿½, and ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ in turn and confirm the current-role context line changes in Korean.
 4. Confirm friend copy feels easygoing, coach copy points to a first action, listener copy uses a short question, and teacher copy organizes the next step calmly.
-5. Confirm ¿À´ÃÀÇ ÀÎ»çÀÌÆ® changes its Áú¹®/ÀÛÀº ¹Ì¼Ç tone by role without claiming certainty or diagnosis.
-6. Confirm ¿À´Ã ½ÃÀÛÇÏ±â changes its ¿À´ÃÀÇ Áú¹®/Ã¹ ¹øÂ° ÀÛÀº Çàµ¿/ÀÀ¿ø ¹®±¸ by role.
+5. Confirm ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Î»ï¿½ï¿½ï¿½Æ® changes its ï¿½ï¿½ï¿½ï¿½/ï¿½ï¿½ï¿½ï¿½ ï¿½Ì¼ï¿½ tone by role without claiming certainty or diagnosis.
+6. Confirm ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï±ï¿½ changes its ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½/Ã¹ ï¿½ï¿½Â° ï¿½ï¿½ï¿½ï¿½ ï¿½àµ¿/ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ by role.
 7. Confirm custom role uses the saved custom role name plus a safe normalized tone phrase rather than replaying raw unsafe custom text.
 8. Confirm lover wording stays warm without obsession, jealousy, sexual language, or dependency pressure.
 9. Confirm parent wording stays caring without control, blame, shame, or scolding.
@@ -512,16 +517,16 @@ flutter test test\features\daily_reflection\presentation\daily_reflection_screen
 `
 
 2. Confirm the visible section order reads naturally as:
-   - ÇöÀç companion »óÅÂ
-   - ±â±â ¾È¿¡ ±â¾ïÇÏ±â
-   - ¿À´Ã ±â·ÏÇÏ±â
-   - ¿À´ÃÀÇ ÀÎ»çÀÌÆ®
-   - ¿À´Ã ½ÃÀÛÇÏ±â
-   - ³» ±â¾ï °ü¸®
-   - ÀüÃ¼ ÃÊ±âÈ­
-3. Confirm ¿À´ÃÀÇ ÀÎ»çÀÌÆ® appears before ¿À´Ã ½ÃÀÛÇÏ±â.
-4. Confirm ³» ±â¾ï °ü¸® stays reachable through an explicit expand/collapse control and does not crowd the main entry flow.
-5. Confirm ÀúÀåµÈ ±â¾ï ¸ðµÎ Áö¿ì±â remains visible and reachable outside the collapsed memory-management details.
+   - ï¿½ï¿½ï¿½ï¿½ companion ï¿½ï¿½ï¿½ï¿½
+   - ï¿½ï¿½ï¿½ ï¿½È¿ï¿½ ï¿½ï¿½ï¿½ï¿½Ï±ï¿½
+   - ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Ï±ï¿½
+   - ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Î»ï¿½ï¿½ï¿½Æ®
+   - ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï±ï¿½
+   - ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
+   - ï¿½ï¿½Ã¼ ï¿½Ê±ï¿½È­
+3. Confirm ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Î»ï¿½ï¿½ï¿½Æ® appears before ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï±ï¿½.
+4. Confirm ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ stays reachable through an explicit expand/collapse control and does not crowd the main entry flow.
+5. Confirm ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ remains visible and reachable outside the collapsed memory-management details.
 6. Confirm existing generate / keep / reset behavior still works after the section reorder.
 7. Confirm no new navigation surface, dependency, permission, network, or Cloud AI behavior appears.
 

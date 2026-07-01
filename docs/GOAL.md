@@ -2,45 +2,60 @@
 
 ## Current Goal
 
-HeartTalk is a privacy-first Flutter mobile app that explores gentle, non-diagnostic daily reflection experiences. The current development goal is to keep the existing `Daily Reflection Companion Demo` MVP stable while using a YOnLab ChatGPT x Codex style workflow: spec-first, evidence-gated, and delivered through small scoped vertical slices.
+HeartTalk is a privacy-first Flutter mobile app that explores gentle, non-diagnostic daily reflection and local-companion experiences. The current development goal is to keep the current HeartTalk MVP stable and release-candidate ready with a spec-first, evidence-gated workflow.
 
-## MVP Scope
+## Current MVP Scope
 
-MVP 001 is the `Daily Reflection Companion Demo`.
+The current MVP includes:
+
+- first-run onboarding
+- local memory consent and role selection
+- role-aware companion tone
+- today record
+- local memory management
+- local insight
+- morning brief
+- 100-day synthetic growth simulation
+- session flow polish
+- full reset/delete
 
 In scope:
 
-- Safe demo conversation events
-- Short manual text entry by the user
-- Local deterministic rule/template reflection generation
-- Daily reflection card
-- Morning briefing card
-- User confirmation, reset, and delete flows
-- Unit/widget tests for the implemented vertical slice
-- Evidence logs that record command output
+- safe demo and synthetic inputs
+- short manual text entry by the user
+- local deterministic generation
+- user-approved local memory storage on device
+- unit/widget tests for the implemented slices
+- evidence logs that record command output
 
 Out of scope:
 
-- Real PPG capture or PPG files
-- Real voice recording, transcript import, or audio processing
-- Phone, SMS, messenger, contact, location, notification, or health-data access
+- real PPG capture or PPG files
+- real voice recording, transcript import, or audio processing
+- phone, SMS, messenger, contact, location, notification, or health-data access
 - Cloud AI, analytics, sync, account systems, or network transfer
-- Local database or durable storage beyond explicitly approved future specs
-- Medical diagnosis, treatment advice, disease prediction, or risk scoring
+- local database or durable storage beyond explicitly approved future specs
+- medical diagnosis, treatment advice, disease prediction, or risk scoring
 
 ## Source of Truth
 
 When docs conflict, use this priority:
 
-1. `specs/001-daily-reflection-companion-demo/spec.md`
-2. `specs/001-daily-reflection-companion-demo/plan.md`
-3. `specs/001-daily-reflection-companion-demo/tasks.md`
-4. `AGENTS.md`
-5. Summary docs under `docs/`
+1. `specs/009-first-run-onboarding/spec.md`
+2. `specs/007-session-flow-polish/HT-100DAY-SIM-001-spec.md`
+3. `specs/007-session-flow-polish/spec.md`
+4. `specs/006-role-ux-polish/spec.md`
+5. `specs/005-local-memory-management/spec.md`
+6. `specs/004-morning-brief-today-start-guide/spec.md`
+7. `specs/003-local-insight-prediction-engine/spec.md`
+8. `specs/002-role-based-local-memory-companion/spec.md`
+9. `specs/001-daily-reflection-companion-demo/spec.md`
+10. `AGENTS.md`
+11. Summary docs under `docs/`
 
 ## Development Principle
 
-Completion is not based on "AI says done." Completion requires command output evidence from the repository, especially format, analyze, test, and git status results.
+Completion is not based on "AI says done." Completion requires command output evidence from the repository, especially format, analyze, test, build, and git status results.
 
 ## HT-COMPANION-001 - Role-Based Local Memory Companion
 
@@ -63,3 +78,7 @@ Still out of scope: server transfer, cloud AI, analytics, sync, accounts, sensit
 The detailed gap matrix and milestone recommendation are recorded in `docs/DESIGN_ALIGNMENT.md`.
 
 For future work, use `Design.md` as a UX-quality input together with the HeartTalk product/spec/privacy constraints. The recommended next milestone is `HT-DESIGN-QA-001`, which should translate the design direction into HeartTalk-specific Android manual QA criteria before any large UI redesign.
+
+## HT-RELEASE-CANDIDATE-001 - Release Candidate Readiness
+
+The current release-candidate review is documented in `docs/releases/HT-MVP-RC1.md`. The review summarizes the current MVP scope, acceptance status, physical Android QA evidence, and the remaining non-blocking risks that should be carried into rc tagging.

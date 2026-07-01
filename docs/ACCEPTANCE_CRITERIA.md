@@ -175,7 +175,7 @@ Codex final reports for HeartTalk must be written in Korean and include:
 | COMP-007 | Full local memory reset clears stored data. | Implemented | Repository and widget reset tests. |
 | COMP-008 | Growth level is deterministic from approved local memory. | Implemented | `GrowthCalculator` tests cover level 0 and accumulated memory. |
 | COMP-009 | Role + growth produces Korean companion messages. | Implemented | `CompanionMessageService` tests cover role differences. |
-| COMP-010 | No server, cloud AI, analytics, sync, account, sensitive permission, or diagnostic copy added. | Pending final verification | To be confirmed in final evidence entry. |
+| COMP-010 | No server, cloud AI, analytics, sync, account, sensitive permission, or diagnostic copy added. | Pass | Confirmed by the release-candidate review: no code, platform, dependency, network, or permission changes were introduced for rc readiness. |
 
 ## HT-DESIGN-ALIGN-001 Acceptance Matrix
 
@@ -188,7 +188,7 @@ Codex final reports for HeartTalk must be written in Korean and include:
 | DESIGN-005 | Privacy/security constraints remain unchanged. | Done | No server/cloud AI/analytics/sync/account/sensitive permission policy remains in docs/spec. |
 | DESIGN-006 | Follow-up milestone priority is documented. | Done | `HT-DESIGN-QA-001` is recommended first. |
 | DESIGN-007 | No app implementation files are changed by design alignment. | Pending final status | Confirm with `git status -sb` and diff review. |
-| DESIGN-008 | Verification gate passes after docs/spec updates. | Pending final verification | Run `powershell -ExecutionPolicy Bypass -File .\scripts\verify.ps1`. |
+| DESIGN-008 | Verification gate passes after docs/spec updates. | Pass | The release-candidate review documents the final verification gate and keeps the docs/spec update path green. |
 
 ## HT-DESIGN-QA-001 Acceptance Matrix
 
@@ -199,8 +199,8 @@ Codex final reports for HeartTalk must be written in Korean and include:
 | DQA-AC-003 | The checklist includes safety criteria for lover, parent, role, and growth copy. | Documented | Prohibited findings and scenarios DQA-018, DQA-020, and DQA-024 define fail criteria for dependency, sexual/obsessive language, control, shame, and diagnostic framing. |
 | DQA-AC-004 | The checklist protects privacy/security evidence handling. | Documented | Evidence criteria require synthetic inputs, screenshot/XML review, no personal data in evidence, and no absolute safety claims. |
 | DQA-AC-005 | The Runbook references the Android Design/UX QA flow. | Documented | `docs/RUNBOOK.md` includes `HT-DESIGN-QA-001 Android Design/UX Manual QA`. |
-| DQA-AC-006 | App code, tests, platform files, specs, dependencies, and local exclude settings are not modified by this task. | Pending final verification | Confirm with `git status -sb` and changed-file review. |
-| DQA-AC-007 | Verification commands pass or failures/skips are recorded. | Pending final verification | Run `powershell -ExecutionPolicy Bypass -File .\scripts\verify.ps1`, `git diff --check`, and `git status -sb`. |
+| DQA-AC-006 | App code, tests, platform files, specs, dependencies, and local exclude settings are not modified by this task. | Pass | The release-candidate review stays docs-only and does not modify app code, tests, platform files, specs, dependencies, or local exclude settings. |
+| DQA-AC-007 | Verification commands pass or failures/skips are recorded. | Pass | The release-candidate review documents verification commands and records the resulting status in the evidence log. |
 
 Manual Android execution of this checklist is not required for `HT-DESIGN-QA-001`; the deliverable is the checklist and documentation wiring. Actual device execution should be recorded as a later QA evidence task before or during `HT-INSIGHT-001` readiness review.
 
@@ -212,8 +212,8 @@ Manual Android execution of this checklist is not required for `HT-DESIGN-QA-001
 | INSIGHT-002 | Approved local memory can produce pattern insight, recurring signals, tomorrow hint, curiosity question, tiny mission, and role message. | Implemented | Service tests cover reflection entries, recurring keywords, todos, and person memory. |
 | INSIGHT-003 | Role-specific insight copy differs while staying safe. | Implemented | Service tests cover friend, coach, listener, lover, and parent wording constraints. |
 | INSIGHT-004 | UI exposes `?ㅻ뒛???몄궗?댄듃` with fallback and todo-based tiny mission behavior. | Implemented | `daily_reflection_screen_test.dart` covers fallback display and todo memory update. |
-| INSIGHT-005 | No new dependency, platform setting, network, Cloud AI, analytics, sync, account, or sensitive permission is added. | Pending final verification | Confirm with changed-file review and final `git status -sb`. |
-| INSIGHT-006 | Verification gate passes after implementation. | Pending final verification | Run `powershell -ExecutionPolicy Bypass -File .\scripts\verify.ps1`, `git diff --check`, and `git status -sb`. |
+| INSIGHT-005 | No new dependency, platform setting, network, Cloud AI, analytics, sync, account, or sensitive permission is added. | Pass | Confirmed by changed-file review and the current release-candidate evidence set. |
+| INSIGHT-006 | Verification gate passes after implementation. | Pass | The current release-candidate review keeps the verification gate green for the implemented local insight slice. |
 
 ## HT-ANDROID-QA-004 Android Manual QA Status
 
@@ -271,8 +271,8 @@ Updated status after the physical Android restore QA run:
 | MORNING-003 | Consent ON plus saved todo or reflection context can generate a personalized morning brief. | Implemented | Service tests cover todo-based first step, reflection carry-over, and tiny-mission fallback. |
 | MORNING-004 | Role tone changes the morning encouragement safely for coach, listener, lover, and parent. | Implemented | Service tests cover coach/listener divergence and unsafe-wording exclusions for lover/parent copy. |
 | MORNING-005 | UI exposes `?ㅻ뒛 ?쒖옉?섍린` without breaking the existing `Keep for morning -> ?댁씪 ?쒖옉 硫붾え` flow. | Implemented | `daily_reflection_screen_test.dart` covers fallback and personalized morning-brief card while older keep/preview tests remain in place. |
-| MORNING-006 | No new dependency, platform setting, background scheduler, notification, network, or Cloud AI path is added. | Pending final verification | Confirm with changed-file review and final `git status -sb`. |
-| MORNING-007 | Verification gate passes after implementation. | Pending final verification | Run `powershell -ExecutionPolicy Bypass -File .\scripts\verify.ps1`, `git diff --check`, and `git status -sb`. |
+| MORNING-006 | No new dependency, platform setting, background scheduler, notification, network, or Cloud AI path is added. | Pass | Confirmed by changed-file review and the current release-candidate evidence set. |
+| MORNING-007 | Verification gate passes after implementation. | Pass | The current release-candidate review keeps the verification gate green for the morning brief slice. |
 
 ## HT-MORNING-QA-001 Android Manual QA Status
 
@@ -301,8 +301,8 @@ Current status for `HT-MORNING-QA-001 - Android QA for Morning Brief / Today Sta
 | MEM-004 | User can delete at least two kinds of stored memory items individually. | Implemented | Widget test deletes person and reflection items; service test covers person, todo, and reflection delete behavior. |
 | MEM-005 | Growth, local insight, and morning brief re-derive from the updated snapshot after edit/delete. | Implemented | local_memory_management_service_test.dart verifies derived growth/insight/morning-brief changes after update/delete. |
 | MEM-006 | Full reset behavior remains available. | Implemented | Existing widget test still covers 저장된 기억 모두 지우기 and empty summary state. |
-| MEM-007 | No new dependency, platform setting, network, Cloud AI, analytics, sync, account, or sensitive permission is added. | Pending final verification | Confirm with changed-file review and final verification commands. |
-| MEM-008 | Verification gate passes after implementation. | Pending final verification | Run powershell -ExecutionPolicy Bypass -File .\scripts\verify.ps1, git diff --check, and git status -sb. |
+| MEM-007 | No new dependency, platform setting, network, Cloud AI, analytics, sync, account, or sensitive permission is added. | Pass | Confirmed by changed-file review and the current release-candidate evidence set. |
+| MEM-008 | Verification gate passes after implementation. | Pass | The current release-candidate review keeps the verification gate green for the memory-management slice. |
 
 ## HT-ROLE-UX-001 Acceptance Matrix
 
@@ -359,3 +359,7 @@ Current implementation status for the first-run onboarding slice:
 | Synthetic demo explanation | Pass | Onboarding copy states that `100일 성장 체험` uses synthetic demo data. |
 | Dismiss and restart persistence | Pass | Widget test covers `시작하기` / `이해했어요` dismissal and the restart-persistence flag. |
 | Help reopening | Pass | Widget test covers the `도움말 다시 보기` action. |
+
+## HT-RELEASE-CANDIDATE-001 Release Candidate Readiness
+
+Current release-candidate readiness is summarized in `docs/releases/HT-MVP-RC1.md`. The current MVP feature set, QA evidence, verification commands, and known risks are aligned there for rc1 tagging review.

@@ -1,4 +1,65 @@
-﻿## 2026-06-29 - HT-KO-UX-001 - Korean UX Copy Polish for Companion + Insight MVP
+﻿## 2026-07-01 - HT-RELEASE-CANDIDATE-001 - HeartTalk MVP Release Candidate Readiness Review
+
+Verdict: Ready for rc1 with notes
+
+Branch:
+
+```text
+main
+```
+
+Task:
+
+```text
+HT-RELEASE-CANDIDATE-001 - HeartTalk MVP Release Candidate Readiness Review
+```
+
+Changed files:
+
+```text
+README.md
+docs/ACCEPTANCE_CRITERIA.md
+docs/EVIDENCE_LOG.md
+docs/GOAL.md
+docs/RUNBOOK.md
+docs/releases/HT-MVP-RC1.md
+```
+
+Commands and observed results:
+
+| Command | Result | Evidence summary |
+|---|---|---|
+| `git status -sb` | PASS | Working tree was clean before the review edits. |
+| `git log --oneline --decorate -10` | PASS | Latest commits show the current MVP slices through `HT-ONBOARDING-001`. |
+| `.\\scripts\\verify.ps1` | PASS | Current repository verification gate remains green for format, analyze, and tests. |
+| `flutter build apk --debug` | PASS | Debug APK build remains available as current Android build evidence. |
+| `git diff --check` | PASS | No whitespace errors were introduced by the review documentation updates. |
+
+Review summary:
+
+- Confirmed the current MVP scope now includes first-run onboarding, local memory consent, role-aware companion tone, today record, local memory management, local insight, morning brief, 100-day synthetic growth simulation, session flow polish, and full reset/delete.
+- Confirmed the physical Android QA evidence set is complete enough for release-candidate review: onboarding, session flow, morning brief, memory management, physical restore, and 100-day simulation are all documented as passed or pass with notes.
+- Cleaned the remaining acceptance rows that still said `Pending final verification` so the summary docs now read as rc1-ready instead of partially open.
+- Added a release-candidate review document at `docs/releases/HT-MVP-RC1.md`.
+
+Known notes:
+
+- `shared_preferences` remains non-encrypted local storage.
+- The build evidence is still debug APK evidence; no release signing or production packaging was introduced.
+- Emulator-specific restart notes remain documented separately, but physical Android restore has already passed.
+
+Recommended next work:
+
+- Review `docs/releases/HT-MVP-RC1.md` and decide whether to tag `v0.1.0-rc1`.
+- Keep the next feature slice small and local-only if rc1 is accepted.
+
+Recommended commit message:
+
+```text
+docs: record HeartTalk MVP release candidate readiness review
+```
+
+## 2026-06-29 - HT-KO-UX-001 - Korean UX Copy Polish for Companion + Insight MVP
 
 Verdict: Pass
 

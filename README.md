@@ -1,15 +1,24 @@
 ﻿# HeartTalk
 
-HeartTalk is a privacy-first Flutter mobile app. The current MVP is the `Daily Reflection Companion Demo`, a local-only demo experience that uses safe synthetic/demo inputs and short user-entered text to generate deterministic daily reflection and morning briefing cards.
+HeartTalk은 나를 기억하는 하루 친구를 목표로 하는 privacy-first Flutter 모바일 앱입니다. 현재 MVP는 사용자가 동의한 기억을 기기 안에 저장하고, 역할에 따라 다른 말투로 인사이트와 오늘 시작하기를 보여주며, 저장된 기억을 언제든지 지울 수 있는 local-only companion flow입니다.
 
 ## Current MVP
 
-- Feature: `Daily Reflection Companion Demo`
-- Authoritative spec: `specs/001-daily-reflection-companion-demo/spec.md`
+- Feature surface: HeartTalk local memory companion MVP
+- Current slices:
+  - first-run onboarding
+  - local memory consent
+  - role selection and role-aware companion tone
+  - today record
+  - local memory management
+  - local insight
+  - morning brief
+  - 100-day synthetic growth simulation
+  - session flow polish
 - Implementation surface: `lib/features/daily_reflection`
 - Test surface: `test/features/daily_reflection`
-- Data policy: synthetic/demo data only
-- Processing policy: local-only, deterministic, no cloud AI
+- Data policy: approved local memory and synthetic demo data only
+- Processing policy: local-only, deterministic, no Cloud AI, no network transfer
 
 Out of scope for the MVP:
 
@@ -78,7 +87,15 @@ flutter build apk --debug
 - `docs/PRODUCT_SPEC.md` - product direction summary
 - `docs/ARCHITECTURE.md` - architecture rules
 - `docs/ACCEPTANCE_CRITERIA.md` - quality gates and completion standards
-- `docs/CODEX_TASK_TEMPLATE.md` - HeartTalk-specific Codex task template
 - `docs/RUNBOOK.md` - Windows PowerShell execution and troubleshooting
 - `docs/EVIDENCE_LOG.md` - verification evidence template
-- `specs/001-daily-reflection-companion-demo/spec.md` - source-of-truth feature spec
+- `docs/releases/HT-MVP-RC1.md` - release candidate readiness review
+- `specs/001-daily-reflection-companion-demo/spec.md` - original feature baseline
+- `specs/002-role-based-local-memory-companion/spec.md` - local memory companion
+- `specs/003-local-insight-prediction-engine/spec.md` - local insight engine
+- `specs/004-morning-brief-today-start-guide/spec.md` - morning brief
+- `specs/005-local-memory-management/spec.md` - memory management
+- `specs/006-role-ux-polish/spec.md` - role UX polish
+- `specs/007-session-flow-polish/spec.md` - session flow polish
+- `specs/007-session-flow-polish/HT-100DAY-SIM-001-spec.md` - 100-day synthetic simulation
+- `specs/009-first-run-onboarding/spec.md` - first-run onboarding
