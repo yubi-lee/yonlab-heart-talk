@@ -1,4 +1,4 @@
-## 2026-06-29 - HT-KO-UX-001 - Korean UX Copy Polish for Companion + Insight MVP
+﻿## 2026-06-29 - HT-KO-UX-001 - Korean UX Copy Polish for Companion + Insight MVP
 
 Verdict: Pass
 
@@ -2263,3 +2263,12 @@ QA status decision:
 - Updated the product spec, acceptance criteria, runbook, and Android QA checklist to reflect the onboarding flow.
 - Verification completed successfully after the UI update: `dart format .`, `dart format --output=none --set-exit-if-changed .`, `flutter analyze`, `flutter test`, `powershell -ExecutionPolicy Bypass -File .\scripts\verify.ps1`, and `git diff --check`.
 - No platform, dependency, Cloud AI, network, or account changes were added for this slice.
+
+
+Physical Android QA evidence:
+
+- SM F956N / R3CX70NHJRN was used as the physical device target.
+- A clean launch after `adb shell pm clear com.example.heart_talk` showed the onboarding card with the Korean copy for local storage, role choice, local insights, morning brief, synthetic `100일 성장 체험`, and memory deletion.
+- Tapping `시작하기` moved into the main screen, and `force-stop -> relaunch` did not bring the onboarding back automatically.
+- The app-bar `도움말 다시 보기` action reopened the onboarding guide, and closing it returned to the main companion screen.
+- Korean copy remained readable on-device, and the onboarding did not reintroduce English user-facing labels.

@@ -128,3 +128,4 @@ Do not start `HT-INSIGHT-001` until these are resolved or explicitly accepted as
 - [ ] Confirm `시작하기` or `이해했어요` closes the onboarding.
 - [ ] Confirm `도움말 다시 보기` reopens the onboarding after dismissal.
 - [ ] Confirm the onboarding does not reappear after restart once acknowledged.
+- [ ] On physical Android, confirm the onboarding can be reopened with `도움말 다시 보기` after it has been dismissed.

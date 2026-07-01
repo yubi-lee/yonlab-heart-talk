@@ -1,4 +1,4 @@
-# HeartTalk Acceptance Criteria
+﻿# HeartTalk Acceptance Criteria
 
 ## Completion Standard
 
@@ -52,7 +52,7 @@ This matrix records the current acceptance state for `HT-MVP-001 - Complete Usab
 | QA-010 | No real PPG, voice, contacts, messages, location, health data, cloud AI, network, database, or sensitive permission path is added. | Pass | Product docs, implementation scope, tests, and forbidden-path review confirm no platform/dependency changes. | Docs + inspection |
 | QA-011 | No medical diagnosis, treatment, disease prediction, risk scoring, or mental-health status classification copy appears. | Pass | Rule-engine tests check forbidden diagnostic copy is absent. | Automated + inspection |
 | QA-012 | Automated tests and debug APK build evidence are recorded. | Pass | `docs/EVIDENCE_LOG.md` contains HT-MVP-001 command evidence; HT-QA-001 adds acceptance evidence. | Evidence log |
-| ONB-001 | First-run onboarding explains local storage, role choice, local insights, morning brief, synthetic demo data, and memory deletion. | Implemented | Widget tests cover clean launch, dismissal, help reopening, and restart persistence. | Automated + docs |
+| ONB-001 | First-run onboarding explains local storage, role choice, local insights, morning brief, synthetic demo data, and memory deletion. | Pass with notes | Widget tests cover clean launch, dismissal, help reopening, and restart persistence; SM F956N physical QA confirmed display, dismissal, non-auto reappearance, help reopening, and readable Korean copy. | Automated + docs + physical QA |
 
 ## Manual QA Checklist
 

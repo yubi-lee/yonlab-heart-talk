@@ -1,4 +1,4 @@
-# HeartTalk Runbook
+﻿# HeartTalk Runbook
 
 ## Standard Shell
 
@@ -556,6 +556,8 @@ Use this flow when validating the first-run onboarding for the local memory comp
 4. Tap `시작하기` or `이해했어요` and confirm the main screen becomes visible.
 5. Tap `도움말 다시 보기` from the app bar and confirm the onboarding guide can be reopened.
 6. Restart the app and confirm the onboarding does not reappear after it has been acknowledged.
+
+- For physical Android QA, clear app data first with `adb shell pm clear com.example.heart_talk` so the onboarding state is guaranteed to be clean.
 
 Useful test command:
 
