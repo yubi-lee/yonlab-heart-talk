@@ -168,3 +168,10 @@ The current implemented simulation slice includes:
 - immediate recalculation of deterministic growth, local insight, and morning brief from the synthetic snapshot
 
 The simulation remains local-only, deterministic, non-diagnostic, and privacy-first. It must not look like real personal data and must not introduce network, Cloud AI, analytics, sync, account, or new permission behavior.
+
+
+## HT-ONBOARDING-001 Product Update
+
+HeartTalk now shows a short local-only first-run onboarding before the main companion flow on a clean launch. The onboarding explains that HeartTalk is a day companion, approved memory is stored only on the device, the companion role can be changed, insights and morning brief become more natural as memory accumulates, `100일 성장 체험` is synthetic demo data, and saved memory can always be deleted.
+
+The onboarding stays inside the existing single-screen app, uses Korean copy, and can be dismissed with `시작하기` or `이해했어요`. A `도움말 다시 보기` app-bar action can reopen the guide after dismissal.

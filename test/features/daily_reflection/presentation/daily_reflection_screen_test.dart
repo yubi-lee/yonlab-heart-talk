@@ -69,6 +69,49 @@ void main() {
     SharedPreferences.setMockInitialValues({});
   });
 
+  testWidgets('shows first-run onboarding on a clean launch', (tester) async {
+    await _pumpScreen(tester);
+
+    expect(find.text('HeartTalk은 나를 기억하는 하루 친구예요.'), findsOneWidget);
+    expect(find.text('동의한 기억은 이 기기 안에만 저장돼요.'), findsOneWidget);
+    expect(find.text('오늘은 친구, 코치, 가족처럼 다른 말투로 함께할 수 있어요.'), findsOneWidget);
+    expect(find.text('100일 성장 체험은 실제 개인정보가 아닌 가상 데이터 데모예요.'), findsOneWidget);
+    expect(find.text('저장된 기억은 언제든지 지울 수 있어요.'), findsOneWidget);
+    expect(find.text('시작하기'), findsOneWidget);
+    expect(find.text('이해했어요'), findsOneWidget);
+  });
+
+  testWidgets('help button reopens the onboarding guide', (tester) async {
+    await _pumpScreen(tester);
+
+    await tester.tap(find.text('이해했어요'));
+    await tester.pumpAndSettle();
+
+    expect(find.text('HeartTalk은 나를 기억하는 하루 친구예요.'), findsNothing);
+    await tester.tap(find.byTooltip('도움말 다시 보기'));
+    await tester.pumpAndSettle();
+
+    expect(find.text('HeartTalk은 나를 기억하는 하루 친구예요.'), findsOneWidget);
+    expect(find.text('저장된 기억은 언제든지 지울 수 있어요.'), findsOneWidget);
+  });
+
+  testWidgets('onboarding seen state persists after restart', (tester) async {
+    await _pumpScreen(tester);
+
+    await tester.tap(find.text('이해했어요'));
+    await tester.pumpAndSettle();
+
+    expect(find.text('HeartTalk은 나를 기억하는 하루 친구예요.'), findsNothing);
+
+    await tester.pumpWidget(const SizedBox.shrink());
+    await tester.pumpAndSettle();
+    await _pumpScreen(tester);
+
+    expect(find.text('HeartTalk은 나를 기억하는 하루 친구예요.'), findsNothing);
+    expect(find.byTooltip('도움말 다시 보기'), findsOneWidget);
+    expect(find.text('현재 companion 상태'), findsOneWidget);
+  });
+
   testWidgets('shows core UI and safe empty state', (tester) async {
     await _pumpScreen(tester);
 

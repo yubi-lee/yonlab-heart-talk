@@ -119,3 +119,12 @@ Do not start `HT-INSIGHT-001` until these are resolved or explicitly accepted as
 5. No Fail remains for Korean text readability on Android UI.
 6. No Fail remains for privacy/security copy about local-only storage and no OS/network/cloud access.
 7. All Notes that affect future local insight wording are triaged into `HT-INSIGHT-001`, `HT-ROLE-UX-001`, or `HT-MEMORY-MANAGE-001`.
+
+
+## First-Run Onboarding
+
+- [ ] Confirm the onboarding appears on a clean launch.
+- [ ] Confirm the onboarding explains local-only storage, role choice, local insights, morning brief, synthetic demo data, and memory deletion.
+- [ ] Confirm `시작하기` or `이해했어요` closes the onboarding.
+- [ ] Confirm `도움말 다시 보기` reopens the onboarding after dismissal.
+- [ ] Confirm the onboarding does not reappear after restart once acknowledged.

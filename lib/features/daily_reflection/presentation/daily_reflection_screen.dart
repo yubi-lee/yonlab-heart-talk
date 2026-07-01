@@ -39,6 +39,12 @@ class _DailyReflectionScreenState extends State<DailyReflectionScreen> {
   final _todoMemoryController = TextEditingController();
   final _personMemoryController = TextEditingController();
 
+  static const _onboardingSeenKey = 'heart_talk.first_run_onboarding_seen.v1';
+
+  SharedPreferences? _preferences;
+  bool _hasLoadedOnboardingState = false;
+  bool _hasSeenOnboarding = false;
+
   LocalMemoryRepository? _memoryRepository;
   ReflectionSessionState _session = const ReflectionSessionState();
   LocalMemorySnapshot _memorySnapshot = LocalMemorySnapshot.empty();
@@ -69,17 +75,21 @@ class _DailyReflectionScreenState extends State<DailyReflectionScreen> {
     final repository = SharedPreferencesLocalMemoryRepository(preferences);
     final simulationRepository =
         SharedPreferencesSyntheticGrowthSimulationRepository(preferences);
+    final onboardingSeen = preferences.getBool(_onboardingSeenKey) ?? false;
     final snapshot = await repository.loadSnapshot();
     final simulationSession = await simulationRepository.loadSession();
     if (!mounted) {
       return;
     }
     setState(() {
+      _preferences = preferences;
       _memoryRepository = repository;
       _simulationRepository = simulationRepository;
       _memorySnapshot = snapshot;
       _simulationSession = simulationSession;
       _profileNameController.text = snapshot.profile.displayName;
+      _hasLoadedOnboardingState = true;
+      _hasSeenOnboarding = onboardingSeen;
     });
   }
 
@@ -223,6 +233,85 @@ class _DailyReflectionScreenState extends State<DailyReflectionScreen> {
       _todoMemoryController.clear();
       _personMemoryController.clear();
     });
+  }
+
+  Future<void> _markOnboardingSeen() async {
+    final preferences = _preferences ?? await SharedPreferences.getInstance();
+    await preferences.setBool(_onboardingSeenKey, true);
+    if (!mounted) {
+      return;
+    }
+    setState(() {
+      _hasLoadedOnboardingState = true;
+      _hasSeenOnboarding = true;
+    });
+  }
+
+  Future<void> _showOnboardingHelp() async {
+    await showModalBottomSheet<void>(
+      context: context,
+      showDragHandle: true,
+      builder: (sheetContext) {
+        return SafeArea(
+          child: ListView(
+            shrinkWrap: true,
+            padding: const EdgeInsets.fromLTRB(16, 8, 16, 16),
+            children: [
+              _buildOnboardingGuide(sheetContext, showActions: false),
+              const SizedBox(height: 12),
+              Align(
+                alignment: Alignment.centerRight,
+                child: TextButton(
+                  onPressed: () => Navigator.of(sheetContext).pop(),
+                  child: const Text('닫기'),
+                ),
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  Widget _buildOnboardingGuide(
+    BuildContext context, {
+    required bool showActions,
+  }) {
+    return _InfoPanel(
+      title: '처음 실행 안내',
+      childrenWidgets: [
+        const Text('HeartTalk은 나를 기억하는 하루 친구예요.'),
+        const SizedBox(height: 4),
+        const Text('동의한 기억은 이 기기 안에만 저장돼요.'),
+        const SizedBox(height: 4),
+        const Text('오늘은 친구, 코치, 가족처럼 다른 말투로 함께할 수 있어요.'),
+        const SizedBox(height: 4),
+        const Text('기록이 쌓이면 오늘의 인사이트와 오늘 시작하기가 더 자연스러워져요.'),
+        const SizedBox(height: 4),
+        const Text('100일 성장 체험은 실제 개인정보가 아닌 가상 데이터 데모예요.'),
+        const SizedBox(height: 4),
+        const Text('저장된 기억은 언제든지 지울 수 있어요.'),
+        if (showActions) ...[
+          const SizedBox(height: 12),
+          Wrap(
+            spacing: 8,
+            runSpacing: 8,
+            children: [
+              FilledButton(
+                key: const Key('onboardingStartButton'),
+                onPressed: _markOnboardingSeen,
+                child: const Text('시작하기'),
+              ),
+              OutlinedButton(
+                key: const Key('onboardingAcknowledgeButton'),
+                onPressed: _markOnboardingSeen,
+                child: const Text('이해했어요'),
+              ),
+            ],
+          ),
+        ],
+      ],
+    );
   }
 
   LifeScenePreset? _simulationPreset() {
@@ -430,13 +519,26 @@ class _DailyReflectionScreenState extends State<DailyReflectionScreen> {
           );
 
     return Scaffold(
-      appBar: AppBar(title: const Text('HeartTalk 하루 대화')),
+      appBar: AppBar(
+        title: const Text('HeartTalk 하루 대화'),
+        actions: [
+          IconButton(
+            tooltip: '도움말 다시 보기',
+            icon: const Icon(Icons.help_outline),
+            onPressed: _showOnboardingHelp,
+          ),
+        ],
+      ),
       body: SafeArea(
         child: SingleChildScrollView(
           padding: const EdgeInsets.all(16),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              if (_hasLoadedOnboardingState && !_hasSeenOnboarding) ...[
+                _buildOnboardingGuide(context, showActions: true),
+                const SizedBox(height: 16),
+              ],
               Text(
                 '기기 안에서만 이어지는 하루 대화예요. 오늘 기록을 남기고, 인사이트를 보고, 내일의 작은 시작까지 차분하게 이어가볼게요.',
                 style: Theme.of(context).textTheme.bodyLarge,

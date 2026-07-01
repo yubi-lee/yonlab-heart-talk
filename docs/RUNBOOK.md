@@ -544,3 +544,21 @@ Useful test commands:
 flutter test test\features\daily_reflection\application\synthetic_growth_simulation_service_test.dart
 flutter test test\features\daily_reflection\presentation\daily_reflection_screen_test.dart
 ```
+
+
+## HT-ONBOARDING-001 First-Run Onboarding
+
+Use this flow when validating the first-run onboarding for the local memory companion:
+
+1. Launch the app on a clean install or with the onboarding flag cleared.
+2. Confirm the onboarding card appears before the main companion flow.
+3. Confirm the copy explains local-only storage, role selection, local insights, morning brief, synthetic `100일 성장 체험`, and memory deletion.
+4. Tap `시작하기` or `이해했어요` and confirm the main screen becomes visible.
+5. Tap `도움말 다시 보기` from the app bar and confirm the onboarding guide can be reopened.
+6. Restart the app and confirm the onboarding does not reappear after it has been acknowledged.
+
+Useful test command:
+
+```powershell
+flutter test test\features\daily_reflection\presentation\daily_reflection_screen_test.dart
+```

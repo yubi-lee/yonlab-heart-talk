@@ -2253,3 +2253,13 @@ QA status decision:
 - 시뮬레이션 기억 지우기 후 다시 열었을 때 아직 체험 중인 씬이 없어요. fallback 상태로 돌아갔다.
 - 시뮬레이션 기억은 실제 local memory와 섞이지 않았고, 한국어 UX 중심으로 동작했다.
 - 이번 QA에서는 앱 기능 코드를 수정하지 않았고, 작업 트리는 깨끗한 상태를 유지했다.
+
+
+## 2026-07-01 - HT-ONBOARDING-001 - First-run Onboarding for Local Memory Companion
+
+- Added a local-only first-run onboarding guide in the existing Daily Reflection screen.
+- The onboarding explains on-device storage, role choice, local insights, morning brief, synthetic `100일 성장 체험` demo data, and memory deletion.
+- Added widget coverage for clean-launch visibility, dismissal, help reopening, and restart persistence.
+- Updated the product spec, acceptance criteria, runbook, and Android QA checklist to reflect the onboarding flow.
+- Verification completed successfully after the UI update: `dart format .`, `dart format --output=none --set-exit-if-changed .`, `flutter analyze`, `flutter test`, `powershell -ExecutionPolicy Bypass -File .\scripts\verify.ps1`, and `git diff --check`.
+- No platform, dependency, Cloud AI, network, or account changes were added for this slice.

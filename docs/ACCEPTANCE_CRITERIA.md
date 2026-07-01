@@ -52,6 +52,7 @@ This matrix records the current acceptance state for `HT-MVP-001 - Complete Usab
 | QA-010 | No real PPG, voice, contacts, messages, location, health data, cloud AI, network, database, or sensitive permission path is added. | Pass | Product docs, implementation scope, tests, and forbidden-path review confirm no platform/dependency changes. | Docs + inspection |
 | QA-011 | No medical diagnosis, treatment, disease prediction, risk scoring, or mental-health status classification copy appears. | Pass | Rule-engine tests check forbidden diagnostic copy is absent. | Automated + inspection |
 | QA-012 | Automated tests and debug APK build evidence are recorded. | Pass | `docs/EVIDENCE_LOG.md` contains HT-MVP-001 command evidence; HT-QA-001 adds acceptance evidence. | Evidence log |
+| ONB-001 | First-run onboarding explains local storage, role choice, local insights, morning brief, synthetic demo data, and memory deletion. | Implemented | Widget tests cover clean launch, dismissal, help reopening, and restart persistence. | Automated + docs |
 
 ## Manual QA Checklist
 
@@ -344,3 +345,17 @@ Updated status after the remaining physical rerun:
 | 시뮬레이션 기억 지우기 | Pass | 시뮬레이션 기억 지우기 후 다시 열면 아직 체험 중인 씬이 없어요. fallback 상태로 돌아갔다. |
 | 실제 memory 분리 | Pass | 시뮬레이션 기억은 실사용 local memory와 섞이지 않았고, 안내 문구로 가상 데이터임이 확인되었다. |
 | 한국어 UX | Pass with notes | 전체 문구는 한국어 중심이었고, 영어 라벨 재노출은 없었다. |
+
+
+## HT-ONBOARDING-001 Acceptance Evidence
+
+Current implementation status for the first-run onboarding slice:
+
+| Item | Status | Evidence |
+|---|---|---|
+| Clean-launch onboarding visibility | Pass | Widget test covers the onboarding card on first launch. |
+| Local storage policy explanation | Pass | Onboarding copy states that approved memory is stored only on the device. |
+| Role-choice explanation | Pass | Onboarding copy explains that the companion role can be changed. |
+| Synthetic demo explanation | Pass | Onboarding copy states that `100일 성장 체험` uses synthetic demo data. |
+| Dismiss and restart persistence | Pass | Widget test covers `시작하기` / `이해했어요` dismissal and the restart-persistence flag. |
+| Help reopening | Pass | Widget test covers the `도움말 다시 보기` action. |
