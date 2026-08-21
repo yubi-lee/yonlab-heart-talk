@@ -90,6 +90,7 @@ flutter build apk --debug
 - `docs/RUNBOOK.md` - Windows PowerShell execution and troubleshooting
 - `docs/EVIDENCE_LOG.md` - verification evidence template
 - `docs/releases/HT-MVP-RC1.md` - release candidate readiness review
+- `docs/releases/HT-MVP-RC1-HANDOFF.md` - rc1 handoff summary
 - `specs/001-daily-reflection-companion-demo/spec.md` - original feature baseline
 - `specs/002-role-based-local-memory-companion/spec.md` - local memory companion
 - `specs/003-local-insight-prediction-engine/spec.md` - local insight engine
